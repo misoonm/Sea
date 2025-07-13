@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MEQR - مولد رموز QR ديناميكية</title>
+    <title>إنشاء رمز QR ديناميكي - MEQR</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.1/build/qrcode.min.js"></script>
     <style>
@@ -18,8 +18,6 @@
             --border: #E0E0E0;
             --shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
             --radius: 12px;
-            --header-height: 60px;
-            --nav-height: 70px;
         }
 
         * {
@@ -33,16 +31,11 @@
             background-color: var(--background);
             color: var(--text);
             overflow-x: hidden;
-            padding-top: var(--header-height);
-            padding-bottom: var(--nav-height);
+            padding: 20px;
         }
 
         .top-bar {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: var(--header-height);
+            height: 60px;
             background: linear-gradient(135deg, var(--primary), var(--primary-dark));
             color: white;
             padding: 0 16px;
@@ -51,6 +44,8 @@
             justify-content: space-between;
             z-index: 1000;
             box-shadow: var(--shadow);
+            border-radius: var(--radius);
+            margin-bottom: 20px;
         }
 
         .back-btn {
@@ -78,68 +73,6 @@
             text-align: center;
         }
 
-        .action-btn {
-            background: none;
-            border: none;
-            color: white;
-            font-size: 1.2rem;
-            cursor: pointer;
-            width: 40px;
-            height: 40px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border-radius: 50%;
-        }
-
-        .action-btn:hover {
-            background-color: rgba(255, 255, 255, 0.1);
-        }
-
-        .content-area {
-            min-height: calc(100vh - var(--header-height) - var(--nav-height));
-            padding: 20px 16px;
-        }
-
-        .bottom-nav {
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            width: 100%;
-            height: var(--nav-height);
-            display: flex;
-            justify-content: space-around;
-            background-color: var(--background);
-            border-top: 1px solid var(--border);
-            z-index: 1000;
-            padding: 8px 0;
-        }
-
-        .nav-item {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            font-size: 0.75rem;
-            color: var(--text-light);
-            cursor: pointer;
-            transition: all 0.3s ease;
-            width: 20%;
-            padding: 5px 0;
-        }
-
-        .nav-item.active {
-            color: var(--primary);
-        }
-
-        .nav-item i {
-            font-size: 1.4rem;
-            margin-bottom: 4px;
-        }
-
-        .nav-label {
-            font-size: 0.7rem;
-        }
-
         .card {
             background-color: var(--background);
             border-radius: var(--radius);
@@ -164,80 +97,6 @@
 
         .card-title i {
             margin-left: 10px;
-        }
-
-        .welcome-screen {
-            text-align: center;
-            padding: 30px 20px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            min-height: 70vh;
-        }
-
-        .welcome-logo {
-            width: 100px;
-            height: 100px;
-            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
-            border-radius: 20px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-bottom: 30px;
-        }
-
-        .welcome-logo i {
-            font-size: 3rem;
-            color: white;
-        }
-
-        .welcome-screen h2 {
-            font-size: 2rem;
-            color: var(--primary);
-            margin-bottom: 15px;
-        }
-
-        .welcome-screen p {
-            font-size: 1.1rem;
-            margin-bottom: 30px;
-            line-height: 1.6;
-            color: var(--text-light);
-            max-width: 500px;
-        }
-
-        .action-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 15px;
-            width: 100%;
-            max-width: 500px;
-        }
-
-        .action-card {
-            background-color: var(--card-bg);
-            border-radius: var(--radius);
-            padding: 20px;
-            text-align: center;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
-
-        .action-card:hover {
-            background-color: var(--primary);
-            color: white;
-        }
-
-        .action-card i {
-            font-size: 2.2rem;
-            margin-bottom: 15px;
-        }
-
-        .action-card p {
-            font-weight: 600;
         }
 
         .type-category {
@@ -271,9 +130,10 @@
             align-items: center;
         }
 
-        .qr-type:hover {
+        .qr-type:hover, .qr-type.selected {
             background-color: var(--primary);
             color: white;
+            transform: scale(1.05);
         }
 
         .qr-type i {
@@ -303,6 +163,8 @@
             border-radius: var(--radius);
             font-size: 1rem;
             transition: border-color 0.3s ease;
+            direction: rtl; /* Added for RTL text input */
+            text-align: right; /* Added for RTL text input */
         }
 
         .form-control:focus {
@@ -369,11 +231,12 @@
             max-width: 200px;
             margin: 0 auto 20px;
             display: block;
+            border: 1px solid var(--border); /* Added border for preview */
         }
 
         .customization-options {
             display: grid;
-            grid-template-columns: repeat(2, 1fr);
+            grid-template-columns: repeat(2, 1fr); /* Changed to 2 columns for better spacing */
             gap: 15px;
             margin-bottom: 20px;
         }
@@ -383,10 +246,14 @@
             border-radius: var(--radius);
             cursor: pointer;
             border: 2px solid transparent;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+            transition: all 0.2s ease;
         }
 
         .color-option.active {
             border-color: var(--text);
+            box-shadow: 0 0 0 3px var(--primary); /* Highlight active color */
+            transform: scale(1.05);
         }
 
         .page {
@@ -403,19 +270,12 @@
             to { opacity: 1; transform: translateY(0); }
         }
 
-        .dynamic-rules {
-            background-color: #f8f9fa;
-            border-radius: var(--radius);
+        .dynamic-item {
+            background: #f8f9fa;
             padding: 15px;
-            margin-bottom: 15px;
-        }
-
-        .rule-item {
-            background-color: white;
             border-radius: var(--radius);
-            padding: 15px;
             margin-bottom: 15px;
-            box-shadow: var(--shadow);
+            border: 1px solid #e9ecef;
         }
 
         .form-row {
@@ -427,337 +287,6 @@
         .form-row .form-group {
             flex: 1;
             margin-bottom: 0;
-        }
-
-        .icon-grid {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 15px;
-            margin-top: 15px;
-        }
-
-        .icon-item {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            text-align: center;
-            font-size: 0.85rem;
-        }
-
-        .icon-circle {
-            width: 60px;
-            height: 60px;
-            border-radius: 50%;
-            background-color: var(--card-bg);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-bottom: 8px;
-            font-size: 1.5rem;
-            color: var(--primary);
-        }
-
-        .days-grid {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 10px;
-            margin-top: 15px;
-        }
-
-        .day-item {
-            padding: 10px;
-            border-radius: var(--radius);
-            background-color: var(--card-bg);
-            text-align: center;
-            cursor: pointer;
-        }
-
-        .day-item.active {
-            background-color: var(--primary);
-            color: white;
-        }
-
-        .scanner-container {
-            position: relative;
-            width: 100%;
-            height: 300px;
-            background-color: #000;
-            border-radius: var(--radius);
-            overflow: hidden;
-            margin-bottom: 20px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .scanner-overlay {
-            position: absolute;
-            width: 70%;
-            height: 70%;
-            border: 3px solid var(--primary);
-            border-radius: var(--radius);
-            box-shadow: 0 0 0 1000px rgba(0, 0, 0, 0.5);
-        }
-
-        .scanner-message {
-            text-align: center;
-            color: var(--text-light);
-            margin-bottom: 20px;
-        }
-
-        .history-tabs {
-            display: flex;
-            margin-bottom: 20px;
-            border-bottom: 1px solid var(--border);
-        }
-
-        .history-tab {
-            padding: 12px 20px;
-            cursor: pointer;
-            font-weight: 600;
-            position: relative;
-        }
-
-        .history-tab.active {
-            color: var(--primary);
-        }
-
-        .history-tab.active::after {
-            content: '';
-            position: absolute;
-            bottom: -1px;
-            left: 0;
-            width: 100%;
-            height: 3px;
-            background-color: var(--primary);
-        }
-
-        .history-list {
-            list-style: none;
-        }
-
-        .history-item {
-            display: flex;
-            align-items: center;
-            padding: 15px;
-            border-bottom: 1px solid var(--border);
-            cursor: pointer;
-        }
-
-        .history-item:last-child {
-            border-bottom: none;
-        }
-
-        .history-icon {
-            width: 40px;
-            height: 40px;
-            background-color: var(--card-bg);
-            border-radius: 50%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            margin-left: 15px;
-            color: var(--primary);
-        }
-
-        .history-details {
-            flex: 1;
-        }
-
-        .history-name {
-            font-weight: 600;
-            margin-bottom: 4px;
-        }
-
-        .history-meta {
-            font-size: 0.85rem;
-            color: var(--text-light);
-        }
-
-        .empty-state {
-            text-align: center;
-            padding: 50px 20px;
-            color: var(--text-light);
-        }
-
-        .empty-state i {
-            font-size: 3rem;
-            margin-bottom: 20px;
-            color: #e0e0e0;
-        }
-
-        .qr-list-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 20px;
-        }
-
-        .search-box {
-            position: relative;
-            flex: 1;
-            margin-left: 15px;
-        }
-
-        .search-box input {
-            width: 100%;
-            padding: 12px 15px 12px 40px;
-            border: 1px solid var(--border);
-            border-radius: var(--radius);
-            font-size: 1rem;
-        }
-
-        .search-box i {
-            position: absolute;
-            left: 15px;
-            top: 50%;
-            transform: translateY(-50%);
-            color: var(--text-light);
-        }
-
-        .qr-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 20px;
-        }
-
-        .qr-item {
-            background-color: var(--card-bg);
-            border-radius: var(--radius);
-            overflow: hidden;
-            box-shadow: var(--shadow);
-        }
-
-        .qr-image {
-            padding: 15px;
-            background-color: white;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-
-        .qr-image canvas {
-            width: 100%;
-            height: auto;
-            max-width: 150px;
-        }
-
-        .qr-info {
-            padding: 15px;
-        }
-
-        .qr-name {
-            font-weight: 600;
-            margin-bottom: 5px;
-            font-size: 1rem;
-        }
-
-        .qr-type {
-            font-size: 0.85rem;
-            color: var(--text-light);
-            margin-bottom: 10px;
-        }
-
-        .settings-list {
-            list-style: none;
-        }
-
-        .settings-item {
-            padding: 18px 0;
-            border-bottom: 1px solid var(--border);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .settings-item:last-child {
-            border-bottom: none;
-        }
-
-        .settings-label {
-            font-weight: 600;
-        }
-
-        .switch {
-            position: relative;
-            display: inline-block;
-            width: 50px;
-            height: 26px;
-        }
-
-        .switch input {
-            opacity: 0;
-            width: 0;
-            height: 0;
-        }
-
-        .slider {
-            position: absolute;
-            cursor: pointer;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background-color: #ccc;
-            transition: .4s;
-            border-radius: 34px;
-        }
-
-        .slider:before {
-            position: absolute;
-            content: "";
-            height: 18px;
-            width: 18px;
-            left: 4px;
-            bottom: 4px;
-            background-color: white;
-            transition: .4s;
-            border-radius: 50%;
-        }
-
-        input:checked + .slider {
-            background-color: var(--primary);
-        }
-
-        input:checked + .slider:before {
-            transform: translateX(24px);
-        }
-
-        .settings-section {
-            margin-bottom: 30px;
-        }
-
-        .settings-section-title {
-            font-size: 1.1rem;
-            font-weight: 700;
-            color: var(--primary-dark);
-            margin-bottom: 15px;
-            padding-bottom: 10px;
-            border-bottom: 1px solid var(--border);
-        }
-
-        .toast {
-            position: fixed;
-            bottom: 90px;
-            left: 50%;
-            transform: translateX(-50%);
-            background-color: var(--primary);
-            color: white;
-            padding: 12px 24px;
-            border-radius: var(--radius);
-            box-shadow: var(--shadow);
-            z-index: 1000;
-            animation: toastIn 0.3s ease, toastOut 0.3s ease 2.7s;
-        }
-
-        @keyframes toastIn {
-            from { opacity: 0; transform: translateX(-50%) translateY(20px); }
-            to { opacity: 1; transform: translateX(-50%) translateY(0); }
-        }
-
-        @keyframes toastOut {
-            from { opacity: 1; transform: translateX(-50%) translateY(0); }
-            to { opacity: 0; transform: translateX(-50%) translateY(20px); }
         }
 
         .file-upload {
@@ -774,6 +303,7 @@
             width: 100%;
             height: 100%;
             cursor: pointer;
+            z-index: 10; /* Ensure it's clickable */
         }
 
         .file-upload-label {
@@ -784,385 +314,253 @@
             border-radius: var(--radius);
             text-align: center;
             cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .file-upload-label:hover {
+            background-color: #e6e9ee;
+            border-color: var(--primary);
         }
 
         .file-upload-label i {
             margin-left: 8px;
         }
 
+        .file-name {
+            display: block;
+            margin-top: 5px;
+            font-size: 0.85rem;
+            color: var(--text-light);
+        }
+
+        .toast {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: var(--primary);
+            color: white;
+            padding: 12px 24px;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            z-index: 1000;
+            animation: toastIn 0.3s ease, toastOut 0.3s ease 2.7s forwards; /* Use forwards to keep final state */
+            opacity: 0; /* Start hidden */
+        }
+
+        @keyframes toastIn {
+            from { opacity: 0; transform: translateX(-50%) translateY(20px); }
+            to { opacity: 1; transform: translateX(-50%) translateY(0); }
+        }
+
+        @keyframes toastOut {
+            from { opacity: 1; transform: translateX(-50%) translateY(0); }
+            to { opacity: 0; transform: translateX(-50%) translateY(20px); }
+        }
+
         @media (max-width: 768px) {
-            .qr-type-grid {
+            .qr-type-grid, .customization-options {
                 grid-template-columns: repeat(2, 1fr);
             }
-            
-            .action-grid {
+            body {
+                padding: 10px;
+            }
+            .top-bar {
+                margin-bottom: 10px;
+            }
+            .card {
+                padding: 15px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .qr-type-grid, .customization-options {
                 grid-template-columns: 1fr;
             }
-            
-            .icon-grid {
-                grid-template-columns: repeat(3, 1fr);
+            .card-title {
+                font-size: 1.1rem;
             }
-            
-            .days-grid {
-                grid-template-columns: repeat(3, 1fr);
+            .form-control {
+                padding: 10px;
             }
-            
-            .qr-grid {
-                grid-template-columns: 1fr;
+            .btn {
+                padding: 12px 20px;
+                font-size: 0.9rem;
             }
         }
     </style>
 </head>
 <body>
     <div class="top-bar">
-        <button class="back-btn" id="back-button" style="display: none;">
+        <button class="back-btn" id="back-button">
             <i class="fas fa-arrow-right"></i>
         </button>
-        <div class="page-title" id="page-title">MEQR</div>
-        <button class="action-btn" id="action-button" style="display: none;">
-            <i class="fas fa-ellipsis-h"></i>
-        </button>
-    </div>
+        <div class="page-title" id="page-title">إنشاء رمز QR جديد</div>
+        <div style="width: 40px;"></div> </div>
 
-    <div class="content-area">
-        <div id="welcome-page" class="page active">
-            <div class="welcome-screen">
-                <div class="welcome-logo">
-                    <i class="fas fa-qrcode"></i>
-                </div>
-                <h2>مرحبًا بك في MEQR!</h2>
-                <p>أنشئ رموز QR ديناميكية مجانًا بنقرة واحدة فقط!</p>
-                
-                <div class="action-grid">
-                    <div class="action-card" data-action="scan">
-                        <i class="fas fa-qrcode"></i>
-                        <p>مسح رمز QR</p>
+    <div id="create-page" class="page active">
+        <div class="card">
+            <h3 class="card-title"><i class="fas fa-qrcode"></i> اختر نوع المحتوى</h3>
+            
+            <div class="type-category">
+                <div class="category-title">الروابط</div>
+                <div class="qr-type-grid">
+                    <div class="qr-type" data-type="url">
+                        <i class="fas fa-link"></i>
+                        <p>رابط URL</p>
                     </div>
-                    <div class="action-card" data-action="history">
-                        <i class="fas fa-history"></i>
-                        <p>سجل المسح</p>
+                    <div class="qr-type" data-type="appstore">
+                        <i class="fas fa-mobile-alt"></i>
+                        <p>متجر التطبيقات</p>
                     </div>
-                    <div class="action-card" data-action="create">
-                        <i class="fas fa-plus-circle"></i>
-                        <p>إنشاء رمز QR</p>
+                    <div class="qr-type" data-type="custom-url">
+                        <i class="fas fa-pencil-ruler"></i>
+                        <p>رابط مخصص</p>
                     </div>
-                    <div class="action-card" data-action="myqrs">
-                        <i class="fas fa-qrcode"></i>
-                        <p>رموزي</p>
+                    <div class="qr-type" data-type="list-links">
+                        <i class="fas fa-list"></i>
+                        <p>قائمة الروابط</p>
+                    </div>
+                    <div class="qr-type" data-type="payment">
+                        <i class="fas fa-money-bill-wave"></i>
+                        <p>دفع</p>
                     </div>
                 </div>
             </div>
-        </div>
-
-        <div id="create-page" class="page">
-            <div class="card">
-                <h3 class="card-title"><i class="fas fa-qrcode"></i> اختر نوع المحتوى</h3>
-                
-                <div class="type-category">
-                    <div class="category-title">الروابط</div>
-                    <div class="qr-type-grid">
-                        <div class="qr-type" data-type="url">
-                            <i class="fas fa-link"></i>
-                            <p>رابط URL</p>
-                        </div>
-                        <div class="qr-type" data-type="appstore">
-                            <i class="fas fa-mobile-alt"></i>
-                            <p>متجر التطبيقات</p>
-                        </div>
-                        <div class="qr-type" data-type="custom-url">
-                            <i class="fas fa-pencil-ruler"></i>
-                            <p>رابط مخصص</p>
-                        </div>
-                        <div class="qr-type" data-type="list-links">
-                            <i class="fas fa-list"></i>
-                            <p>قائمة الروابط</p>
-                        </div>
-                        <div class="qr-type" data-type="payment">
-                            <i class="fas fa-money-bill-wave"></i>
-                            <p>دفع</p>
-                        </div>
+            
+            <div class="type-category">
+                <div class="category-title">التواصل</div>
+                <div class="qr-type-grid">
+                    <div class="qr-type" data-type="email">
+                        <i class="fas fa-envelope"></i>
+                        <p>البريد الإلكتروني</p>
                     </div>
-                </div>
-                
-                <div class="type-category">
-                    <div class="category-title">التواصل</div>
-                    <div class="qr-type-grid">
-                        <div class="qr-type" data-type="email">
-                            <i class="fas fa-envelope"></i>
-                            <p>البريد الإلكتروني</p>
-                        </div>
-                        <div class="qr-type" data-type="sms">
-                            <i class="fas fa-sms"></i>
-                            <p>رسالة SMS</p>
-                        </div>
-                        <div class="qr-type" data-type="whatsapp">
-                            <i class="fab fa-whatsapp"></i>
-                            <p>واتساب</p>
-                        </div>
-                        <div class="qr-type" data-type="phone">
-                            <i class="fas fa-phone-alt"></i>
-                            <p>مكالمة هاتفية</p>
-                        </div>
-                        <div class="qr-type" data-type="vcard">
-                            <i class="fas fa-address-card"></i>
-                            <p>بطاقة اتصال</p>
-                        </div>
+                    <div class="qr-type" data-type="sms">
+                        <i class="fas fa-sms"></i>
+                        <p>رسالة SMS</p>
                     </div>
-                </div>
-                
-                <div class="type-category">
-                    <div class="category-title">الوسائط</div>
-                    <div class="qr-type-grid">
-                        <div class="qr-type" data-type="pdf">
-                            <i class="fas fa-file-pdf"></i>
-                            <p>ملف PDF</p>
-                        </div>
-                        <div class="qr-type" data-type="image">
-                            <i class="fas fa-image"></i>
-                            <p>صورة</p>
-                        </div>
-                        <div class="qr-type" data-type="audio">
-                            <i class="fas fa-music"></i>
-                            <p>صوت</p>
-                        </div>
-                        <div class="qr-type" data-type="video">
-                            <i class="fas fa-video"></i>
-                            <p>فيديو</p>
-                        </div>
+                    <div class="qr-type" data-type="whatsapp">
+                        <i class="fab fa-whatsapp"></i>
+                        <p>واتساب</p>
                     </div>
-                </div>
-                
-                <div class="type-category">
-                    <div class="category-title">الشبكات</div>
-                    <div class="qr-type-grid">
-                        <div class="qr-type" data-type="wifi">
-                            <i class="fas fa-wifi"></i>
-                            <p>واي فاي</p>
-                        </div>
-                        <div class="qr-type" data-type="social">
-                            <i class="fas fa-hashtag"></i>
-                            <p>وسائل التواصل</p>
-                        </div>
+                    <div class="qr-type" data-type="phone">
+                        <i class="fas fa-phone-alt"></i>
+                        <p>مكالمة هاتفية</p>
                     </div>
-                </div>
-                
-                <div class="type-category">
-                    <div class="category-title">أخرى</div>
-                    <div class="qr-type-grid">
-                        <div class="qr-type" data-type="text">
-                            <i class="fas fa-font"></i>
-                            <p>نص</p>
-                        </div>
-                        <div class="qr-type" data-type="map">
-                            <i class="fas fa-map-marker-alt"></i>
-                            <p>خريطة</p>
-                        </div>
-                        <div class="qr-type" data-type="booking">
-                            <i class="fas fa-calendar-check"></i>
-                            <p>حجز موعد</p>
-                        </div>
-                        <div class="qr-type" data-type="crypto">
-                            <i class="fab fa-bitcoin"></i>
-                            <p>عملة رقمية</p>
-                        </div>
+                    <div class="qr-type" data-type="vcard">
+                        <i class="fas fa-address-card"></i>
+                        <p>بطاقة اتصال</p>
                     </div>
                 </div>
             </div>
-        </div>
-
-        <div id="create-detail-page" class="page">
-            <!-- سيتم ملؤها ديناميكيًا -->
-        </div>
-
-        <div id="scan-page" class="page">
-            <div class="card">
-                <h3 class="card-title"><i class="fas fa-qrcode"></i> مسح رمز QR</h3>
-                <div class="scanner-container">
-                    <div class="scanner-overlay"></div>
-                </div>
-                <p class="scanner-message">ضع رمز QR داخل الإطار لمسحه ضوئيًا</p>
-                
-                <div id="scan-result" style="display: none;">
-                    <h4>نتيجة المسح:</h4>
-                    <div class="card">
-                        <div id="result-content"></div>
+            
+            <div class="type-category">
+                <div class="category-title">الوسائط</div>
+                <div class="qr-type-grid">
+                    <div class="qr-type" data-type="pdf">
+                        <i class="fas fa-file-pdf"></i>
+                        <p>ملف PDF</p>
                     </div>
-                    <button class="btn" id="new-scan-btn">مسح رمز جديد</button>
-                </div>
-            </div>
-        </div>
-
-        <div id="history-page" class="page">
-            <div class="card">
-                <div class="history-tabs">
-                    <div class="history-tab active" data-tab="scanned">الممسوحة</div>
-                    <div class="history-tab" data-tab="favorites">المفضلة</div>
-                </div>
-
-                <div id="scanned-content">
-                    <ul class="history-list" id="scanned-list">
-                        <!-- سيتم ملؤه ديناميكيًا -->
-                    </ul>
-                </div>
-                
-                <div id="favorites-content" style="display: none;">
-                    <ul class="history-list" id="favorites-list">
-                        <!-- سيتم ملؤه ديناميكيًا -->
-                    </ul>
-                </div>
-            </div>
-        </div>
-
-        <div id="myqrs-page" class="page">
-            <div class="card">
-                <div class="qr-list-header">
-                    <h3 class="card-title"><i class="fas fa-qrcode"></i> رموزي</h3>
-                    <div class="search-box">
-                        <i class="fas fa-search"></i>
-                        <input type="text" id="qr-search" placeholder="بحث في رموزي...">
+                    <div class="qr-type" data-type="image">
+                        <i class="fas fa-image"></i>
+                        <p>صورة</p>
+                    </div>
+                    <div class="qr-type" data-type="audio">
+                        <i class="fas fa-music"></i>
+                        <p>صوت</p>
+                    </div>
+                    <div class="qr-type" data-type="video">
+                        <i class="fas fa-video"></i>
+                        <p>فيديو</p>
                     </div>
                 </div>
-
-                <div class="qr-grid" id="my-qrs-grid">
-                    <!-- سيتم ملؤه ديناميكيًا -->
+            </div>
+            
+            <div class="type-category">
+                <div class="category-title">الشبكات</div>
+                <div class="qr-type-grid">
+                    <div class="qr-type" data-type="wifi">
+                        <i class="fas fa-wifi"></i>
+                        <p>واي فاي</p>
+                    </div>
+                    <div class="qr-type" data-type="social">
+                        <i class="fas fa-hashtag"></i>
+                        <p>وسائل التواصل</p>
+                    </div>
                 </div>
             </div>
-        </div>
-
-        <div id="settings-page" class="page">
-            <div class="card">
-                <div class="settings-section">
-                    <h4 class="settings-section-title">تفضيلات المسح</h4>
-                    <ul class="settings-list">
-                        <li class="settings-item">
-                            <span class="settings-label">الاهتزاز عند المسح</span>
-                            <label class="switch">
-                                <input type="checkbox" id="vibrate-setting" checked>
-                                <span class="slider"></span>
-                            </label>
-                        </li>
-                        <li class="settings-item">
-                            <span class="settings-label">فتح المواقع تلقائيًا</span>
-                            <label class="switch">
-                                <input type="checkbox" id="auto-open-setting" checked>
-                                <span class="slider"></span>
-                            </label>
-                        </li>
-                        <li class="settings-item">
-                            <span class="settings-label">حفظ السجل</span>
-                            <label class="switch">
-                                <input type="checkbox" id="save-history-setting" checked>
-                                <span class="slider"></span>
-                            </label>
-                        </li>
-                    </ul>
-                </div>
-
-                <div class="settings-section">
-                    <h4 class="settings-section-title">المساعدة والدعم</h4>
-                    <ul class="settings-list">
-                        <li class="settings-item" id="feedback-btn">
-                            <span class="settings-label">إرسال ملاحظات</span>
-                            <i class="fas fa-chevron-left"></i>
-                        </li>
-                        <li class="settings-item" id="pricing-btn">
-                            <span class="settings-label">الأسعار</span>
-                            <i class="fas fa-chevron-left"></i>
-                        </li>
-                        <li class="settings-item" id="help-btn">
-                            <span class="settings-label">مساعدة</span>
-                            <i class="fas fa-chevron-left"></i>
-                        </li>
-                    </ul>
-                </div>
-
-                <div class="settings-section">
-                    <h4 class="settings-section-title">حول التطبيق</h4>
-                    <ul class="settings-list">
-                        <li class="settings-item">
-                            <span class="settings-label">الإصدار</span>
-                            <span class="settings-value">1.0.0</span>
-                        </li>
-                        <li class="settings-item">
-                            <span class="settings-label">بنيت بحب ❤️</span>
-                            <span class="settings-value">MEQR Team</span>
-                        </li>
-                    </ul>
+            
+            <div class="type-category">
+                <div class="category-title">أخرى</div>
+                <div class="qr-type-grid">
+                    <div class="qr-type" data-type="text">
+                        <i class="fas fa-font"></i>
+                        <p>نص</p>
+                    </div>
+                    <div class="qr-type" data-type="map">
+                        <i class="fas fa-map-marker-alt"></i>
+                        <p>خريطة</p>
+                    </div>
+                    <div class="qr-type" data-type="booking">
+                        <i class="fas fa-calendar-check"></i>
+                        <p>حجز موعد</p>
+                    </div>
+                    <div class="qr-type" data-type="crypto">
+                        <i class="fab fa-bitcoin"></i>
+                        <p>عملة رقمية</p>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 
-    <div class="bottom-nav">
-        <div class="nav-item active" data-page="welcome">
-            <i class="fas fa-home"></i>
-            <span class="nav-label">الرئيسية</span>
+    <div id="create-detail-page" class="page">
         </div>
-        <div class="nav-item" data-page="history">
-            <i class="fas fa-history"></i>
-            <span class="nav-label">السجل</span>
-        </div>
-        <div class="nav-item" data-page="scan">
-            <i class="fas fa-qrcode"></i>
-            <span class="nav-label">مسح</span>
-        </div>
-        <div class="nav-item" data-page="myqrs">
-            <i class="fas fa-folder"></i>
-            <span class="nav-label">رموزي</span>
-        </div>
-        <div class="nav-item" data-page="settings">
-            <i class="fas fa-cog"></i>
-            <span class="nav-label">الإعدادات</span>
-        </div>
-    </div>
 
     <script>
-        // حالة التطبيق
+        // App State
         const appState = {
-            currentPage: 'welcome',
-            previousPages: [],
+            currentPage: 'create',
             currentQrType: null,
-            savedQrs: JSON.parse(localStorage.getItem('meqr_qrs')) || [],
-            scanHistory: JSON.parse(localStorage.getItem('meqr_scan_history')) || [],
-            favorites: JSON.parse(localStorage.getItem('meqr_favorites')) || [],
-            settings: JSON.parse(localStorage.getItem('meqr_settings')) || {
-                vibrate: true,
-                autoOpen: true,
-                saveHistory: true
-            }
+            qrData: {}, // Stores data for the current QR being created
+            savedQrs: [] // Would store saved QR data (requires backend for persistence)
         };
 
-        // أنواع رموز QR مع تفاصيلها
+        // QR Types and their configurations
         const qrTypes = {
             'url': {
                 name: 'رابط URL',
                 icon: 'fas fa-link',
                 fields: [
                     { type: 'text', name: 'url', label: 'الرابط', placeholder: 'https://example.com', required: true }
-                ]
+                ],
+                generateContent: (data) => data.url || ''
             },
             'text': {
                 name: 'نص',
                 icon: 'fas fa-font',
                 fields: [
                     { type: 'textarea', name: 'text', label: 'النص', placeholder: 'أدخل النص هنا...', required: true }
-                ]
+                ],
+                generateContent: (data) => data.text || ''
             },
             'wifi': {
                 name: 'واي فاي',
                 icon: 'fas fa-wifi',
                 fields: [
                     { type: 'text', name: 'ssid', label: 'اسم الشبكة (SSID)', placeholder: 'اسم شبكة الواي فاي', required: true },
-                    { type: 'select', name: 'encryption', label: 'نوع التشفير', options: ['WPA/WPA2', 'WEP', 'لا يوجد'], required: true },
+                    { type: 'select', name: 'encryption', label: 'نوع التشفير', options: ['WPA/WPA2', 'WEP', 'لا يوجد'], required: true, value: 'WPA/WPA2' },
                     { type: 'text', name: 'password', label: 'كلمة المرور', placeholder: 'كلمة مرور الواي فاي', required: true }
-                ]
+                ],
+                generateContent: (data) => `WIFI:S:${data.ssid || ''};T:${data.encryption || 'WPA/WPA2'};P:${data.password || ''};;`
             },
             'pdf': {
                 name: 'ملف PDF',
                 icon: 'fas fa-file-pdf',
                 fields: [
-                    { type: 'file', name: 'pdf', label: 'رفع ملف PDF', accept: '.pdf', required: true }
-                ]
+                    { type: 'file', name: 'pdf', label: 'رفع ملف PDF', accept: '.pdf', required: true, placeholder: 'لم يتم اختيار ملف' }
+                ],
+                generateContent: (data) => data.fileUrl || 'Please upload PDF' // Placeholder, real impl needs backend
             },
             'appstore': {
                 name: 'متجر التطبيقات',
@@ -1170,7 +568,13 @@
                 fields: [
                     { type: 'text', name: 'ios', label: 'رابط App Store', placeholder: 'https://apps.apple.com/...' },
                     { type: 'text', name: 'android', label: 'رابط Google Play', placeholder: 'https://play.google.com/...' }
-                ]
+                ],
+                generateContent: (data) => {
+                    if (data.ios && data.android) return `https://linktree.com/app?ios=${encodeURIComponent(data.ios)}&android=${encodeURIComponent(data.android)}`;
+                    if (data.ios) return data.ios;
+                    if (data.android) return data.android;
+                    return 'No app links provided';
+                }
             },
             'email': {
                 name: 'البريد الإلكتروني',
@@ -1179,22 +583,25 @@
                     { type: 'email', name: 'to', label: 'المستلم', placeholder: 'example@domain.com', required: true },
                     { type: 'text', name: 'subject', label: 'الموضوع', placeholder: 'موضوع البريد الإلكتروني' },
                     { type: 'textarea', name: 'body', label: 'نص الرسالة', placeholder: 'محتوى البريد الإلكتروني...' }
-                ]
+                ],
+                generateContent: (data) => `mailto:${data.to || ''}?subject=${encodeURIComponent(data.subject || '')}&body=${encodeURIComponent(data.body || '')}`
             },
             'whatsapp': {
                 name: 'واتساب',
                 icon: 'fab fa-whatsapp',
                 fields: [
-                    { type: 'tel', name: 'phone', label: 'رقم الهاتف', placeholder: '+966XXXXXXXXX', required: true },
-                    { type: 'text', name: 'message', label: 'الرسالة', placeholder: 'رسالة واتساب...' }
-                ]
+                    { type: 'tel', name: 'phone', label: 'رقم الهاتف (بما في ذلك رمز الدولة)', placeholder: '+966XXXXXXXXX', required: true },
+                    { type: 'text', name: 'message', label: 'الرسالة (اختياري)', placeholder: 'رسالة واتساب...' }
+                ],
+                generateContent: (data) => `https://wa.me/${data.phone || ''}${data.message ? `?text=${encodeURIComponent(data.message)}` : ''}`
             },
             'phone': {
                 name: 'مكالمة هاتفية',
                 icon: 'fas fa-phone-alt',
                 fields: [
                     { type: 'tel', name: 'number', label: 'رقم الهاتف', placeholder: '+966XXXXXXXXX', required: true }
-                ]
+                ],
+                generateContent: (data) => `tel:${data.number || ''}`
             },
             'sms': {
                 name: 'رسالة SMS',
@@ -1202,7 +609,8 @@
                 fields: [
                     { type: 'tel', name: 'number', label: 'رقم الهاتف', placeholder: '+966XXXXXXXXX', required: true },
                     { type: 'text', name: 'message', label: 'الرسالة', placeholder: 'نص الرسالة...' }
-                ]
+                ],
+                generateContent: (data) => `sms:${data.number || ''}${data.message ? `?body=${encodeURIComponent(data.message)}` : ''}`
             },
             'vcard': {
                 name: 'بطاقة اتصال',
@@ -1213,41 +621,70 @@
                     { type: 'email', name: 'email', label: 'البريد الإلكتروني', placeholder: 'example@domain.com' },
                     { type: 'text', name: 'company', label: 'الشركة', placeholder: 'اسم الشركة' },
                     { type: 'text', name: 'title', label: 'المسمى الوظيفي', placeholder: 'المسمى الوظيفي' }
-                ]
+                ],
+                generateContent: (data) => {
+                    let vCard = 'BEGIN:VCARD\nVERSION:3.0\n';
+                    if (data.name) vCard += `FN:${data.name}\n`;
+                    if (data.phone) vCard += `TEL:${data.phone}\n`;
+                    if (data.email) vCard += `EMAIL:${data.email}\n`;
+                    if (data.company) vCard += `ORG:${data.company}\n`;
+                    if (data.title) vCard += `TITLE:${data.title}\n`;
+                    vCard += 'END:VCARD';
+                    return vCard;
+                }
             },
             'map': {
                 name: 'خريطة',
                 icon: 'fas fa-map-marker-alt',
                 fields: [
-                    { type: 'text', name: 'address', label: 'العنوان', placeholder: 'العنوان الكامل' },
-                    { type: 'number', name: 'latitude', label: 'خط العرض', placeholder: '00.0000' },
-                    { type: 'number', name: 'longitude', label: 'خط الطول', placeholder: '00.0000' }
-                ]
+                    { type: 'text', name: 'address', label: 'العنوان', placeholder: 'العنوان الكامل (أو اترك فارغاً للإحداثيات)' },
+                    { type: 'number', name: 'latitude', label: 'خط العرض', placeholder: '00.0000', step: 'any' },
+                    { type: 'number', name: 'longitude', label: 'خط الطول', placeholder: '00.0000', step: 'any' }
+                ],
+                generateContent: (data) => {
+                    if (data.address) {
+                        return `https://maps.google.com/?q=${encodeURIComponent(data.address)}`;
+                    } else if (data.latitude && data.longitude) {
+                        return `https://maps.google.com/?q=${data.latitude},${data.longitude}`;
+                    }
+                    return 'No map data provided';
+                }
             },
             'audio': {
                 name: 'صوت',
                 icon: 'fas fa-music',
                 fields: [
-                    { type: 'file', name: 'audio', label: 'رفع ملف صوتي', accept: '.mp3,.wav', required: true }
-                ]
+                    { type: 'file', name: 'audio', label: 'رفع ملف صوتي', accept: '.mp3,.wav', required: true, placeholder: 'لم يتم اختيار ملف' }
+                ],
+                generateContent: (data) => data.fileUrl || 'Please upload audio' // Placeholder, real impl needs backend
             },
             'video': {
                 name: 'فيديو',
                 icon: 'fas fa-video',
                 fields: [
-                    { type: 'text', name: 'url', label: 'رابط الفيديو', placeholder: 'https://youtube.com/...', required: true }
-                ]
+                    { type: 'text', name: 'url', label: 'رابط الفيديو (YouTube, Vimeo, etc.)', placeholder: 'https://youtube.com/watch?v=...', required: true }
+                ],
+                generateContent: (data) => data.url || ''
             },
             'social': {
                 name: 'وسائل التواصل',
                 icon: 'fas fa-hashtag',
                 fields: [
                     { type: 'text', name: 'facebook', label: 'فيسبوك', placeholder: 'https://facebook.com/...' },
-                    { type: 'text', name: 'twitter', label: 'تويتر', placeholder: 'https://twitter.com/...' },
+                    { type: 'text', name: 'twitter', label: 'تويتر (X)', placeholder: 'https://twitter.com/...' },
                     { type: 'text', name: 'instagram', label: 'إنستغرام', placeholder: 'https://instagram.com/...' },
                     { type: 'text', name: 'linkedin', label: 'لينكد إن', placeholder: 'https://linkedin.com/...' },
                     { type: 'text', name: 'tiktok', label: 'تيك توك', placeholder: 'https://tiktok.com/...' }
-                ]
+                ],
+                generateContent: (data) => {
+                    let socialLinks = [];
+                    if (data.facebook) socialLinks.push(`Facebook: ${data.facebook}`);
+                    if (data.twitter) socialLinks.push(`Twitter: ${data.twitter}`);
+                    if (data.instagram) socialLinks.push(`Instagram: ${data.instagram}`);
+                    if (data.linkedin) socialLinks.push(`LinkedIn: ${data.linkedin}`);
+                    if (data.tiktok) socialLinks.push(`TikTok: ${data.tiktok}`);
+                    return socialLinks.join('\n') || 'No social links provided';
+                }
             },
             'booking': {
                 name: 'حجز موعد',
@@ -1255,36 +692,89 @@
                 fields: [
                     { type: 'text', name: 'title', label: 'عنوان الحجز', placeholder: 'عنوان الحجز', required: true },
                     { type: 'text', name: 'description', label: 'الوصف', placeholder: 'وصف الحجز...' },
-                    { type: 'date', name: 'start', label: 'تاريخ البدء', required: true },
-                    { type: 'date', name: 'end', label: 'تاريخ الانتهاء' },
-                    { type: 'number', name: 'duration', label: 'المدة (دقائق)', placeholder: '30', value: '30' }
-                ]
+                    { type: 'datetime-local', name: 'start', label: 'تاريخ ووقت البدء', required: true },
+                    { type: 'datetime-local', name: 'end', label: 'تاريخ ووقت الانتهاء' },
+                    { type: 'text', name: 'location', label: 'الموقع', placeholder: 'الموقع (اختياري)' }
+                ],
+                generateContent: (data) => {
+                    // iCalendar format (simplified)
+                    let icsContent = 'BEGIN:VCALENDAR\nVERSION:2.0\nPRODID:-//MEQR//NONSGML v1.0//EN\nBEGIN:VEVENT\n';
+                    icsContent += `SUMMARY:${data.title || 'Event'}\n`;
+                    if (data.description) icsContent += `DESCRIPTION:${data.description}\n`;
+                    if (data.location) icsContent += `LOCATION:${data.location}\n`;
+                    if (data.start) icsContent += `DTSTART:${new Date(data.start).toISOString().replace(/[-:]|\.\d{3}/g, '')}\n`;
+                    if (data.end) icsContent += `DTEND:${new Date(data.end).toISOString().replace(/[-:]|\.\d{3}/g, '')}\n`;
+                    icsContent += 'END:VEVENT\nEND:VCALENDAR';
+                    return icsContent;
+                }
             },
             'crypto': {
                 name: 'عملة رقمية',
                 icon: 'fab fa-bitcoin',
                 fields: [
-                    { type: 'select', name: 'currency', label: 'العملة', options: ['Bitcoin', 'Ethereum', 'Litecoin', 'Dogecoin'], required: true },
+                    { type: 'select', name: 'currency', label: 'العملة', options: ['Bitcoin', 'Ethereum', 'Litecoin', 'Dogecoin', 'USDT'], required: true, value: 'Bitcoin' },
                     { type: 'text', name: 'address', label: 'عنوان المحفظة', placeholder: '1A1zP1eP5QGefi2DMPTfTL5SLmv7DivfNa', required: true },
-                    { type: 'number', name: 'amount', label: 'المبلغ', placeholder: '0.00' }
-                ]
+                    { type: 'number', name: 'amount', label: 'المبلغ', placeholder: '0.00', step: 'any' }
+                ],
+                generateContent: (data) => {
+                    let content = '';
+                    switch (data.currency) {
+                        case 'Bitcoin': content = 'bitcoin:'; break;
+                        case 'Ethereum': content = 'ethereum:'; break;
+                        case 'Litecoin': content = 'litecoin:'; break;
+                        case 'Dogecoin': content = 'dogecoin:'; break;
+                        case 'USDT': content = 'erc20:'; break; // Placeholder for ERC20 USDT
+                    }
+                    content += data.address;
+                    if (data.amount) content += `?amount=${data.amount}`;
+                    return content;
+                }
             },
             'payment': {
                 name: 'دفع',
                 icon: 'fas fa-money-bill-wave',
                 fields: [
-                    { type: 'text', name: 'url', label: 'رابط الدفع', placeholder: 'https://payment.example.com', required: true },
-                    { type: 'number', name: 'amount', label: 'المبلغ', placeholder: '0.00', required: true },
+                    { type: 'text', name: 'url', label: 'رابط الدفع (Stripe, PayPal.me, etc.)', placeholder: 'https://paypal.me/yourname', required: true },
+                    { type: 'number', name: 'amount', label: 'المبلغ (اختياري)', placeholder: '0.00', step: '0.01' },
                     { type: 'select', name: 'currency', label: 'العملة', options: ['SAR', 'USD', 'EUR', 'AED'], value: 'SAR' }
-                ]
+                ],
+                generateContent: (data) => {
+                    let url = data.url || '';
+                    if (data.amount && data.currency) {
+                        // This part is highly dependent on the payment gateway's URL parameters
+                        // For PayPal.me, it's typically: https://paypal.me/yourname/amountcurrency
+                        if (url.includes('paypal.me')) {
+                            url = `${url.split('?')[0]}/${data.amount}${data.currency}`;
+                        } else {
+                            // Generic approach, might not work for all gateways
+                            url += (url.includes('?') ? '&' : '?') + `amount=${data.amount}&currency=${data.currency}`;
+                        }
+                    }
+                    return url;
+                }
             },
             'custom-url': {
                 name: 'رابط مخصص',
                 icon: 'fas fa-pencil-ruler',
                 fields: [
-                    { type: 'text', name: 'url', label: 'الرابط', placeholder: 'https://example.com', required: true },
-                    { type: 'select', name: 'condition', label: 'الشرط', options: ['الموقع الجغرافي', 'الوقت', 'اللغة', 'عدد المسح'], required: true }
-                ]
+                    { type: 'text', name: 'default_url', label: 'الرابط الافتراضي', placeholder: 'https://example.com', required: true },
+                    { type: 'text', name: 'name', label: 'اسم الرمز (لإدارة القواعد)', placeholder: 'حملة صيف 2025', required: true },
+                    { type: 'dynamic', name: 'rules', label: 'قواعد إعادة التوجيه (تتطلب خادمًا)', fields: [
+                        { type: 'select', name: 'condition_type', label: 'نوع الشرط', options: ['الموقع الجغرافي', 'الوقت', 'اللغة', 'نوع الجهاز'], required: true, value: 'الموقع الجغرافي' },
+                        { type: 'text', name: 'condition_value', label: 'قيمة الشرط (مثل: SA, 09:00-17:00, ar, mobile)', placeholder: 'SA أو 09:00-17:00', required: true },
+                        { type: 'text', name: 'redirect_url', label: 'رابط إعادة التوجيه', placeholder: 'https://alternative.com', required: true }
+                    ]}
+                ],
+                generateContent: (data) => {
+                    // For a real dynamic QR code, this would point to a backend service
+                    // Example: https://yourdomain.com/qr/dynamic_id
+                    // The backend would then handle the redirection based on 'rules'
+                    // For this frontend-only demo, we'll just show the default URL.
+                    let rulesText = (data.rules || []).map(rule => 
+                        `${rule.condition_type}: ${rule.condition_value} -> ${rule.redirect_url}`
+                    ).join('\n');
+                    return `Default URL: ${data.default_url}\n(Dynamic rules for "${data.name}" require backend implementation)\n${rulesText}`;
+                }
             },
             'list-links': {
                 name: 'قائمة الروابط',
@@ -1292,954 +782,509 @@
                 fields: [
                     { type: 'text', name: 'title', label: 'عنوان القائمة', placeholder: 'روابط مفيدة', required: true },
                     { type: 'dynamic', name: 'links', label: 'الروابط', fields: [
-                        { type: 'text', name: 'title', label: 'عنوان الرابط', placeholder: 'الرابط الأول' },
-                        { type: 'text', name: 'url', label: 'الرابط', placeholder: 'https://...' }
+                        { type: 'text', name: 'link_title', label: 'عنوان الرابط', placeholder: 'الرابط الأول', required: true },
+                        { type: 'text', name: 'link_url', label: 'الرابط', placeholder: 'https://...', required: true }
                     ]}
-                ]
+                ],
+                generateContent: (data) => {
+                    // This would ideally point to a hosted webpage generated by your backend
+                    // showing a list of links, e.g., https://yourdomain.com/qr/list/list_id
+                    let linksText = (data.links || []).map(link => 
+                        `${link.link_title || 'No Title'}: ${link.link_url || 'No URL'}`
+                    ).join('\n');
+                    return `QR Title: ${data.title}\nLinks:\n${linksText}`;
+                }
             }
         };
 
-        // تهيئة التطبيق عند تحميل الصفحة
+        // DOM Elements
+        const pages = {
+            create: document.getElementById('create-page'),
+            createDetail: document.getElementById('create-detail-page')
+        };
+        const backButton = document.getElementById('back-button');
+        const pageTitleElement = document.getElementById('page-title');
+        const qrTypesElements = document.querySelectorAll('.qr-type');
+        
+        // Initial setup on page load
         document.addEventListener('DOMContentLoaded', function() {
-            initApp();
+            setupEventListeners();
+            navigateTo('create'); // Start on the create page
         });
 
-        function initApp() {
-            // عناصر DOM
-            const pages = {
-                welcome: document.getElementById('welcome-page'),
-                create: document.getElementById('create-page'),
-                createDetail: document.getElementById('create-detail-page'),
-                scan: document.getElementById('scan-page'),
-                history: document.getElementById('history-page'),
-                myqrs: document.getElementById('myqrs-page'),
-                settings: document.getElementById('settings-page')
-            };
-            
-            const navItems = document.querySelectorAll('.nav-item');
-            const pageTitle = document.getElementById('page-title');
-            const backButton = document.getElementById('back-button');
-            const actionButton = document.getElementById('action-button');
-            const actionCards = document.querySelectorAll('.action-card');
-            const qrTypesElements = document.querySelectorAll('.qr-type');
-            const historyTabs = document.querySelectorAll('.history-tab');
-            const newScanBtn = document.getElementById('new-scan-btn');
-            const qrSearch = document.getElementById('qr-search');
-            const settingsSwitches = {
-                vibrate: document.getElementById('vibrate-setting'),
-                autoOpen: document.getElementById('auto-open-setting'),
-                saveHistory: document.getElementById('save-history-setting')
-            };
-            
-            // تحديث الإعدادات من التخزين المحلي
-            updateSettingsFromStorage();
-            
-            // إعداد مستمعي الأحداث
-            setupEventListeners();
-            
-            // تحميل البيانات الأولية
-            loadInitialData();
+        function setupEventListeners() {
+            // Select QR Type
+            qrTypesElements.forEach(type => {
+                type.addEventListener('click', () => {
+                    // Remove 'selected' class from previous selection
+                    qrTypesElements.forEach(el => el.classList.remove('selected'));
+                    // Add 'selected' class to current selection
+                    type.classList.add('selected');
 
-            // إعداد مستمعي الأحداث
-            function setupEventListeners() {
-                // التنقل بين الصفحات
-                navItems.forEach(item => {
-                    item.addEventListener('click', () => {
-                        const targetPage = item.dataset.page;
-                        navigateTo(targetPage);
-                    });
+                    appState.currentQrType = type.dataset.type;
+                    // Reset qrData for new QR creation
+                    appState.qrData = {}; 
+                    loadCreateDetailPage(appState.currentQrType);
                 });
-                
-                // بطاقات الإجراءات على الصفحة الرئيسية
-                actionCards.forEach(card => {
-                    card.addEventListener('click', () => {
-                        const action = card.dataset.action;
-                        navigateTo(action);
-                    });
-                });
-                
-                // اختيار نوع رمز QR
-                qrTypesElements.forEach(type => {
-                    type.addEventListener('click', () => {
-                        appState.currentQrType = type.dataset.type;
-                        loadCreateDetailPage(appState.currentQrType);
-                    });
-                });
-                
-                // زر الرجوع
-                backButton.addEventListener('click', () => {
-                    if (appState.previousPages.length > 0) {
-                        const prevPage = appState.previousPages.pop();
-                        navigateTo(prevPage);
-                    }
-                });
-                
-                // تبديل تبويبات التاريخ
-                historyTabs.forEach(tab => {
-                    tab.addEventListener('click', () => {
-                        historyTabs.forEach(t => t.classList.remove('active'));
-                        tab.classList.add('active');
-                        updateHistoryTab(tab.dataset.tab);
-                    });
-                });
-                
-                // مسح جديد
-                if (newScanBtn) {
-                    newScanBtn.addEventListener('click', () => {
-                        document.getElementById('scan-result').style.display = 'none';
-                        document.querySelector('.scanner-message').style.display = 'block';
-                        simulateScan();
-                    });
-                }
-                
-                // البحث في رموزي
-                if (qrSearch) {
-                    qrSearch.addEventListener('input', () => {
-                        filterMyQrs(qrSearch.value);
-                    });
-                }
-                
-                // إعدادات التبديل
-                if (settingsSwitches.vibrate) {
-                    settingsSwitches.vibrate.addEventListener('change', () => {
-                        appState.settings.vibrate = settingsSwitches.vibrate.checked;
-                        saveSettings();
-                    });
-                }
-                
-                if (settingsSwitches.autoOpen) {
-                    settingsSwitches.autoOpen.addEventListener('change', () => {
-                        appState.settings.autoOpen = settingsSwitches.autoOpen.checked;
-                        saveSettings();
-                    });
-                }
-                
-                if (settingsSwitches.saveHistory) {
-                    settingsSwitches.saveHistory.addEventListener('change', () => {
-                        appState.settings.saveHistory = settingsSwitches.saveHistory.checked;
-                        saveSettings();
-                    });
-                }
-                
-                // زر الإجراءات
-                actionButton.addEventListener('click', handleActionButtonClick);
-            }
+            });
             
-            // التنقل بين الصفحات
-            function navigateTo(page) {
-                // حفظ الصفحة الحالية كسابقة
-                appState.previousPages.push(appState.currentPage);
-                
-                // إخفاء الصفحة الحالية
-                pages[appState.currentPage].classList.remove('active');
-                
-                // إظهار الصفحة الجديدة
-                pages[page].classList.add('active');
-                appState.currentPage = page;
-                
-                // تحديث شريط التنقل
-                updateNav();
-                
-                // تحديث عنوان الصفحة
-                updatePageTitle();
-                
-                // إظهار/إخفاء زر الرجوع والإجراءات
-                toggleActionButtons();
-                
-                // إجراءات خاصة بالصفحة
-                handlePageSpecificActions();
-            }
+            // Back button functionality
+            backButton.addEventListener('click', () => {
+                // Clear selected type when going back to type selection
+                qrTypesElements.forEach(el => el.classList.remove('selected'));
+                navigateTo('create');
+            });
+        }
+        
+        // Page Navigation
+        function navigateTo(page) {
+            // Hide current active page
+            Object.values(pages).forEach(p => p.classList.remove('active'));
             
-            // تحديث شريط التنقل
-            function updateNav() {
-                navItems.forEach(item => {
-                    if (item.dataset.page === appState.currentPage) {
-                        item.classList.add('active');
-                    } else {
-                        item.classList.remove('active');
-                    }
-                });
-            }
+            // Show the new page
+            pages[page].classList.add('active');
+            appState.currentPage = page;
             
-            // تحديث عنوان الصفحة
-            function updatePageTitle() {
-                const titles = {
-                    'welcome': 'MEQR',
-                    'create': 'إنشاء رمز QR',
-                    'createDetail': qrTypes[appState.currentQrType]?.name || 'تفاصيل الرمز',
-                    'scan': 'مسح رمز QR',
-                    'history': 'سجل المسح',
-                    'myqrs': 'رموزي',
-                    'settings': 'الإعدادات'
-                };
-                
-                pageTitle.textContent = titles[appState.currentPage] || 'MEQR';
+            // Update page title and back button icon
+            updatePageTitleAndIcon();
+        }
+        
+        // Update Page Title and Back Button Icon
+        function updatePageTitleAndIcon() {
+            if (appState.currentPage === 'create') {
+                pageTitleElement.textContent = 'إنشاء رمز QR جديد';
+                backButton.innerHTML = '<i class="fas fa-arrow-right"></i>'; // Or 'fas fa-home' if it leads to dashboard
+            } else if (appState.currentPage === 'createDetail' && appState.currentQrType) {
+                pageTitleElement.textContent = qrTypes[appState.currentQrType].name;
+                backButton.innerHTML = '<i class="fas fa-arrow-right"></i>';
             }
+        }
+        
+        // Load QR Detail Page based on type
+        function loadCreateDetailPage(type) {
+            const typeData = qrTypes[type];
+            if (!typeData) return;
             
-            // إظهار/إخفاء زر الرجوع والإجراءات
-            function toggleActionButtons() {
-                if (appState.currentPage === 'createDetail') {
-                    backButton.style.display = 'block';
-                    actionButton.style.display = 'block';
-                } else {
-                    backButton.style.display = 'none';
-                    actionButton.style.display = 'none';
+            let formHTML = `
+                <div class="card">
+                    <h3 class="card-title"><i class="${typeData.icon}"></i> ${typeData.name}</h3>
+                    <form id="qr-form">
+            `;
+            
+            // Add form fields
+            typeData.fields.forEach(field => {
+                if (['text', 'email', 'tel', 'number', 'url', 'datetime-local'].includes(field.type)) {
+                    formHTML += `
+                        <div class="form-group">
+                            <label for="${field.name}">${field.label}${field.required ? ' *' : ''}</label>
+                            <input type="${field.type}" id="${field.name}" name="${field.name}" 
+                                class="form-control" placeholder="${field.placeholder || ''}" 
+                                ${field.required ? 'required' : ''} value="${appState.qrData[field.name] || field.value || ''}"
+                                ${field.step ? `step="${field.step}"` : ''}>
+                        </div>
+                    `;
+                } 
+                else if (field.type === 'textarea') {
+                    formHTML += `
+                        <div class="form-group">
+                            <label for="${field.name}">${field.label}${field.required ? ' *' : ''}</label>
+                            <textarea id="${field.name}" name="${field.name}" 
+                                class="form-control" placeholder="${field.placeholder || ''}" 
+                                rows="4" ${field.required ? 'required' : ''}>${appState.qrData[field.name] || field.value || ''}</textarea>
+                        </div>
+                    `;
                 }
-            }
-            
-            // إجراءات خاصة بالصفحة
-            function handlePageSpecificActions() {
-                switch(appState.currentPage) {
-                    case 'scan':
-                        simulateScan();
-                        break;
-                    case 'history':
-                        updateHistoryTab('scanned');
-                        break;
-                    case 'myqrs':
-                        renderMyQrs();
-                        break;
-                    case 'settings':
-                        renderSettings();
-                        break;
+                else if (field.type === 'select') {
+                    let optionsHTML = '';
+                    field.options.forEach(option => {
+                        const selected = (option === (appState.qrData[field.name] || field.value)) ? 'selected' : '';
+                        optionsHTML += `<option value="${option}" ${selected}>${option}</option>`;
+                    });
+                    
+                    formHTML += `
+                        <div class="form-group">
+                            <label for="${field.name}">${field.label}${field.required ? ' *' : ''}</label>
+                            <select id="${field.name}" name="${field.name}" class="form-control" ${field.required ? 'required' : ''}>
+                                ${optionsHTML}
+                            </select>
+                        </div>
+                    `;
                 }
-            }
-            
-            // تحميل صفحة تفاصيل إنشاء رمز QR
-            function loadCreateDetailPage(type) {
-                const typeData = qrTypes[type];
-                if (!typeData) return;
-                
-                let formHTML = `
-                    <div class="card">
-                        <h3 class="card-title"><i class="${typeData.icon}"></i> ${typeData.name}</h3>
-                        <form id="qr-form">
-                `;
-                
-                // إضافة حقول النموذج
-                typeData.fields.forEach(field => {
-                    if (field.type === 'text' || field.type === 'email' || 
-                        field.type === 'tel' || field.type === 'number' || field.type === 'url') {
-                        formHTML += `
-                            <div class="form-group">
-                                <label for="${field.name}">${field.label}${field.required ? ' *' : ''}</label>
-                                <input type="${field.type}" id="${field.name}" name="${field.name}" 
-                                    class="form-control" placeholder="${field.placeholder || ''}" 
-                                    ${field.required ? 'required' : ''} value="${field.value || ''}">
-                            </div>
-                        `;
-                    } 
-                    else if (field.type === 'textarea') {
-                        formHTML += `
-                            <div class="form-group">
-                                <label for="${field.name}">${field.label}${field.required ? ' *' : ''}</label>
-                                <textarea id="${field.name}" name="${field.name}" 
-                                    class="form-control" placeholder="${field.placeholder || ''}" 
-                                    rows="4" ${field.required ? 'required' : ''}>${field.value || ''}</textarea>
-                            </div>
-                        `;
-                    }
-                    else if (field.type === 'select') {
-                        let optionsHTML = '';
-                        field.options.forEach(option => {
-                            const selected = (option === field.value) ? 'selected' : '';
-                            optionsHTML += `<option value="${option}" ${selected}>${option}</option>`;
-                        });
-                        
-                        formHTML += `
-                            <div class="form-group">
-                                <label for="${field.name}">${field.label}${field.required ? ' *' : ''}</label>
-                                <select id="${field.name}" name="${field.name}" class="form-control" ${field.required ? 'required' : ''}>
-                                    ${optionsHTML}
-                                </select>
-                            </div>
-                        `;
-                    }
-                    else if (field.type === 'file') {
-                        formHTML += `
-                            <div class="form-group">
-                                <label for="${field.name}">${field.label}${field.required ? ' *' : ''}</label>
-                                <div class="file-upload">
-                                    <input type="file" id="${field.name}" name="${field.name}" 
-                                        accept="${field.accept || '*'}" ${field.required ? 'required' : ''}>
-                                    <div class="file-upload-label">
-                                        <i class="fas fa-upload"></i> اختر ملفًا للرفع
-                                    </div>
+                else if (field.type === 'file') {
+                    formHTML += `
+                        <div class="form-group">
+                            <label for="${field.name}">${field.label}${field.required ? ' *' : ''}</label>
+                            <div class="file-upload">
+                                <input type="file" id="${field.name}" name="${field.name}" 
+                                    accept="${field.accept || '*'}" ${field.required ? 'required' : ''}>
+                                <div class="file-upload-label">
+                                    <i class="fas fa-upload"></i> <span id="${field.name}-filename">${appState.qrData[`${field.name}_filename`] || field.placeholder}</span>
                                 </div>
                             </div>
-                        `;
-                    }
-                    else if (field.type === 'dynamic') {
-                        formHTML += `
-                            <div class="form-group">
-                                <label>${field.label}</label>
-                                <div id="dynamic-container">
-                                    <div class="dynamic-item">
-                                        ${generateDynamicFields(field.fields)}
-                                        <button type="button" class="btn btn-small btn-secondary remove-item">إزالة</button>
-                                    </div>
-                                </div>
-                                <button type="button" class="btn btn-small" id="add-item">+ إضافة عنصر</button>
+                        </div>
+                    `;
+                }
+                else if (field.type === 'dynamic') {
+                    // For dynamic fields, we check if there's existing data or add one default item
+                    const dynamicItems = appState.qrData[field.name] || [{}]; 
+                    formHTML += `
+                        <div class="form-group">
+                            <label>${field.label}</label>
+                            <div id="${field.name}-container">
+                                ${dynamicItems.map((item, index) => generateDynamicItemHTML(field.fields, item, field.name, index)).join('')}
                             </div>
-                        `;
-                    }
-                });
-                
-                formHTML += `
-                            <button type="submit" class="btn">إنشاء رمز QR</button>
-                        </form>
-                    </div>
-                `;
-                
-                // إضافة معاينة الرمز
-                formHTML += `
-                    <div class="card">
-                        <h3 class="card-title"><i class="fas fa-eye"></i> معاينة الرمز</h3>
-                        <div class="qr-preview-container">
-                            <canvas id="qr-preview" width="200" height="200"></canvas>
-                            <div id="qr-name-display">رمز ${typeData.name}</div>
+                            <button type="button" class="btn btn-small" id="add-${field.name}-item">+ إضافة عنصر</button>
                         </div>
-                        <div class="customization-options">
-                            <div class="color-option active" style="background-color: #2F6BFF;" data-color="#2F6BFF"></div>
-                            <div class="color-option" style="background-color: #00C853;" data-color="#00C853"></div>
-                            <div class="color-option" style="background-color: #FF6B6B;" data-color="#FF6B6B"></div>
-                            <div class="color-option" style="background-color: #9B59B6;" data-color="#9B59B6"></div>
-                        </div>
-                        <button class="btn" id="download-btn"><i class="fas fa-download"></i> تنزيل الرمز</button>
-                        <button class="btn btn-secondary" id="share-btn"><i class="fas fa-share-alt"></i> مشاركة</button>
-                    </div>
-                `;
-                
-                pages.createDetail.innerHTML = formHTML;
-                navigateTo('createDetail');
-                
-                // إعداد مستمعي الأحداث للصفحة الجديدة
-                setupDetailPageEvents();
-            }
+                    `;
+                }
+            });
             
-            // توليد حقول ديناميكية
-            function generateDynamicFields(fields) {
-                let html = '';
-                fields.forEach(field => {
+            formHTML += `
+                        <button type="submit" class="btn">إنشاء رمز QR</button>
+                    </form>
+                </div>
+            `;
+            
+            // Add QR Preview and Customization
+            formHTML += `
+                <div class="card">
+                    <h3 class="card-title"><i class="fas fa-eye"></i> معاينة الرمز</h3>
+                    <div class="qr-preview-container">
+                        <canvas id="qr-preview" width="200" height="200"></canvas>
+                        <div id="qr-name-display">رمز ${typeData.name}</div>
+                    </div>
+                    <div class="customization-options">
+                        <div class="color-option ${appState.qrData.color === '#2F6BFF' || !appState.qrData.color ? 'active' : ''}" style="background-color: #2F6BFF;" data-color="#2F6BFF"></div>
+                        <div class="color-option ${appState.qrData.color === '#00C853' ? 'active' : ''}" style="background-color: #00C853;" data-color="#00C853"></div>
+                        <div class="color-option ${appState.qrData.color === '#FF6B6B' ? 'active' : ''}" style="background-color: #FF6B6B;" data-color="#FF6B6B"></div>
+                        <div class="color-option ${appState.qrData.color === '#9B59B6' ? 'active' : ''}" style="background-color: #9B59B6;" data-color="#9B59B6"></div>
+                    </div>
+                    <button class="btn" id="download-btn"><i class="fas fa-download"></i> تنزيل الرمز</button>
+                    <button class="btn btn-secondary" id="share-btn"><i class="fas fa-share-alt"></i> مشاركة</button>
+                </div>
+            `;
+            
+            pages.createDetail.innerHTML = formHTML;
+            navigateTo('createDetail');
+            
+            // Setup event listeners for the new page
+            setupDetailPageEvents(type);
+        }
+        
+        // Generate HTML for a single dynamic item
+        function generateDynamicItemHTML(fields, itemData = {}, parentName, index) {
+            let html = '<div class="dynamic-item">';
+            fields.forEach(field => {
+                const itemId = `${parentName}-${field.name}-${index}`;
+                const fieldValue = itemData[field.name] || field.value || '';
+                if (['text', 'email', 'url', 'number', 'tel'].includes(field.type)) {
                     html += `
                         <div class="form-group">
-                            <label for="${field.name}">${field.label}</label>
-                            <input type="${field.type}" name="${field.name}" 
-                                class="form-control" placeholder="${field.placeholder || ''}">
+                            <label for="${itemId}">${field.label}${field.required ? ' *' : ''}</label>
+                            <input type="${field.type}" id="${itemId}" name="${field.name}" 
+                                class="form-control dynamic-input" placeholder="${field.placeholder || ''}" 
+                                value="${fieldValue}" ${field.required ? 'required' : ''}>
                         </div>
                     `;
-                });
-                return html;
-            }
-            
-            // إعداد أحداث الصفحة التفصيلية
-            function setupDetailPageEvents() {
-                // إضافة عنصر ديناميكي
-                const addItemBtn = document.getElementById('add-item');
+                } else if (field.type === 'select') {
+                    let optionsHTML = '';
+                    field.options.forEach(option => {
+                        const selected = (option === fieldValue) ? 'selected' : '';
+                        optionsHTML += `<option value="${option}" ${selected}>${option}</option>`;
+                    });
+                    html += `
+                        <div class="form-group">
+                            <label for="${itemId}">${field.label}${field.required ? ' *' : ''}</label>
+                            <select id="${itemId}" name="${field.name}" class="form-control dynamic-input" ${field.required ? 'required' : ''}>
+                                ${optionsHTML}
+                            </select>
+                        </div>
+                    `;
+                }
+            });
+            html += `<button type="button" class="btn btn-small btn-secondary remove-item">إزالة</button></div>`;
+            return html;
+        }
+
+        // Setup events for the detail page
+        function setupDetailPageEvents(type) {
+            const qrForm = document.getElementById('qr-form');
+            if (!qrForm) return;
+
+            const typeData = qrTypes[type];
+
+            // Add Dynamic Item
+            typeData.fields.filter(f => f.type === 'dynamic').forEach(dynamicField => {
+                const addItemBtn = document.getElementById(`add-${dynamicField.name}-item`);
                 if (addItemBtn) {
                     addItemBtn.addEventListener('click', () => {
-                        const container = document.getElementById('dynamic-container');
-                        const newItem = document.createElement('div');
-                        newItem.className = 'dynamic-item';
-                        newItem.innerHTML = generateDynamicFields(qrTypes[appState.currentQrType].fields.find(f => f.type === 'dynamic').fields) + 
-                                            '<button type="button" class="btn btn-small btn-secondary remove-item">إزالة</button>';
-                        container.appendChild(newItem);
+                        const container = document.getElementById(`${dynamicField.name}-container`);
+                        const newIndex = container.children.length;
+                        const newItemHTML = generateDynamicItemHTML(dynamicField.fields, {}, dynamicField.name, newIndex);
+                        container.insertAdjacentHTML('beforeend', newItemHTML);
                         
-                        // إضافة مستمع للأزرار الجديدة
-                        newItem.querySelector('.remove-item').addEventListener('click', function() {
-                            if (container.children.length > 1) {
-                                this.parentElement.remove();
-                            }
-                        });
-                    });
-                }
-                
-                // إزالة عنصر ديناميكي
-                document.querySelectorAll('.remove-item').forEach(btn => {
-                    btn.addEventListener('click', function() {
-                        if (document.getElementById('dynamic-container').children.length > 1) {
-                            this.parentElement.remove();
-                        }
-                    });
-                });
-                
-                // تغيير لون رمز QR
-                document.querySelectorAll('.color-option').forEach(option => {
-                    option.addEventListener('click', function() {
-                        document.querySelectorAll('.color-option').forEach(o => o.classList.remove('active'));
-                        this.classList.add('active');
+                        // Add event listeners to newly added elements
+                        setupDynamicItemEventListeners(container.lastElementChild, dynamicField.name);
+                        // Trigger QR preview update
                         generateQRPreview();
                     });
-                });
+                }
+            });
+            
+            // Initial setup for existing dynamic items
+            document.querySelectorAll('.dynamic-item').forEach(item => {
+                setupDynamicItemEventListeners(item);
+            });
+
+            // Remove Dynamic Item
+            function setupDynamicItemEventListeners(itemElement, parentName = '') {
+                const removeBtn = itemElement.querySelector('.remove-item');
+                if (removeBtn) {
+                    removeBtn.addEventListener('click', function() {
+                        const container = itemElement.parentElement;
+                        // Prevent removing the last item unless it's explicitly allowed (e.g., if not required)
+                        if (container.children.length > 1) {
+                            itemElement.remove();
+                            // Re-index dynamic inputs if needed (optional but good for consistency)
+                            // Re-generate QR preview after removal
+                            updateQrDataFromForm();
+                            generateQRPreview();
+                        } else {
+                            showToast('لا يمكنك إزالة العنصر الأخير.');
+                        }
+                    });
+                }
                 
-                // إنشاء رمز QR عند تغيير المدخلات
-                document.querySelectorAll('#qr-form input, #qr-form textarea, #qr-form select').forEach(input => {
+                // Add input event listeners to dynamic inputs
+                itemElement.querySelectorAll('.dynamic-input').forEach(input => {
                     input.addEventListener('input', generateQRPreview);
-                });
-                
-                // إرسال النموذج
-                const qrForm = document.getElementById('qr-form');
-                if (qrForm) {
-                    qrForm.addEventListener('submit', function(e) {
-                        e.preventDefault();
-                        saveQR();
-                    });
-                }
-                
-                // تنزيل رمز QR
-                const downloadBtn = document.getElementById('download-btn');
-                if (downloadBtn) {
-                    downloadBtn.addEventListener('click', downloadQR);
-                }
-                
-                // مشاركة رمز QR
-                const shareBtn = document.getElementById('share-btn');
-                if (shareBtn) {
-                    shareBtn.addEventListener('click', shareQR);
-                }
-                
-                // إنشاء معاينة أولية
-                generateQRPreview();
-            }
-            
-            // إنشاء معاينة رمز QR
-            function generateQRPreview() {
-                const form = document.getElementById('qr-form');
-                if (!form) return;
-                
-                // جمع بيانات النموذج
-                const formData = new FormData(form);
-                let qrContent = '';
-                
-                // بناء محتوى رمز QR حسب النوع
-                switch(appState.currentQrType) {
-                    case 'url':
-                        qrContent = formData.get('url') || '';
-                        break;
-                    case 'text':
-                        qrContent = formData.get('text') || '';
-                        break;
-                    case 'wifi':
-                        qrContent = `WIFI:S:${formData.get('ssid')};T:${formData.get('encryption')};P:${formData.get('password')};;`;
-                        break;
-                    case 'email':
-                        const to = formData.get('to') || '';
-                        const subject = encodeURIComponent(formData.get('subject') || '');
-                        const body = encodeURIComponent(formData.get('body') || '');
-                        qrContent = `mailto:${to}?subject=${subject}&body=${body}`;
-                        break;
-                    case 'whatsapp':
-                        const phone = formData.get('phone') || '';
-                        const message = encodeURIComponent(formData.get('message') || '');
-                        qrContent = `https://wa.me/${phone}?text=${message}`;
-                        break;
-                    default:
-                        qrContent = formData.get('url') || formData.get('text') || '';
-                }
-                
-                // الحصول على اللون المختار
-                const colorOption = document.querySelector('.color-option.active');
-                const color = colorOption ? colorOption.dataset.color : '#2F6BFF';
-                
-                // إنشاء رمز QR
-                const canvas = document.getElementById('qr-preview');
-                QRCode.toCanvas(canvas, qrContent, {
-                    width: 200,
-                    margin: 1,
-                    color: {
-                        dark: color,
-                        light: '#ffffff'
-                    }
-                }, function(error) {
-                    if (error) {
-                        console.error('Error generating QR code:', error);
-                    }
+                    input.addEventListener('change', generateQRPreview); // For select elements
                 });
             }
+
+            // Color option selection
+            document.querySelectorAll('.color-option').forEach(option => {
+                option.addEventListener('click', function() {
+                    document.querySelectorAll('.color-option').forEach(o => o.classList.remove('active'));
+                    this.classList.add('active');
+                    appState.qrData.color = this.dataset.color; // Save selected color to state
+                    generateQRPreview();
+                });
+            });
             
-            // حفظ رمز QR
-            function saveQR() {
-                const form = document.getElementById('qr-form');
-                if (!form) return;
-                
-                const formData = new FormData(form);
-                const name = formData.get('name') || `رمز ${qrTypes[appState.currentQrType].name}`;
-                const colorOption = document.querySelector('.color-option.active');
-                const color = colorOption ? colorOption.dataset.color : '#2F6BFF';
-                
-                // بناء محتوى رمز QR
-                let qrContent = '';
-                switch(appState.currentQrType) {
-                    case 'url':
-                        qrContent = formData.get('url') || '';
-                        break;
-                    case 'text':
-                        qrContent = formData.get('text') || '';
-                        break;
-                    case 'wifi':
-                        qrContent = `WIFI:S:${formData.get('ssid')};T:${formData.get('encryption')};P:${formData.get('password')};;`;
-                        break;
-                    case 'email':
-                        const to = formData.get('to') || '';
-                        const subject = encodeURIComponent(formData.get('subject') || '');
-                        const body = encodeURIComponent(formData.get('body') || '');
-                        qrContent = `mailto:${to}?subject=${subject}&body=${body}`;
-                        break;
-                    case 'whatsapp':
-                        const phone = formData.get('phone') || '';
-                        const message = encodeURIComponent(formData.get('message') || '');
-                        qrContent = `https://wa.me/${phone}?text=${message}`;
-                        break;
-                    default:
-                        qrContent = formData.get('url') || formData.get('text') || '';
-                }
-                
-                // إنشاء كائن رمز QR
-                const qr = {
-                    id: 'qr_' + Date.now(),
-                    name: name,
-                    type: appState.currentQrType,
-                    content: qrContent,
-                    color: color,
-                    date: new Date().toLocaleDateString('ar-EG')
-                };
-                
-                // إضافة إلى القائمة
-                appState.savedQrs.unshift(qr);
-                localStorage.setItem('meqr_qrs', JSON.stringify(appState.savedQrs));
-                
-                showToast('تم حفظ الرمز بنجاح!');
-                navigateTo('myqrs');
-            }
-            
-            // تنزيل رمز QR
-            function downloadQR() {
-                const canvas = document.getElementById('qr-preview');
-                const link = document.createElement('a');
-                link.download = 'meqr-qrcode.png';
-                link.href = canvas.toDataURL('image/png');
-                link.click();
-            }
-            
-            // مشاركة رمز QR
-            function shareQR() {
-                const canvas = document.getElementById('qr-preview');
-                canvas.toBlob(function(blob) {
-                    const file = new File([blob], "meqr-qrcode.png", {type: "image/png"});
-                    
-                    if (navigator.share && navigator.canShare({files: [file]})) {
-                        navigator.share({
-                            title: 'رمز QR من MEQR',
-                            text: 'تم إنشاء هذا الرمز باستخدام تطبيق MEQR',
-                            files: [file]
-                        })
-                        .catch(error => console.log('Sharing failed', error));
-                    } else {
-                        showToast('مشاركة الملف غير مدعومة في هذا المتصفح');
-                    }
-                }, 'image/png');
-            }
-            
-            // محاكاة مسح رمز QR
-            function simulateScan() {
-                setTimeout(() => {
-                    document.querySelector('.scanner-message').style.display = 'none';
-                    const scanResult = document.getElementById('scan-result');
-                    scanResult.style.display = 'block';
-                    
-                    // نتائج مسح عشوائية
-                    const results = [
-                        {type: 'url', content: 'https://meqr.com', title: 'موقع MEQR الرسمي'},
-                        {type: 'text', content: 'مرحبًا بك في تطبيق MEQR!', title: 'رسالة ترحيبية'},
-                        {type: 'wifi', content: 'WIFI:S:MyNetwork;T:WPA;P:Password123;;', title: 'شبكة واي فاي'}
-                    ];
-                    
-                    const randomResult = results[Math.floor(Math.random() * results.length)];
-                    
-                    document.getElementById('result-content').innerHTML = `
-                        <div style="margin-bottom: 10px;">
-                            <strong>${randomResult.title}</strong>
-                        </div>
-                        <div style="background-color: #f8f9fa; padding: 15px; border-radius: 8px; font-family: monospace; word-break: break-all;">
-                            ${randomResult.content}
-                        </div>
-                    `;
-                    
-                    // حفظ في السجل
-                    if (appState.settings.saveHistory) {
-                        const scanItem = {
-                            id: 'scan_' + Date.now(),
-                            type: randomResult.type,
-                            content: randomResult.content,
-                            title: randomResult.title,
-                            date: new Date().toLocaleDateString('ar-EG')
+            // Input event listeners for form controls
+            qrForm.querySelectorAll('.form-control:not([type="file"])').forEach(input => {
+                input.addEventListener('input', generateQRPreview);
+                input.addEventListener('change', generateQRPreview); // For select elements
+            });
+
+            // File input handling
+            qrForm.querySelectorAll('input[type="file"]').forEach(fileInput => {
+                fileInput.addEventListener('change', function() {
+                    const fileNameSpan = document.getElementById(`${fileInput.id}-filename`);
+                    if (this.files.length > 0) {
+                        const file = this.files[0];
+                        fileNameSpan.textContent = file.name;
+                        // For a real application, you'd upload the file here
+                        // For this demo, we store a placeholder URL or data URL
+                        const reader = new FileReader();
+                        reader.onload = (e) => {
+                            appState.qrData[fileInput.name] = e.target.result; // Store as Data URL for preview
+                            appState.qrData[`${fileInput.name}_filename`] = file.name;
+                            generateQRPreview();
                         };
-                        
-                        appState.scanHistory.unshift(scanItem);
-                        localStorage.setItem('meqr_scan_history', JSON.stringify(appState.scanHistory));
-                        updateHistoryTab('scanned');
-                    }
-                    
-                    // الاهتزاز إذا كان مفعلًا
-                    if (appState.settings.vibrate && navigator.vibrate) {
-                        navigator.vibrate(200);
-                    }
-                    
-                    // فتح الرابط تلقائيًا إذا كان مفعلًا
-                    if (appState.settings.autoOpen && randomResult.type === 'url') {
-                        window.open(randomResult.content, '_blank');
-                    }
-                }, 3000);
-            }
-            
-            // تحديث تبويب التاريخ
-            function updateHistoryTab(tab) {
-                if (tab === 'scanned') {
-                    document.getElementById('scanned-content').style.display = 'block';
-                    document.getElementById('favorites-content').style.display = 'none';
-                    renderScanHistory();
-                } else {
-                    document.getElementById('scanned-content').style.display = 'none';
-                    document.getElementById('favorites-content').style.display = 'block';
-                    renderFavorites();
-                }
-            }
-            
-            // عرض سجل المسح
-            function renderScanHistory() {
-                const list = document.getElementById('scanned-list');
-                list.innerHTML = '';
-                
-                if (appState.scanHistory.length === 0) {
-                    list.innerHTML = `
-                        <div class="empty-state">
-                            <i class="fas fa-qrcode"></i>
-                            <h4>لا توجد عمليات مسح</h4>
-                            <p>لم تقم بمسح أي رموز QR بعد</p>
-                        </div>
-                    `;
-                    return;
-                }
-                
-                appState.scanHistory.forEach(item => {
-                    const listItem = document.createElement('li');
-                    listItem.className = 'history-item';
-                    
-                    // أيقونة حسب النوع
-                    let iconClass = 'fas fa-link';
-                    if (item.type === 'wifi') iconClass = 'fas fa-wifi';
-                    if (item.type === 'text') iconClass = 'fas fa-font';
-                    
-                    listItem.innerHTML = `
-                        <div class="history-icon">
-                            <i class="${iconClass}"></i>
-                        </div>
-                        <div class="history-details">
-                            <div class="history-name">${item.title}</div>
-                            <div class="history-meta">${item.type} • ${item.date}</div>
-                        </div>
-                        <div class="history-actions">
-                            <button class="action-btn favorite-btn" data-id="${item.id}">
-                                <i class="far fa-star"></i>
-                            </button>
-                        </div>
-                    `;
-                    
-                    list.appendChild(listItem);
-                });
-                
-                // إضافة مستمعي الأحداث للأزرار
-                document.querySelectorAll('.favorite-btn').forEach(btn => {
-                    btn.addEventListener('click', function() {
-                        const id = this.dataset.id;
-                        toggleFavorite(id);
-                    });
-                });
-            }
-            
-            // عرض المفضلة
-            function renderFavorites() {
-                const list = document.getElementById('favorites-list');
-                list.innerHTML = '';
-                
-                if (appState.favorites.length === 0) {
-                    list.innerHTML = `
-                        <div class="empty-state">
-                            <i class="fas fa-star"></i>
-                            <h4>لا توجد مفضلات</h4>
-                            <p>لم تقم بإضافة أي عناصر إلى المفضلة بعد</p>
-                        </div>
-                    `;
-                    return;
-                }
-                
-                appState.favorites.forEach(item => {
-                    const listItem = document.createElement('li');
-                    listItem.className = 'history-item';
-                    
-                    // أيقونة حسب النوع
-                    let iconClass = 'fas fa-link';
-                    if (item.type === 'wifi') iconClass = 'fas fa-wifi';
-                    if (item.type === 'text') iconClass = 'fas fa-font';
-                    
-                    listItem.innerHTML = `
-                        <div class="history-icon">
-                            <i class="${iconClass}"></i>
-                        </div>
-                        <div class="history-details">
-                            <div class="history-name">${item.title}</div>
-                            <div class="history-meta">${item.type} • ${item.date}</div>
-                        </div>
-                        <div class="history-actions">
-                            <button class="action-btn remove-favorite-btn" data-id="${item.id}">
-                                <i class="fas fa-trash"></i>
-                            </button>
-                        </div>
-                    `;
-                    
-                    list.appendChild(listItem);
-                });
-                
-                // إضافة مستمعي الأحداث للأزرار
-                document.querySelectorAll('.remove-favorite-btn').forEach(btn => {
-                    btn.addEventListener('click', function() {
-                        const id = this.dataset.id;
-                        removeFavorite(id);
-                    });
-                });
-            }
-            
-            // التبديل بين المفضلة
-            function toggleFavorite(id) {
-                const item = appState.scanHistory.find(i => i.id === id);
-                if (!item) return;
-                
-                const isFavorite = appState.favorites.some(i => i.id === id);
-                
-                if (isFavorite) {
-                    appState.favorites = appState.favorites.filter(i => i.id !== id);
-                    showToast('تمت إزالة العنصر من المفضلة');
-                } else {
-                    appState.favorites.unshift(item);
-                    showToast('تمت إضافة العنصر إلى المفضلة');
-                }
-                
-                localStorage.setItem('meqr_favorites', JSON.stringify(appState.favorites));
-                renderFavorites();
-            }
-            
-            // إزالة من المفضلة
-            function removeFavorite(id) {
-                appState.favorites = appState.favorites.filter(i => i.id !== id);
-                localStorage.setItem('meqr_favorites', JSON.stringify(appState.favorites));
-                renderFavorites();
-                showToast('تمت إزالة العنصر من المفضلة');
-            }
-            
-            // عرض رموزي
-            function renderMyQrs() {
-                const grid = document.getElementById('my-qrs-grid');
-                grid.innerHTML = '';
-                
-                if (appState.savedQrs.length === 0) {
-                    grid.innerHTML = `
-                        <div class="empty-state">
-                            <i class="fas fa-qrcode"></i>
-                            <h4>لا توجد رموز</h4>
-                            <p>لم تقم بإنشاء أي رموز QR بعد</p>
-                        </div>
-                    `;
-                    return;
-                }
-                
-                appState.savedQrs.forEach(qr => {
-                    const qrItem = document.createElement('div');
-                    qrItem.className = 'qr-item';
-                    
-                    // أيقونة حسب النوع
-                    let iconClass = 'fas fa-link';
-                    if (qr.type === 'wifi') iconClass = 'fas fa-wifi';
-                    if (qr.type === 'text') iconClass = 'fas fa-font';
-                    if (qr.type === 'pdf') iconClass = 'fas fa-file-pdf';
-                    
-                    qrItem.innerHTML = `
-                        <div class="qr-image">
-                            <canvas id="qr-${qr.id}"></canvas>
-                        </div>
-                        <div class="qr-info">
-                            <div class="qr-name">${qr.name}</div>
-                            <div class="qr-type">${qrTypes[qr.type]?.name || qr.type} • ${qr.date}</div>
-                            <div class="qr-actions" style="margin-top: 10px;">
-                                <button class="btn btn-small download-btn" data-id="${qr.id}">تنزيل</button>
-                                <button class="btn btn-small btn-secondary delete-btn" data-id="${qr.id}">حذف</button>
-                            </div>
-                        </div>
-                    `;
-                    
-                    grid.appendChild(qrItem);
-                    
-                    // إنشاء رمز QR
-                    setTimeout(() => {
-                        QRCode.toCanvas(document.getElementById(`qr-${qr.id}`), qr.content, {
-                            width: 120,
-                            margin: 1,
-                            color: {
-                                dark: qr.color,
-                                light: '#ffffff'
-                            }
-                        });
-                    }, 100);
-                });
-                
-                // إضافة مستمعي الأحداث للأزرار
-                document.querySelectorAll('.download-btn').forEach(btn => {
-                    btn.addEventListener('click', function() {
-                        const id = this.dataset.id;
-                        downloadSavedQR(id);
-                    });
-                });
-                
-                document.querySelectorAll('.delete-btn').forEach(btn => {
-                    btn.addEventListener('click', function() {
-                        const id = this.dataset.id;
-                        deleteQR(id);
-                    });
-                });
-            }
-            
-            // تنزيل رمز QR محفوظ
-            function downloadSavedQR(id) {
-                const qr = appState.savedQrs.find(q => q.id === id);
-                if (!qr) return;
-                
-                const canvas = document.createElement('canvas');
-                QRCode.toCanvas(canvas, qr.content, {
-                    width: 300,
-                    margin: 2,
-                    color: {
-                        dark: qr.color,
-                        light: '#ffffff'
-                    }
-                }, function() {
-                    const link = document.createElement('a');
-                    link.download = `meqr-${qr.name.replace(/\s+/g, '-')}.png`;
-                    link.href = canvas.toDataURL('image/png');
-                    link.click();
-                });
-            }
-            
-            // حذف رمز QR
-            function deleteQR(id) {
-                appState.savedQrs = appState.savedQrs.filter(q => q.id !== id);
-                localStorage.setItem('meqr_qrs', JSON.stringify(appState.savedQrs));
-                renderMyQrs();
-                showToast('تم حذف الرمز بنجاح');
-            }
-            
-            // تصفية رموزي
-            function filterMyQrs(query) {
-                const grid = document.getElementById('my-qrs-grid');
-                const qrItems = grid.querySelectorAll('.qr-item');
-                
-                qrItems.forEach(item => {
-                    const name = item.querySelector('.qr-name').textContent.toLowerCase();
-                    if (name.includes(query.toLowerCase())) {
-                        item.style.display = 'block';
+                        reader.readAsDataURL(file);
                     } else {
-                        item.style.display = 'none';
+                        fileNameSpan.textContent = qrTypes[type].fields.find(f => f.name === fileInput.name).placeholder;
+                        appState.qrData[fileInput.name] = '';
+                        appState.qrData[`${fileInput.name}_filename`] = '';
+                        generateQRPreview();
                     }
                 });
+            });
+
+            // Form Submission
+            qrForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                updateQrDataFromForm(); // Ensure appState.qrData is up-to-date
+                saveQR();
+            });
+            
+            // Download QR
+            const downloadBtn = document.getElementById('download-btn');
+            if (downloadBtn) {
+                downloadBtn.addEventListener('click', downloadQR);
             }
             
-            // تحديث الإعدادات من التخزين المحلي
-            function updateSettingsFromStorage() {
-                if (settingsSwitches.vibrate) {
-                    settingsSwitches.vibrate.checked = appState.settings.vibrate;
+            // Share QR
+            const shareBtn = document.getElementById('share-btn');
+            if (shareBtn) {
+                shareBtn.addEventListener('click', shareQR);
+            }
+            
+            // Initial QR preview generation
+            generateQRPreview();
+        }
+
+        // Update appState.qrData from the current form inputs
+        function updateQrDataFromForm() {
+            const form = document.getElementById('qr-form');
+            if (!form) return;
+
+            const newQrData = {};
+            const typeData = qrTypes[appState.currentQrType];
+
+            typeData.fields.forEach(field => {
+                if (field.type === 'dynamic') {
+                    const dynamicContainer = document.getElementById(`${field.name}-container`);
+                    if (dynamicContainer) {
+                        newQrData[field.name] = [];
+                        dynamicContainer.querySelectorAll('.dynamic-item').forEach(itemElement => {
+                            const itemData = {};
+                            itemElement.querySelectorAll('.dynamic-input').forEach(input => {
+                                itemData[input.name] = input.value;
+                            });
+                            newQrData[field.name].push(itemData);
+                        });
+                    }
+                } else if (field.type === 'file') {
+                    // File data is handled by the change event listener
+                    // Keep the existing file data in appState.qrData unless a new file is selected
+                    if (appState.qrData[field.name]) {
+                        newQrData[field.name] = appState.qrData[field.name];
+                        newQrData[`${field.name}_filename`] = appState.qrData[`${field.name}_filename`];
+                    }
+                } else {
+                    const inputElement = form.elements[field.name];
+                    if (inputElement) {
+                        newQrData[field.name] = inputElement.value;
+                    }
                 }
-                if (settingsSwitches.autoOpen) {
-                    settingsSwitches.autoOpen.checked = appState.settings.autoOpen;
+            });
+
+            // Update the color as well
+            const colorOption = document.querySelector('.color-option.active');
+            newQrData.color = colorOption ? colorOption.dataset.color : '#2F6BFF';
+
+            appState.qrData = newQrData;
+        }
+
+        // Generate QR Code Preview
+        function generateQRPreview() {
+            updateQrDataFromForm(); // Always update data from form before generating
+
+            const canvas = document.getElementById('qr-preview');
+            const qrNameDisplay = document.getElementById('qr-name-display');
+            if (!canvas || !qrNameDisplay) return;
+
+            const typeData = qrTypes[appState.currentQrType];
+            if (!typeData) return;
+
+            const qrContent = typeData.generateContent(appState.qrData);
+            const color = appState.qrData.color || '#2F6BFF';
+
+            qrNameDisplay.textContent = `رمز ${appState.qrData.name || typeData.name}`;
+
+            if (qrContent.trim() === '') {
+                // Clear canvas if content is empty
+                const ctx = canvas.getContext('2d');
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                qrNameDisplay.textContent = `أدخل بيانات لـ ${typeData.name}`;
+                return;
+            }
+
+            QRCode.toCanvas(canvas, qrContent, {
+                width: 200,
+                margin: 1,
+                color: {
+                    dark: color,
+                    light: '#ffffff'
                 }
-                if (settingsSwitches.saveHistory) {
-                    settingsSwitches.saveHistory.checked = appState.settings.saveHistory;
+            }, function(error) {
+                if (error) {
+                    console.error('Error generating QR code:', error);
+                    qrNameDisplay.textContent = 'خطأ في توليد الرمز';
                 }
+            });
+        }
+        
+        // Save QR Code (Frontend Only - for real persistence, needs backend)
+        function saveQR() {
+            if (!appState.qrData || Object.keys(appState.qrData).length === 0) {
+                showToast('الرجاء إدخال بيانات لإنشاء الرمز.');
+                return;
             }
-            
-            // حفظ الإعدادات
-            function saveSettings() {
-                localStorage.setItem('meqr_settings', JSON.stringify(appState.settings));
-                showToast('تم حفظ الإعدادات');
+
+            // In a real application, you would send appState.qrData to your backend
+            // The backend would then save it to a database and provide a unique short URL
+            // for the dynamic QR code if applicable.
+
+            showToast('تم حفظ الرمز بنجاح! (الحفظ محلي فقط لهذا العرض التوضيحي)');
+            // For demo purposes, you could add it to appState.savedQrs
+            // appState.savedQrs.push(JSON.parse(JSON.stringify(appState.qrData)));
+            // console.log("Saved QRs:", appState.savedQrs);
+        }
+        
+        // Download QR Code
+        function downloadQR() {
+            const canvas = document.getElementById('qr-preview');
+            if (!canvas) return;
+
+            const nameInput = document.getElementById('name'); // Try to get a name if available
+            const defaultName = qrTypes[appState.currentQrType]?.name || 'QR_Code';
+            const fileName = (nameInput && nameInput.value.trim() !== '') ? nameInput.value.trim() : defaultName;
+
+            const link = document.createElement('a');
+            link.download = `${fileName}.png`;
+            link.href = canvas.toDataURL('image/png');
+            link.click();
+            showToast('تم تنزيل الرمز بنجاح!');
+        }
+        
+        // Share QR Code
+        function shareQR() {
+            const canvas = document.getElementById('qr-preview');
+            if (!canvas) {
+                showToast('لا يوجد رمز QR للمشاركة.');
+                return;
             }
-            
-            // عرض الإعدادات
-            function renderSettings() {
-                updateSettingsFromStorage();
-            }
-            
-            // معالجة زر الإجراءات
-            function handleActionButtonClick() {
-                const currentPage = appState.currentPage;
+
+            canvas.toBlob(function(blob) {
+                const file = new File([blob], "meqr-qrcode.png", {type: "image/png"});
                 
-                if (currentPage === 'createDetail') {
-                    // إظهار خيارات إضافية لصفحة الإنشاء
-                    showToast('خيارات إضافية: تحرير، مشاركة، إلخ');
+                if (navigator.share && navigator.canShare({files: [file]})) {
+                    navigator.share({
+                        title: 'رمز QR من MEQR',
+                        text: 'تم إنشاء هذا الرمز باستخدام تطبيق MEQR',
+                        files: [file]
+                    })
+                    .then(() => showToast('تمت المشاركة بنجاح!'))
+                    .catch(error => showToast('حدث خطأ في المشاركة: ' + error.message));
+                } else {
+                    showToast('مشاركة الملف غير مدعومة في هذا المتصفح');
                 }
-            }
+            }, 'image/png');
+        }
+        
+        // Display Toast Message
+        function showToast(message) {
+            const existingToast = document.querySelector('.toast');
+            if (existingToast) existingToast.remove();
             
-            // تحميل البيانات الأولية
-            function loadInitialData() {
-                // إنشاء بعض البيانات الافتراضية إذا لم تكن موجودة
-                if (appState.savedQrs.length === 0) {
-                    appState.savedQrs = [
-                        {
-                            id: 'qr_1',
-                            name: 'موقع الشركة',
-                            type: 'url',
-                            content: 'https://example.com',
-                            color: '#2F6BFF',
-                            date: '13.07.25'
-                        },
-                        {
-                            id: 'qr_2',
-                            name: 'شبكة المكتب',
-                            type: 'wifi',
-                            content: 'WIFI:S:OfficeNetwork;T:WPA;P:OfficePass123;;',
-                            color: '#00C853',
-                            date: '12.07.25'
-                        }
-                    ];
-                    localStorage.setItem('meqr_qrs', JSON.stringify(appState.savedQrs));
-                }
-                
-                if (appState.scanHistory.length === 0) {
-                    appState.scanHistory = [
-                        {
-                            id: 'scan_1',
-                            type: 'url',
-                            content: 'https://meqr.com',
-                            title: 'موقع MEQR الرسمي',
-                            date: '13.07.25'
-                        }
-                    ];
-                    localStorage.setItem('meqr_scan_history', JSON.stringify(appState.scanHistory));
-                }
-            }
+            const toast = document.createElement('div');
+            toast.className = 'toast';
+            toast.textContent = message;
             
-            // عرض رسالة تنبيه
-            function showToast(message) {
-                const existingToast = document.querySelector('.toast');
-                if (existingToast) existingToast.remove();
-                
-                const toast = document.createElement('div');
-                toast.className = 'toast';
-                toast.textContent = message;
-                
-                document.body.appendChild(toast);
-                
-                setTimeout(() => {
+            document.body.appendChild(toast);
+            
+            // Remove after 3 seconds
+            setTimeout(() => {
+                if (toast.parentNode) { // Check if it still exists before removing
                     toast.remove();
-                }, 3000);
-            }
+                }
+            }, 3000);
         }
     </script>
 </body>
 </html>
+
