@@ -2,44 +2,866 @@
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <title>عمار الوزير | إنشاء ومسح رموز QR</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MEQR - مولد رموز QR ديناميكية</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700;800;900&display=swap" rel="stylesheet">
-    <script src="https://cdn.rawgit.com/davidshimjs/qrcodejs/gh-pages/qrcode.min.js"></script>
-    <script src="https://rawgit.com/schmich/instascan-builds/master/instascan.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/jsqr@1.4.0/dist/jsQR.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.1/build/qrcode.min.js"></script>
     <style>
-        /* ... (جميع أنماط التصميم الأصلية تبقى كما هي) ... */
+        :root {
+            --primary: #2F6BFF;
+            --primary-dark: #0E374A;
+            --secondary: #00C853;
+            --background: #FFFFFF;
+            --card-bg: #F2F4F8;
+            --text: #333333;
+            --text-light: #777777;
+            --border: #E0E0E0;
+            --shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            --radius: 12px;
+            --header-height: 60px;
+            --nav-height: 70px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: var(--background);
+            color: var(--text);
+            overflow-x: hidden;
+            padding-top: var(--header-height);
+            padding-bottom: var(--nav-height);
+        }
+
+        .top-bar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: var(--header-height);
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: white;
+            padding: 0 16px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            z-index: 1000;
+            box-shadow: var(--shadow);
+        }
+
+        .back-btn {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 1.2rem;
+            cursor: pointer;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+        }
+
+        .back-btn:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+
+        .page-title {
+            font-size: 1.3rem;
+            font-weight: 700;
+            flex: 1;
+            text-align: center;
+        }
+
+        .action-btn {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 1.2rem;
+            cursor: pointer;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+        }
+
+        .action-btn:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+
+        .content-area {
+            min-height: calc(100vh - var(--header-height) - var(--nav-height));
+            padding: 20px 16px;
+        }
+
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: var(--nav-height);
+            display: flex;
+            justify-content: space-around;
+            background-color: var(--background);
+            border-top: 1px solid var(--border);
+            z-index: 1000;
+            padding: 8px 0;
+        }
+
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            font-size: 0.75rem;
+            color: var(--text-light);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            width: 20%;
+            padding: 5px 0;
+        }
+
+        .nav-item.active {
+            color: var(--primary);
+        }
+
+        .nav-item i {
+            font-size: 1.4rem;
+            margin-bottom: 4px;
+        }
+
+        .nav-label {
+            font-size: 0.7rem;
+        }
+
+        .card {
+            background-color: var(--background);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            padding: 20px;
+            margin-bottom: 20px;
+            transition: transform 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-3px);
+        }
+
+        .card-title {
+            font-size: 1.2rem;
+            font-weight: 700;
+            margin-bottom: 16px;
+            color: var(--primary-dark);
+            display: flex;
+            align-items: center;
+        }
+
+        .card-title i {
+            margin-left: 10px;
+        }
+
+        .welcome-screen {
+            text-align: center;
+            padding: 30px 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 70vh;
+        }
+
+        .welcome-logo {
+            width: 100px;
+            height: 100px;
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 30px;
+        }
+
+        .welcome-logo i {
+            font-size: 3rem;
+            color: white;
+        }
+
+        .welcome-screen h2 {
+            font-size: 2rem;
+            color: var(--primary);
+            margin-bottom: 15px;
+        }
+
+        .welcome-screen p {
+            font-size: 1.1rem;
+            margin-bottom: 30px;
+            line-height: 1.6;
+            color: var(--text-light);
+            max-width: 500px;
+        }
+
+        .action-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            width: 100%;
+            max-width: 500px;
+        }
+
+        .action-card {
+            background-color: var(--card-bg);
+            border-radius: var(--radius);
+            padding: 20px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .action-card:hover {
+            background-color: var(--primary);
+            color: white;
+        }
+
+        .action-card i {
+            font-size: 2.2rem;
+            margin-bottom: 15px;
+        }
+
+        .action-card p {
+            font-weight: 600;
+        }
+
+        .type-category {
+            margin-bottom: 25px;
+        }
+
+        .category-title {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--primary-dark);
+            margin-bottom: 15px;
+            padding-bottom: 8px;
+            border-bottom: 2px solid var(--primary);
+        }
+
+        .qr-type-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+        }
+
+        .qr-type {
+            background-color: var(--card-bg);
+            border-radius: var(--radius);
+            padding: 15px 8px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .qr-type:hover {
+            background-color: var(--primary);
+            color: white;
+        }
+
+        .qr-type i {
+            font-size: 1.8rem;
+            margin-bottom: 8px;
+        }
+
+        .qr-type p {
+            font-size: 0.85rem;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: var(--primary-dark);
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            font-size: 1rem;
+            transition: border-color 0.3s ease;
+        }
+
+        .form-control:focus {
+            border-color: var(--primary);
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(47, 107, 255, 0.2);
+        }
+
+        .checkbox-group {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .checkbox-group input {
+            margin-left: 10px;
+        }
+
+        .btn {
+            display: inline-block;
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            border-radius: var(--radius);
+            padding: 14px 24px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+            width: 100%;
+            margin-top: 10px;
+        }
+
+        .btn:hover {
+            background-color: var(--primary-dark);
+            transform: translateY(-2px);
+        }
+
+        .btn-secondary {
+            background-color: var(--card-bg);
+            color: var(--text);
+        }
+
+        .btn-secondary:hover {
+            background-color: #e0e0e0;
+        }
+
+        .btn-small {
+            padding: 8px 15px;
+            font-size: 0.9rem;
+            width: auto;
+        }
+
+        .qr-preview-container {
+            text-align: center;
+            padding: 20px;
+            background-color: var(--card-bg);
+            border-radius: var(--radius);
+            margin-bottom: 20px;
+        }
+
+        #qr-preview {
+            max-width: 200px;
+            margin: 0 auto 20px;
+            display: block;
+        }
+
+        .customization-options {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .color-option {
+            height: 40px;
+            border-radius: var(--radius);
+            cursor: pointer;
+            border: 2px solid transparent;
+        }
+
+        .color-option.active {
+            border-color: var(--text);
+        }
+
+        .page {
+            display: none;
+        }
+
+        .page.active {
+            display: block;
+            animation: fadeIn 0.4s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .dynamic-rules {
+            background-color: #f8f9fa;
+            border-radius: var(--radius);
+            padding: 15px;
+            margin-bottom: 15px;
+        }
+
+        .rule-item {
+            background-color: white;
+            border-radius: var(--radius);
+            padding: 15px;
+            margin-bottom: 15px;
+            box-shadow: var(--shadow);
+        }
+
+        .form-row {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+
+        .form-row .form-group {
+            flex: 1;
+            margin-bottom: 0;
+        }
+
+        .icon-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 15px;
+            margin-top: 15px;
+        }
+
+        .icon-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            font-size: 0.85rem;
+        }
+
+        .icon-circle {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background-color: var(--card-bg);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 8px;
+            font-size: 1.5rem;
+            color: var(--primary);
+        }
+
+        .days-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .day-item {
+            padding: 10px;
+            border-radius: var(--radius);
+            background-color: var(--card-bg);
+            text-align: center;
+            cursor: pointer;
+        }
+
+        .day-item.active {
+            background-color: var(--primary);
+            color: white;
+        }
+
+        .scanner-container {
+            position: relative;
+            width: 100%;
+            height: 300px;
+            background-color: #000;
+            border-radius: var(--radius);
+            overflow: hidden;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .scanner-overlay {
+            position: absolute;
+            width: 70%;
+            height: 70%;
+            border: 3px solid var(--primary);
+            border-radius: var(--radius);
+            box-shadow: 0 0 0 1000px rgba(0, 0, 0, 0.5);
+        }
+
+        .scanner-message {
+            text-align: center;
+            color: var(--text-light);
+            margin-bottom: 20px;
+        }
+
+        .history-tabs {
+            display: flex;
+            margin-bottom: 20px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .history-tab {
+            padding: 12px 20px;
+            cursor: pointer;
+            font-weight: 600;
+            position: relative;
+        }
+
+        .history-tab.active {
+            color: var(--primary);
+        }
+
+        .history-tab.active::after {
+            content: '';
+            position: absolute;
+            bottom: -1px;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background-color: var(--primary);
+        }
+
+        .history-list {
+            list-style: none;
+        }
+
+        .history-item {
+            display: flex;
+            align-items: center;
+            padding: 15px;
+            border-bottom: 1px solid var(--border);
+            cursor: pointer;
+        }
+
+        .history-item:last-child {
+            border-bottom: none;
+        }
+
+        .history-icon {
+            width: 40px;
+            height: 40px;
+            background-color: var(--card-bg);
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-left: 15px;
+            color: var(--primary);
+        }
+
+        .history-details {
+            flex: 1;
+        }
+
+        .history-name {
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+
+        .history-meta {
+            font-size: 0.85rem;
+            color: var(--text-light);
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 50px 20px;
+            color: var(--text-light);
+        }
+
+        .empty-state i {
+            font-size: 3rem;
+            margin-bottom: 20px;
+            color: #e0e0e0;
+        }
+
+        .qr-list-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .search-box {
+            position: relative;
+            flex: 1;
+            margin-left: 15px;
+        }
+
+        .search-box input {
+            width: 100%;
+            padding: 12px 15px 12px 40px;
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            font-size: 1rem;
+        }
+
+        .search-box i {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-light);
+        }
+
+        .qr-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+        }
+
+        .qr-item {
+            background-color: var(--card-bg);
+            border-radius: var(--radius);
+            overflow: hidden;
+            box-shadow: var(--shadow);
+        }
+
+        .qr-image {
+            padding: 15px;
+            background-color: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .qr-image canvas {
+            width: 100%;
+            height: auto;
+            max-width: 150px;
+        }
+
+        .qr-info {
+            padding: 15px;
+        }
+
+        .qr-name {
+            font-weight: 600;
+            margin-bottom: 5px;
+            font-size: 1rem;
+        }
+
+        .qr-type {
+            font-size: 0.85rem;
+            color: var(--text-light);
+            margin-bottom: 10px;
+        }
+
+        .settings-list {
+            list-style: none;
+        }
+
+        .settings-item {
+            padding: 18px 0;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .settings-item:last-child {
+            border-bottom: none;
+        }
+
+        .settings-label {
+            font-weight: 600;
+        }
+
+        .switch {
+            position: relative;
+            display: inline-block;
+            width: 50px;
+            height: 26px;
+        }
+
+        .switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #ccc;
+            transition: .4s;
+            border-radius: 34px;
+        }
+
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 18px;
+            width: 18px;
+            left: 4px;
+            bottom: 4px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+        }
+
+        input:checked + .slider {
+            background-color: var(--primary);
+        }
+
+        input:checked + .slider:before {
+            transform: translateX(24px);
+        }
+
+        .settings-section {
+            margin-bottom: 30px;
+        }
+
+        .settings-section-title {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--primary-dark);
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .toast {
+            position: fixed;
+            bottom: 90px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: var(--primary);
+            color: white;
+            padding: 12px 24px;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            z-index: 1000;
+            animation: toastIn 0.3s ease, toastOut 0.3s ease 2.7s;
+        }
+
+        @keyframes toastIn {
+            from { opacity: 0; transform: translateX(-50%) translateY(20px); }
+            to { opacity: 1; transform: translateX(-50%) translateY(0); }
+        }
+
+        @keyframes toastOut {
+            from { opacity: 1; transform: translateX(-50%) translateY(0); }
+            to { opacity: 0; transform: translateX(-50%) translateY(20px); }
+        }
+
+        .file-upload {
+            position: relative;
+            display: inline-block;
+            width: 100%;
+        }
+
+        .file-upload input {
+            position: absolute;
+            left: 0;
+            top: 0;
+            opacity: 0;
+            width: 100%;
+            height: 100%;
+            cursor: pointer;
+        }
+
+        .file-upload-label {
+            display: block;
+            padding: 12px 15px;
+            background-color: var(--card-bg);
+            border: 1px dashed var(--border);
+            border-radius: var(--radius);
+            text-align: center;
+            cursor: pointer;
+        }
+
+        .file-upload-label i {
+            margin-left: 8px;
+        }
+
+        @media (max-width: 768px) {
+            .qr-type-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .action-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .icon-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+            
+            .days-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+            
+            .qr-grid {
+                grid-template-columns: 1fr;
+            }
+        }
     </style>
 </head>
 <body>
-    <!-- الهيدر -->
-    <header>
-        <div class="logo">
-            <div class="logo-icon">
-                <i class="fas fa-qrcode"></i>
+    <div class="top-bar">
+        <button class="back-btn" id="back-button" style="display: none;">
+            <i class="fas fa-arrow-right"></i>
+        </button>
+        <div class="page-title" id="page-title">MEQR</div>
+        <button class="action-btn" id="action-button" style="display: none;">
+            <i class="fas fa-ellipsis-h"></i>
+        </button>
+    </div>
+
+    <div class="content-area">
+        <div id="welcome-page" class="page active">
+            <div class="welcome-screen">
+                <div class="welcome-logo">
+                    <i class="fas fa-qrcode"></i>
+                </div>
+                <h2>مرحبًا بك في MEQR!</h2>
+                <p>أنشئ رموز QR ديناميكية مجانًا بنقرة واحدة فقط!</p>
+                
+                <div class="action-grid">
+                    <div class="action-card" data-action="scan">
+                        <i class="fas fa-qrcode"></i>
+                        <p>مسح رمز QR</p>
+                    </div>
+                    <div class="action-card" data-action="history">
+                        <i class="fas fa-history"></i>
+                        <p>سجل المسح</p>
+                    </div>
+                    <div class="action-card" data-action="create">
+                        <i class="fas fa-plus-circle"></i>
+                        <p>إنشاء رمز QR</p>
+                    </div>
+                    <div class="action-card" data-action="myqrs">
+                        <i class="fas fa-qrcode"></i>
+                        <p>رموزي</p>
+                    </div>
+                </div>
             </div>
-            <div class="logo-text">عمار الوزير</div>
         </div>
-        <div class="user-info">
-            <div class="user-avatar">ع</div>
-        </div>
-    </header>
-    
-    <!-- المحتوى الرئيسي -->
-    <div class="container">
-        <!-- صفحة إنشاء QR -->
-        <div id="create-page" class="page active">
-            <h2 class="section-title"><i class="fas fa-plus-circle"></i>إنشاء رمز QR جديد</h2>
-            
+
+        <div id="create-page" class="page">
             <div class="card">
                 <h3 class="card-title"><i class="fas fa-qrcode"></i> اختر نوع المحتوى</h3>
                 
                 <div class="type-category">
                     <div class="category-title">الروابط</div>
-                    <div class="qr-types-grid">
-                        <div class="qr-type active" data-type="url">
+                    <div class="qr-type-grid">
+                        <div class="qr-type" data-type="url">
                             <i class="fas fa-link"></i>
                             <p>رابط URL</p>
                         </div>
@@ -64,7 +886,7 @@
                 
                 <div class="type-category">
                     <div class="category-title">التواصل</div>
-                    <div class="qr-types-grid">
+                    <div class="qr-type-grid">
                         <div class="qr-type" data-type="email">
                             <i class="fas fa-envelope"></i>
                             <p>البريد الإلكتروني</p>
@@ -90,7 +912,7 @@
                 
                 <div class="type-category">
                     <div class="category-title">الوسائط</div>
-                    <div class="qr-types-grid">
+                    <div class="qr-type-grid">
                         <div class="qr-type" data-type="pdf">
                             <i class="fas fa-file-pdf"></i>
                             <p>ملف PDF</p>
@@ -112,7 +934,7 @@
                 
                 <div class="type-category">
                     <div class="category-title">الشبكات</div>
-                    <div class="qr-types-grid">
+                    <div class="qr-type-grid">
                         <div class="qr-type" data-type="wifi">
                             <i class="fas fa-wifi"></i>
                             <p>واي فاي</p>
@@ -126,7 +948,7 @@
                 
                 <div class="type-category">
                     <div class="category-title">أخرى</div>
-                    <div class="qr-types-grid">
+                    <div class="qr-type-grid">
                         <div class="qr-type" data-type="text">
                             <i class="fas fa-font"></i>
                             <p>نص</p>
@@ -148,224 +970,544 @@
             </div>
         </div>
 
-        <!-- صفحة تفاصيل إنشاء الرمز -->
         <div id="create-detail-page" class="page">
             <!-- سيتم ملؤها ديناميكيًا -->
         </div>
-        
-        <!-- ... (بقية الصفحات تبقى كما هي) ... -->
-    </div>
-    
-    <!-- شريط التنقل السفلي -->
-    <div class="bottom-nav">
-        <!-- ... (يبقى كما هو) ... -->
-    </div>
-    
-    <script>
-        // بيانات التطبيق
-        const app = {
-            // ... (بقية البيانات الأصلية) ...
-            
-            // أنواع رموز QR مع تفاصيلها
-            qrTypes: {
-                'url': {
-                    name: 'رابط URL',
-                    icon: 'fas fa-link',
-                    fields: [
-                        { type: 'text', name: 'url', label: 'الرابط', placeholder: 'https://example.com', required: true }
-                    ]
-                },
-                'text': {
-                    name: 'نص',
-                    icon: 'fas fa-font',
-                    fields: [
-                        { type: 'textarea', name: 'text', label: 'النص', placeholder: 'أدخل النص هنا...', required: true }
-                    ]
-                },
-                'wifi': {
-                    name: 'واي فاي',
-                    icon: 'fas fa-wifi',
-                    fields: [
-                        { type: 'text', name: 'ssid', label: 'اسم الشبكة (SSID)', placeholder: 'اسم شبكة الواي فاي', required: true },
-                        { type: 'select', name: 'encryption', label: 'نوع التشفير', options: ['WPA/WPA2', 'WEP', 'لا يوجد'], required: true },
-                        { type: 'text', name: 'password', label: 'كلمة المرور', placeholder: 'كلمة مرور الواي فاي', required: true }
-                    ]
-                },
-                'pdf': {
-                    name: 'ملف PDF',
-                    icon: 'fas fa-file-pdf',
-                    fields: [
-                        { type: 'file', name: 'pdf', label: 'رفع ملف PDF', accept: '.pdf', required: true }
-                    ]
-                },
-                'appstore': {
-                    name: 'متجر التطبيقات',
-                    icon: 'fas fa-mobile-alt',
-                    fields: [
-                        { type: 'text', name: 'ios', label: 'رابط App Store', placeholder: 'https://apps.apple.com/...' },
-                        { type: 'text', name: 'android', label: 'رابط Google Play', placeholder: 'https://play.google.com/...' }
-                    ]
-                },
-                'email': {
-                    name: 'البريد الإلكتروني',
-                    icon: 'fas fa-envelope',
-                    fields: [
-                        { type: 'email', name: 'to', label: 'المستلم', placeholder: 'example@domain.com', required: true },
-                        { type: 'text', name: 'subject', label: 'الموضوع', placeholder: 'موضوع البريد الإلكتروني' },
-                        { type: 'textarea', name: 'body', label: 'نص الرسالة', placeholder: 'محتوى البريد الإلكتروني...' }
-                    ]
-                },
-                'whatsapp': {
-                    name: 'واتساب',
-                    icon: 'fab fa-whatsapp',
-                    fields: [
-                        { type: 'tel', name: 'phone', label: 'رقم الهاتف', placeholder: '+966XXXXXXXXX', required: true },
-                        { type: 'text', name: 'message', label: 'الرسالة', placeholder: 'رسالة واتساب...' }
-                    ]
-                },
-                'phone': {
-                    name: 'مكالمة هاتفية',
-                    icon: 'fas fa-phone-alt',
-                    fields: [
-                        { type: 'tel', name: 'number', label: 'رقم الهاتف', placeholder: '+966XXXXXXXXX', required: true }
-                    ]
-                },
-                'sms': {
-                    name: 'رسالة SMS',
-                    icon: 'fas fa-sms',
-                    fields: [
-                        { type: 'tel', name: 'number', label: 'رقم الهاتف', placeholder: '+966XXXXXXXXX', required: true },
-                        { type: 'text', name: 'message', label: 'الرسالة', placeholder: 'نص الرسالة...' }
-                    ]
-                },
-                'vcard': {
-                    name: 'بطاقة اتصال',
-                    icon: 'fas fa-address-card',
-                    fields: [
-                        { type: 'text', name: 'name', label: 'الاسم', placeholder: 'الاسم الكامل', required: true },
-                        { type: 'tel', name: 'phone', label: 'رقم الهاتف', placeholder: '+966XXXXXXXXX' },
-                        { type: 'email', name: 'email', label: 'البريد الإلكتروني', placeholder: 'example@domain.com' },
-                        { type: 'text', name: 'company', label: 'الشركة', placeholder: 'اسم الشركة' },
-                        { type: 'text', name: 'title', label: 'المسمى الوظيفي', placeholder: 'المسمى الوظيفي' }
-                    ]
-                },
-                'map': {
-                    name: 'خريطة',
-                    icon: 'fas fa-map-marker-alt',
-                    fields: [
-                        { type: 'text', name: 'address', label: 'العنوان', placeholder: 'العنوان الكامل' },
-                        { type: 'number', name: 'latitude', label: 'خط العرض', placeholder: '00.0000' },
-                        { type: 'number', name: 'longitude', label: 'خط الطول', placeholder: '00.0000' }
-                    ]
-                },
-                'audio': {
-                    name: 'صوت',
-                    icon: 'fas fa-music',
-                    fields: [
-                        { type: 'file', name: 'audio', label: 'رفع ملف صوتي', accept: '.mp3,.wav', required: true }
-                    ]
-                },
-                'video': {
-                    name: 'فيديو',
-                    icon: 'fas fa-video',
-                    fields: [
-                        { type: 'text', name: 'url', label: 'رابط الفيديو', placeholder: 'https://youtube.com/...', required: true }
-                    ]
-                },
-                'social': {
-                    name: 'وسائل التواصل',
-                    icon: 'fas fa-hashtag',
-                    fields: [
-                        { type: 'text', name: 'facebook', label: 'فيسبوك', placeholder: 'https://facebook.com/...' },
-                        { type: 'text', name: 'twitter', label: 'تويتر', placeholder: 'https://twitter.com/...' },
-                        { type: 'text', name: 'instagram', label: 'إنستغرام', placeholder: 'https://instagram.com/...' },
-                        { type: 'text', name: 'linkedin', label: 'لينكد إن', placeholder: 'https://linkedin.com/...' },
-                        { type: 'text', name: 'tiktok', label: 'تيك توك', placeholder: 'https://tiktok.com/...' }
-                    ]
-                },
-                'booking': {
-                    name: 'حجز موعد',
-                    icon: 'fas fa-calendar-check',
-                    fields: [
-                        { type: 'text', name: 'title', label: 'عنوان الحجز', placeholder: 'عنوان الحجز', required: true },
-                        { type: 'text', name: 'description', label: 'الوصف', placeholder: 'وصف الحجز...' },
-                        { type: 'date', name: 'start', label: 'تاريخ البدء', required: true },
-                        { type: 'date', name: 'end', label: 'تاريخ الانتهاء' },
-                        { type: 'number', name: 'duration', label: 'المدة (دقائق)', placeholder: '30', value: '30' }
-                    ]
-                },
-                'crypto': {
-                    name: 'عملة رقمية',
-                    icon: 'fab fa-bitcoin',
-                    fields: [
-                        { type: 'select', name: 'currency', label: 'العملة', options: ['Bitcoin', 'Ethereum', 'Litecoin', 'Dogecoin'], required: true },
-                        { type: 'text', name: 'address', label: 'عنوان المحفظة', placeholder: '1A1zP1eP5QGefi2DMPTfTL5SLmv7DivfNa', required: true },
-                        { type: 'number', name: 'amount', label: 'المبلغ', placeholder: '0.00' }
-                    ]
-                },
-                'payment': {
-                    name: 'دفع',
-                    icon: 'fas fa-money-bill-wave',
-                    fields: [
-                        { type: 'text', name: 'url', label: 'رابط الدفع', placeholder: 'https://payment.example.com', required: true },
-                        { type: 'number', name: 'amount', label: 'المبلغ', placeholder: '0.00', required: true },
-                        { type: 'select', name: 'currency', label: 'العملة', options: ['SAR', 'USD', 'EUR', 'AED'], value: 'SAR' }
-                    ]
-                },
-                'custom-url': {
-                    name: 'رابط مخصص',
-                    icon: 'fas fa-pencil-ruler',
-                    fields: [
-                        { type: 'text', name: 'url', label: 'الرابط', placeholder: 'https://example.com', required: true },
-                        { type: 'select', name: 'condition', label: 'الشرط', options: ['الموقع الجغرافي', 'الوقت', 'اللغة', 'عدد المسح'], required: true }
-                    ]
-                },
-                'list-links': {
-                    name: 'قائمة الروابط',
-                    icon: 'fas fa-list',
-                    fields: [
-                        { type: 'text', name: 'title', label: 'عنوان القائمة', placeholder: 'روابط مفيدة', required: true },
-                        { type: 'dynamic', name: 'links', label: 'الروابط', fields: [
-                            { type: 'text', name: 'title', label: 'عنوان الرابط', placeholder: 'الرابط الأول' },
-                            { type: 'text', name: 'url', label: 'الرابط', placeholder: 'https://...' }
-                        ]}
-                    ]
-                }
-            },
 
-            // تهيئة التطبيق
-            initApp: function() {
-                this.loadFromLocalStorage();
-                this.setupNavigation();
-                this.setupCreatePage();
-                this.setupScanPage();
-                this.setupMyQrsPage();
-                this.setupHistoryPage();
-                this.setupSettingsPage();
-                this.generateSampleData();
+        <div id="scan-page" class="page">
+            <div class="card">
+                <h3 class="card-title"><i class="fas fa-qrcode"></i> مسح رمز QR</h3>
+                <div class="scanner-container">
+                    <div class="scanner-overlay"></div>
+                </div>
+                <p class="scanner-message">ضع رمز QR داخل الإطار لمسحه ضوئيًا</p>
+                
+                <div id="scan-result" style="display: none;">
+                    <h4>نتيجة المسح:</h4>
+                    <div class="card">
+                        <div id="result-content"></div>
+                    </div>
+                    <button class="btn" id="new-scan-btn">مسح رمز جديد</button>
+                </div>
+            </div>
+        </div>
+
+        <div id="history-page" class="page">
+            <div class="card">
+                <div class="history-tabs">
+                    <div class="history-tab active" data-tab="scanned">الممسوحة</div>
+                    <div class="history-tab" data-tab="favorites">المفضلة</div>
+                </div>
+
+                <div id="scanned-content">
+                    <ul class="history-list" id="scanned-list">
+                        <!-- سيتم ملؤه ديناميكيًا -->
+                    </ul>
+                </div>
+                
+                <div id="favorites-content" style="display: none;">
+                    <ul class="history-list" id="favorites-list">
+                        <!-- سيتم ملؤه ديناميكيًا -->
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div id="myqrs-page" class="page">
+            <div class="card">
+                <div class="qr-list-header">
+                    <h3 class="card-title"><i class="fas fa-qrcode"></i> رموزي</h3>
+                    <div class="search-box">
+                        <i class="fas fa-search"></i>
+                        <input type="text" id="qr-search" placeholder="بحث في رموزي...">
+                    </div>
+                </div>
+
+                <div class="qr-grid" id="my-qrs-grid">
+                    <!-- سيتم ملؤه ديناميكيًا -->
+                </div>
+            </div>
+        </div>
+
+        <div id="settings-page" class="page">
+            <div class="card">
+                <div class="settings-section">
+                    <h4 class="settings-section-title">تفضيلات المسح</h4>
+                    <ul class="settings-list">
+                        <li class="settings-item">
+                            <span class="settings-label">الاهتزاز عند المسح</span>
+                            <label class="switch">
+                                <input type="checkbox" id="vibrate-setting" checked>
+                                <span class="slider"></span>
+                            </label>
+                        </li>
+                        <li class="settings-item">
+                            <span class="settings-label">فتح المواقع تلقائيًا</span>
+                            <label class="switch">
+                                <input type="checkbox" id="auto-open-setting" checked>
+                                <span class="slider"></span>
+                            </label>
+                        </li>
+                        <li class="settings-item">
+                            <span class="settings-label">حفظ السجل</span>
+                            <label class="switch">
+                                <input type="checkbox" id="save-history-setting" checked>
+                                <span class="slider"></span>
+                            </label>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="settings-section">
+                    <h4 class="settings-section-title">المساعدة والدعم</h4>
+                    <ul class="settings-list">
+                        <li class="settings-item" id="feedback-btn">
+                            <span class="settings-label">إرسال ملاحظات</span>
+                            <i class="fas fa-chevron-left"></i>
+                        </li>
+                        <li class="settings-item" id="pricing-btn">
+                            <span class="settings-label">الأسعار</span>
+                            <i class="fas fa-chevron-left"></i>
+                        </li>
+                        <li class="settings-item" id="help-btn">
+                            <span class="settings-label">مساعدة</span>
+                            <i class="fas fa-chevron-left"></i>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="settings-section">
+                    <h4 class="settings-section-title">حول التطبيق</h4>
+                    <ul class="settings-list">
+                        <li class="settings-item">
+                            <span class="settings-label">الإصدار</span>
+                            <span class="settings-value">1.0.0</span>
+                        </li>
+                        <li class="settings-item">
+                            <span class="settings-label">بنيت بحب ❤️</span>
+                            <span class="settings-value">MEQR Team</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="bottom-nav">
+        <div class="nav-item active" data-page="welcome">
+            <i class="fas fa-home"></i>
+            <span class="nav-label">الرئيسية</span>
+        </div>
+        <div class="nav-item" data-page="history">
+            <i class="fas fa-history"></i>
+            <span class="nav-label">السجل</span>
+        </div>
+        <div class="nav-item" data-page="scan">
+            <i class="fas fa-qrcode"></i>
+            <span class="nav-label">مسح</span>
+        </div>
+        <div class="nav-item" data-page="myqrs">
+            <i class="fas fa-folder"></i>
+            <span class="nav-label">رموزي</span>
+        </div>
+        <div class="nav-item" data-page="settings">
+            <i class="fas fa-cog"></i>
+            <span class="nav-label">الإعدادات</span>
+        </div>
+    </div>
+
+    <script>
+        // حالة التطبيق
+        const appState = {
+            currentPage: 'welcome',
+            previousPages: [],
+            currentQrType: null,
+            savedQrs: JSON.parse(localStorage.getItem('meqr_qrs')) || [],
+            scanHistory: JSON.parse(localStorage.getItem('meqr_scan_history')) || [],
+            favorites: JSON.parse(localStorage.getItem('meqr_favorites')) || [],
+            settings: JSON.parse(localStorage.getItem('meqr_settings')) || {
+                vibrate: true,
+                autoOpen: true,
+                saveHistory: true
+            }
+        };
+
+        // أنواع رموز QR مع تفاصيلها
+        const qrTypes = {
+            'url': {
+                name: 'رابط URL',
+                icon: 'fas fa-link',
+                fields: [
+                    { type: 'text', name: 'url', label: 'الرابط', placeholder: 'https://example.com', required: true }
+                ]
             },
+            'text': {
+                name: 'نص',
+                icon: 'fas fa-font',
+                fields: [
+                    { type: 'textarea', name: 'text', label: 'النص', placeholder: 'أدخل النص هنا...', required: true }
+                ]
+            },
+            'wifi': {
+                name: 'واي فاي',
+                icon: 'fas fa-wifi',
+                fields: [
+                    { type: 'text', name: 'ssid', label: 'اسم الشبكة (SSID)', placeholder: 'اسم شبكة الواي فاي', required: true },
+                    { type: 'select', name: 'encryption', label: 'نوع التشفير', options: ['WPA/WPA2', 'WEP', 'لا يوجد'], required: true },
+                    { type: 'text', name: 'password', label: 'كلمة المرور', placeholder: 'كلمة مرور الواي فاي', required: true }
+                ]
+            },
+            'pdf': {
+                name: 'ملف PDF',
+                icon: 'fas fa-file-pdf',
+                fields: [
+                    { type: 'file', name: 'pdf', label: 'رفع ملف PDF', accept: '.pdf', required: true }
+                ]
+            },
+            'appstore': {
+                name: 'متجر التطبيقات',
+                icon: 'fas fa-mobile-alt',
+                fields: [
+                    { type: 'text', name: 'ios', label: 'رابط App Store', placeholder: 'https://apps.apple.com/...' },
+                    { type: 'text', name: 'android', label: 'رابط Google Play', placeholder: 'https://play.google.com/...' }
+                ]
+            },
+            'email': {
+                name: 'البريد الإلكتروني',
+                icon: 'fas fa-envelope',
+                fields: [
+                    { type: 'email', name: 'to', label: 'المستلم', placeholder: 'example@domain.com', required: true },
+                    { type: 'text', name: 'subject', label: 'الموضوع', placeholder: 'موضوع البريد الإلكتروني' },
+                    { type: 'textarea', name: 'body', label: 'نص الرسالة', placeholder: 'محتوى البريد الإلكتروني...' }
+                ]
+            },
+            'whatsapp': {
+                name: 'واتساب',
+                icon: 'fab fa-whatsapp',
+                fields: [
+                    { type: 'tel', name: 'phone', label: 'رقم الهاتف', placeholder: '+966XXXXXXXXX', required: true },
+                    { type: 'text', name: 'message', label: 'الرسالة', placeholder: 'رسالة واتساب...' }
+                ]
+            },
+            'phone': {
+                name: 'مكالمة هاتفية',
+                icon: 'fas fa-phone-alt',
+                fields: [
+                    { type: 'tel', name: 'number', label: 'رقم الهاتف', placeholder: '+966XXXXXXXXX', required: true }
+                ]
+            },
+            'sms': {
+                name: 'رسالة SMS',
+                icon: 'fas fa-sms',
+                fields: [
+                    { type: 'tel', name: 'number', label: 'رقم الهاتف', placeholder: '+966XXXXXXXXX', required: true },
+                    { type: 'text', name: 'message', label: 'الرسالة', placeholder: 'نص الرسالة...' }
+                ]
+            },
+            'vcard': {
+                name: 'بطاقة اتصال',
+                icon: 'fas fa-address-card',
+                fields: [
+                    { type: 'text', name: 'name', label: 'الاسم', placeholder: 'الاسم الكامل', required: true },
+                    { type: 'tel', name: 'phone', label: 'رقم الهاتف', placeholder: '+966XXXXXXXXX' },
+                    { type: 'email', name: 'email', label: 'البريد الإلكتروني', placeholder: 'example@domain.com' },
+                    { type: 'text', name: 'company', label: 'الشركة', placeholder: 'اسم الشركة' },
+                    { type: 'text', name: 'title', label: 'المسمى الوظيفي', placeholder: 'المسمى الوظيفي' }
+                ]
+            },
+            'map': {
+                name: 'خريطة',
+                icon: 'fas fa-map-marker-alt',
+                fields: [
+                    { type: 'text', name: 'address', label: 'العنوان', placeholder: 'العنوان الكامل' },
+                    { type: 'number', name: 'latitude', label: 'خط العرض', placeholder: '00.0000' },
+                    { type: 'number', name: 'longitude', label: 'خط الطول', placeholder: '00.0000' }
+                ]
+            },
+            'audio': {
+                name: 'صوت',
+                icon: 'fas fa-music',
+                fields: [
+                    { type: 'file', name: 'audio', label: 'رفع ملف صوتي', accept: '.mp3,.wav', required: true }
+                ]
+            },
+            'video': {
+                name: 'فيديو',
+                icon: 'fas fa-video',
+                fields: [
+                    { type: 'text', name: 'url', label: 'رابط الفيديو', placeholder: 'https://youtube.com/...', required: true }
+                ]
+            },
+            'social': {
+                name: 'وسائل التواصل',
+                icon: 'fas fa-hashtag',
+                fields: [
+                    { type: 'text', name: 'facebook', label: 'فيسبوك', placeholder: 'https://facebook.com/...' },
+                    { type: 'text', name: 'twitter', label: 'تويتر', placeholder: 'https://twitter.com/...' },
+                    { type: 'text', name: 'instagram', label: 'إنستغرام', placeholder: 'https://instagram.com/...' },
+                    { type: 'text', name: 'linkedin', label: 'لينكد إن', placeholder: 'https://linkedin.com/...' },
+                    { type: 'text', name: 'tiktok', label: 'تيك توك', placeholder: 'https://tiktok.com/...' }
+                ]
+            },
+            'booking': {
+                name: 'حجز موعد',
+                icon: 'fas fa-calendar-check',
+                fields: [
+                    { type: 'text', name: 'title', label: 'عنوان الحجز', placeholder: 'عنوان الحجز', required: true },
+                    { type: 'text', name: 'description', label: 'الوصف', placeholder: 'وصف الحجز...' },
+                    { type: 'date', name: 'start', label: 'تاريخ البدء', required: true },
+                    { type: 'date', name: 'end', label: 'تاريخ الانتهاء' },
+                    { type: 'number', name: 'duration', label: 'المدة (دقائق)', placeholder: '30', value: '30' }
+                ]
+            },
+            'crypto': {
+                name: 'عملة رقمية',
+                icon: 'fab fa-bitcoin',
+                fields: [
+                    { type: 'select', name: 'currency', label: 'العملة', options: ['Bitcoin', 'Ethereum', 'Litecoin', 'Dogecoin'], required: true },
+                    { type: 'text', name: 'address', label: 'عنوان المحفظة', placeholder: '1A1zP1eP5QGefi2DMPTfTL5SLmv7DivfNa', required: true },
+                    { type: 'number', name: 'amount', label: 'المبلغ', placeholder: '0.00' }
+                ]
+            },
+            'payment': {
+                name: 'دفع',
+                icon: 'fas fa-money-bill-wave',
+                fields: [
+                    { type: 'text', name: 'url', label: 'رابط الدفع', placeholder: 'https://payment.example.com', required: true },
+                    { type: 'number', name: 'amount', label: 'المبلغ', placeholder: '0.00', required: true },
+                    { type: 'select', name: 'currency', label: 'العملة', options: ['SAR', 'USD', 'EUR', 'AED'], value: 'SAR' }
+                ]
+            },
+            'custom-url': {
+                name: 'رابط مخصص',
+                icon: 'fas fa-pencil-ruler',
+                fields: [
+                    { type: 'text', name: 'url', label: 'الرابط', placeholder: 'https://example.com', required: true },
+                    { type: 'select', name: 'condition', label: 'الشرط', options: ['الموقع الجغرافي', 'الوقت', 'اللغة', 'عدد المسح'], required: true }
+                ]
+            },
+            'list-links': {
+                name: 'قائمة الروابط',
+                icon: 'fas fa-list',
+                fields: [
+                    { type: 'text', name: 'title', label: 'عنوان القائمة', placeholder: 'روابط مفيدة', required: true },
+                    { type: 'dynamic', name: 'links', label: 'الروابط', fields: [
+                        { type: 'text', name: 'title', label: 'عنوان الرابط', placeholder: 'الرابط الأول' },
+                        { type: 'text', name: 'url', label: 'الرابط', placeholder: 'https://...' }
+                    ]}
+                ]
+            }
+        };
+
+        // تهيئة التطبيق عند تحميل الصفحة
+        document.addEventListener('DOMContentLoaded', function() {
+            initApp();
+        });
+
+        function initApp() {
+            // عناصر DOM
+            const pages = {
+                welcome: document.getElementById('welcome-page'),
+                create: document.getElementById('create-page'),
+                createDetail: document.getElementById('create-detail-page'),
+                scan: document.getElementById('scan-page'),
+                history: document.getElementById('history-page'),
+                myqrs: document.getElementById('myqrs-page'),
+                settings: document.getElementById('settings-page')
+            };
             
-            // إعداد صفحة الإنشاء
-            setupCreatePage: function() {
-                // تغيير نوع QR
-                document.querySelectorAll('.qr-type').forEach(type => {
-                    type.addEventListener('click', function() {
-                        document.querySelectorAll('.qr-type').forEach(t => {
-                            t.classList.remove('active');
-                        });
-                        this.classList.add('active');
-                        
-                        // تحديث الحقول حسب النوع
-                        const type = this.dataset.type;
-                        app.currentQrType = type;
-                        app.loadCreateDetailPage(type);
+            const navItems = document.querySelectorAll('.nav-item');
+            const pageTitle = document.getElementById('page-title');
+            const backButton = document.getElementById('back-button');
+            const actionButton = document.getElementById('action-button');
+            const actionCards = document.querySelectorAll('.action-card');
+            const qrTypesElements = document.querySelectorAll('.qr-type');
+            const historyTabs = document.querySelectorAll('.history-tab');
+            const newScanBtn = document.getElementById('new-scan-btn');
+            const qrSearch = document.getElementById('qr-search');
+            const settingsSwitches = {
+                vibrate: document.getElementById('vibrate-setting'),
+                autoOpen: document.getElementById('auto-open-setting'),
+                saveHistory: document.getElementById('save-history-setting')
+            };
+            
+            // تحديث الإعدادات من التخزين المحلي
+            updateSettingsFromStorage();
+            
+            // إعداد مستمعي الأحداث
+            setupEventListeners();
+            
+            // تحميل البيانات الأولية
+            loadInitialData();
+
+            // إعداد مستمعي الأحداث
+            function setupEventListeners() {
+                // التنقل بين الصفحات
+                navItems.forEach(item => {
+                    item.addEventListener('click', () => {
+                        const targetPage = item.dataset.page;
+                        navigateTo(targetPage);
                     });
                 });
-            },
+                
+                // بطاقات الإجراءات على الصفحة الرئيسية
+                actionCards.forEach(card => {
+                    card.addEventListener('click', () => {
+                        const action = card.dataset.action;
+                        navigateTo(action);
+                    });
+                });
+                
+                // اختيار نوع رمز QR
+                qrTypesElements.forEach(type => {
+                    type.addEventListener('click', () => {
+                        appState.currentQrType = type.dataset.type;
+                        loadCreateDetailPage(appState.currentQrType);
+                    });
+                });
+                
+                // زر الرجوع
+                backButton.addEventListener('click', () => {
+                    if (appState.previousPages.length > 0) {
+                        const prevPage = appState.previousPages.pop();
+                        navigateTo(prevPage);
+                    }
+                });
+                
+                // تبديل تبويبات التاريخ
+                historyTabs.forEach(tab => {
+                    tab.addEventListener('click', () => {
+                        historyTabs.forEach(t => t.classList.remove('active'));
+                        tab.classList.add('active');
+                        updateHistoryTab(tab.dataset.tab);
+                    });
+                });
+                
+                // مسح جديد
+                if (newScanBtn) {
+                    newScanBtn.addEventListener('click', () => {
+                        document.getElementById('scan-result').style.display = 'none';
+                        document.querySelector('.scanner-message').style.display = 'block';
+                        simulateScan();
+                    });
+                }
+                
+                // البحث في رموزي
+                if (qrSearch) {
+                    qrSearch.addEventListener('input', () => {
+                        filterMyQrs(qrSearch.value);
+                    });
+                }
+                
+                // إعدادات التبديل
+                if (settingsSwitches.vibrate) {
+                    settingsSwitches.vibrate.addEventListener('change', () => {
+                        appState.settings.vibrate = settingsSwitches.vibrate.checked;
+                        saveSettings();
+                    });
+                }
+                
+                if (settingsSwitches.autoOpen) {
+                    settingsSwitches.autoOpen.addEventListener('change', () => {
+                        appState.settings.autoOpen = settingsSwitches.autoOpen.checked;
+                        saveSettings();
+                    });
+                }
+                
+                if (settingsSwitches.saveHistory) {
+                    settingsSwitches.saveHistory.addEventListener('change', () => {
+                        appState.settings.saveHistory = settingsSwitches.saveHistory.checked;
+                        saveSettings();
+                    });
+                }
+                
+                // زر الإجراءات
+                actionButton.addEventListener('click', handleActionButtonClick);
+            }
+            
+            // التنقل بين الصفحات
+            function navigateTo(page) {
+                // حفظ الصفحة الحالية كسابقة
+                appState.previousPages.push(appState.currentPage);
+                
+                // إخفاء الصفحة الحالية
+                pages[appState.currentPage].classList.remove('active');
+                
+                // إظهار الصفحة الجديدة
+                pages[page].classList.add('active');
+                appState.currentPage = page;
+                
+                // تحديث شريط التنقل
+                updateNav();
+                
+                // تحديث عنوان الصفحة
+                updatePageTitle();
+                
+                // إظهار/إخفاء زر الرجوع والإجراءات
+                toggleActionButtons();
+                
+                // إجراءات خاصة بالصفحة
+                handlePageSpecificActions();
+            }
+            
+            // تحديث شريط التنقل
+            function updateNav() {
+                navItems.forEach(item => {
+                    if (item.dataset.page === appState.currentPage) {
+                        item.classList.add('active');
+                    } else {
+                        item.classList.remove('active');
+                    }
+                });
+            }
+            
+            // تحديث عنوان الصفحة
+            function updatePageTitle() {
+                const titles = {
+                    'welcome': 'MEQR',
+                    'create': 'إنشاء رمز QR',
+                    'createDetail': qrTypes[appState.currentQrType]?.name || 'تفاصيل الرمز',
+                    'scan': 'مسح رمز QR',
+                    'history': 'سجل المسح',
+                    'myqrs': 'رموزي',
+                    'settings': 'الإعدادات'
+                };
+                
+                pageTitle.textContent = titles[appState.currentPage] || 'MEQR';
+            }
+            
+            // إظهار/إخفاء زر الرجوع والإجراءات
+            function toggleActionButtons() {
+                if (appState.currentPage === 'createDetail') {
+                    backButton.style.display = 'block';
+                    actionButton.style.display = 'block';
+                } else {
+                    backButton.style.display = 'none';
+                    actionButton.style.display = 'none';
+                }
+            }
+            
+            // إجراءات خاصة بالصفحة
+            function handlePageSpecificActions() {
+                switch(appState.currentPage) {
+                    case 'scan':
+                        simulateScan();
+                        break;
+                    case 'history':
+                        updateHistoryTab('scanned');
+                        break;
+                    case 'myqrs':
+                        renderMyQrs();
+                        break;
+                    case 'settings':
+                        renderSettings();
+                        break;
+                }
+            }
             
             // تحميل صفحة تفاصيل إنشاء رمز QR
-            loadCreateDetailPage: function(type) {
-                const typeData = this.qrTypes[type];
+            function loadCreateDetailPage(type) {
+                const typeData = qrTypes[type];
                 if (!typeData) return;
                 
                 let formHTML = `
@@ -433,7 +1575,7 @@
                                 <label>${field.label}</label>
                                 <div id="dynamic-container">
                                     <div class="dynamic-item">
-                                        ${this.generateDynamicFields(field.fields)}
+                                        ${generateDynamicFields(field.fields)}
                                         <button type="button" class="btn btn-small btn-secondary remove-item">إزالة</button>
                                     </div>
                                 </div>
@@ -468,18 +1610,15 @@
                     </div>
                 `;
                 
-                document.getElementById('create-detail-page').innerHTML = formHTML;
-                
-                // إظهار صفحة التفاصيل
-                document.getElementById('create-page').classList.remove('active');
-                document.getElementById('create-detail-page').classList.add('active');
+                pages.createDetail.innerHTML = formHTML;
+                navigateTo('createDetail');
                 
                 // إعداد مستمعي الأحداث للصفحة الجديدة
-                this.setupDetailPageEvents();
-            },
+                setupDetailPageEvents();
+            }
             
             // توليد حقول ديناميكية
-            generateDynamicFields: function(fields) {
+            function generateDynamicFields(fields) {
                 let html = '';
                 fields.forEach(field => {
                     html += `
@@ -491,10 +1630,10 @@
                     `;
                 });
                 return html;
-            },
+            }
             
             // إعداد أحداث الصفحة التفصيلية
-            setupDetailPageEvents: function() {
+            function setupDetailPageEvents() {
                 // إضافة عنصر ديناميكي
                 const addItemBtn = document.getElementById('add-item');
                 if (addItemBtn) {
@@ -502,9 +1641,8 @@
                         const container = document.getElementById('dynamic-container');
                         const newItem = document.createElement('div');
                         newItem.className = 'dynamic-item';
-                        newItem.innerHTML = this.generateDynamicFields(
-                            this.qrTypes[app.currentQrType].fields.find(f => f.type === 'dynamic').fields
-                        ) + '<button type="button" class="btn btn-small btn-secondary remove-item">إزالة</button>';
+                        newItem.innerHTML = generateDynamicFields(qrTypes[appState.currentQrType].fields.find(f => f.type === 'dynamic').fields) + 
+                                            '<button type="button" class="btn btn-small btn-secondary remove-item">إزالة</button>';
                         container.appendChild(newItem);
                         
                         // إضافة مستمع للأزرار الجديدة
@@ -530,42 +1668,42 @@
                     option.addEventListener('click', function() {
                         document.querySelectorAll('.color-option').forEach(o => o.classList.remove('active'));
                         this.classList.add('active');
-                        this.generateQRPreview();
+                        generateQRPreview();
                     });
                 });
                 
                 // إنشاء رمز QR عند تغيير المدخلات
                 document.querySelectorAll('#qr-form input, #qr-form textarea, #qr-form select').forEach(input => {
-                    input.addEventListener('input', this.generateQRPreview.bind(this));
+                    input.addEventListener('input', generateQRPreview);
                 });
                 
                 // إرسال النموذج
                 const qrForm = document.getElementById('qr-form');
                 if (qrForm) {
-                    qrForm.addEventListener('submit', (e) => {
+                    qrForm.addEventListener('submit', function(e) {
                         e.preventDefault();
-                        this.saveQR();
+                        saveQR();
                     });
                 }
                 
                 // تنزيل رمز QR
                 const downloadBtn = document.getElementById('download-btn');
                 if (downloadBtn) {
-                    downloadBtn.addEventListener('click', this.downloadQR.bind(this));
+                    downloadBtn.addEventListener('click', downloadQR);
                 }
                 
                 // مشاركة رمز QR
                 const shareBtn = document.getElementById('share-btn');
                 if (shareBtn) {
-                    shareBtn.addEventListener('click', this.shareQR.bind(this));
+                    shareBtn.addEventListener('click', shareQR);
                 }
                 
                 // إنشاء معاينة أولية
-                this.generateQRPreview();
-            },
+                generateQRPreview();
+            }
             
             // إنشاء معاينة رمز QR
-            generateQRPreview: function() {
+            function generateQRPreview() {
                 const form = document.getElementById('qr-form');
                 if (!form) return;
                 
@@ -574,7 +1712,7 @@
                 let qrContent = '';
                 
                 // بناء محتوى رمز QR حسب النوع
-                switch(this.currentQrType) {
+                switch(appState.currentQrType) {
                     case 'url':
                         qrContent = formData.get('url') || '';
                         break;
@@ -617,21 +1755,21 @@
                         console.error('Error generating QR code:', error);
                     }
                 });
-            },
+            }
             
             // حفظ رمز QR
-            saveQR: function() {
+            function saveQR() {
                 const form = document.getElementById('qr-form');
                 if (!form) return;
                 
                 const formData = new FormData(form);
-                const name = formData.get('name') || `رمز ${this.qrTypes[this.currentQrType].name}`;
+                const name = formData.get('name') || `رمز ${qrTypes[appState.currentQrType].name}`;
                 const colorOption = document.querySelector('.color-option.active');
                 const color = colorOption ? colorOption.dataset.color : '#2F6BFF';
                 
                 // بناء محتوى رمز QR
                 let qrContent = '';
-                switch(this.currentQrType) {
+                switch(appState.currentQrType) {
                     case 'url':
                         qrContent = formData.get('url') || '';
                         break;
@@ -660,35 +1798,31 @@
                 const qr = {
                     id: 'qr_' + Date.now(),
                     name: name,
-                    type: this.currentQrType,
+                    type: appState.currentQrType,
                     content: qrContent,
                     color: color,
                     date: new Date().toLocaleDateString('ar-EG')
                 };
                 
                 // إضافة إلى القائمة
-                this.savedQrs.unshift(qr);
-                this.saveToLocalStorage();
+                appState.savedQrs.unshift(qr);
+                localStorage.setItem('meqr_qrs', JSON.stringify(appState.savedQrs));
                 
-                this.showToast('تم حفظ الرمز بنجاح!');
-                
-                // العودة إلى صفحة الإنشاء الرئيسية
-                document.getElementById('create-detail-page').classList.remove('active');
-                document.getElementById('create-page').classList.add('active');
-            },
+                showToast('تم حفظ الرمز بنجاح!');
+                navigateTo('myqrs');
+            }
             
             // تنزيل رمز QR
-            downloadQR: function() {
+            function downloadQR() {
                 const canvas = document.getElementById('qr-preview');
                 const link = document.createElement('a');
                 link.download = 'meqr-qrcode.png';
                 link.href = canvas.toDataURL('image/png');
                 link.click();
-                this.showToast('تم تنزيل الرمز بنجاح!');
-            },
+            }
             
             // مشاركة رمز QR
-            shareQR: function() {
+            function shareQR() {
                 const canvas = document.getElementById('qr-preview');
                 canvas.toBlob(function(blob) {
                     const file = new File([blob], "meqr-qrcode.png", {type: "image/png"});
@@ -699,21 +1833,413 @@
                             text: 'تم إنشاء هذا الرمز باستخدام تطبيق MEQR',
                             files: [file]
                         })
-                        .then(() => this.showToast('تمت المشاركة بنجاح!'))
-                        .catch(error => this.showToast('حدث خطأ في المشاركة: ' + error));
+                        .catch(error => console.log('Sharing failed', error));
                     } else {
-                        this.showToast('مشاركة الملف غير مدعومة في هذا المتصفح');
+                        showToast('مشاركة الملف غير مدعومة في هذا المتصفح');
                     }
                 }, 'image/png');
-            },
+            }
             
-            // ... (بقية الدوال الأصلية تبقى كما هي) ...
-        };
-
-        // بدء التطبيق عند تحميل الصفحة
-        window.addEventListener('DOMContentLoaded', () => {
-            app.initApp();
-        });
+            // محاكاة مسح رمز QR
+            function simulateScan() {
+                setTimeout(() => {
+                    document.querySelector('.scanner-message').style.display = 'none';
+                    const scanResult = document.getElementById('scan-result');
+                    scanResult.style.display = 'block';
+                    
+                    // نتائج مسح عشوائية
+                    const results = [
+                        {type: 'url', content: 'https://meqr.com', title: 'موقع MEQR الرسمي'},
+                        {type: 'text', content: 'مرحبًا بك في تطبيق MEQR!', title: 'رسالة ترحيبية'},
+                        {type: 'wifi', content: 'WIFI:S:MyNetwork;T:WPA;P:Password123;;', title: 'شبكة واي فاي'}
+                    ];
+                    
+                    const randomResult = results[Math.floor(Math.random() * results.length)];
+                    
+                    document.getElementById('result-content').innerHTML = `
+                        <div style="margin-bottom: 10px;">
+                            <strong>${randomResult.title}</strong>
+                        </div>
+                        <div style="background-color: #f8f9fa; padding: 15px; border-radius: 8px; font-family: monospace; word-break: break-all;">
+                            ${randomResult.content}
+                        </div>
+                    `;
+                    
+                    // حفظ في السجل
+                    if (appState.settings.saveHistory) {
+                        const scanItem = {
+                            id: 'scan_' + Date.now(),
+                            type: randomResult.type,
+                            content: randomResult.content,
+                            title: randomResult.title,
+                            date: new Date().toLocaleDateString('ar-EG')
+                        };
+                        
+                        appState.scanHistory.unshift(scanItem);
+                        localStorage.setItem('meqr_scan_history', JSON.stringify(appState.scanHistory));
+                        updateHistoryTab('scanned');
+                    }
+                    
+                    // الاهتزاز إذا كان مفعلًا
+                    if (appState.settings.vibrate && navigator.vibrate) {
+                        navigator.vibrate(200);
+                    }
+                    
+                    // فتح الرابط تلقائيًا إذا كان مفعلًا
+                    if (appState.settings.autoOpen && randomResult.type === 'url') {
+                        window.open(randomResult.content, '_blank');
+                    }
+                }, 3000);
+            }
+            
+            // تحديث تبويب التاريخ
+            function updateHistoryTab(tab) {
+                if (tab === 'scanned') {
+                    document.getElementById('scanned-content').style.display = 'block';
+                    document.getElementById('favorites-content').style.display = 'none';
+                    renderScanHistory();
+                } else {
+                    document.getElementById('scanned-content').style.display = 'none';
+                    document.getElementById('favorites-content').style.display = 'block';
+                    renderFavorites();
+                }
+            }
+            
+            // عرض سجل المسح
+            function renderScanHistory() {
+                const list = document.getElementById('scanned-list');
+                list.innerHTML = '';
+                
+                if (appState.scanHistory.length === 0) {
+                    list.innerHTML = `
+                        <div class="empty-state">
+                            <i class="fas fa-qrcode"></i>
+                            <h4>لا توجد عمليات مسح</h4>
+                            <p>لم تقم بمسح أي رموز QR بعد</p>
+                        </div>
+                    `;
+                    return;
+                }
+                
+                appState.scanHistory.forEach(item => {
+                    const listItem = document.createElement('li');
+                    listItem.className = 'history-item';
+                    
+                    // أيقونة حسب النوع
+                    let iconClass = 'fas fa-link';
+                    if (item.type === 'wifi') iconClass = 'fas fa-wifi';
+                    if (item.type === 'text') iconClass = 'fas fa-font';
+                    
+                    listItem.innerHTML = `
+                        <div class="history-icon">
+                            <i class="${iconClass}"></i>
+                        </div>
+                        <div class="history-details">
+                            <div class="history-name">${item.title}</div>
+                            <div class="history-meta">${item.type} • ${item.date}</div>
+                        </div>
+                        <div class="history-actions">
+                            <button class="action-btn favorite-btn" data-id="${item.id}">
+                                <i class="far fa-star"></i>
+                            </button>
+                        </div>
+                    `;
+                    
+                    list.appendChild(listItem);
+                });
+                
+                // إضافة مستمعي الأحداث للأزرار
+                document.querySelectorAll('.favorite-btn').forEach(btn => {
+                    btn.addEventListener('click', function() {
+                        const id = this.dataset.id;
+                        toggleFavorite(id);
+                    });
+                });
+            }
+            
+            // عرض المفضلة
+            function renderFavorites() {
+                const list = document.getElementById('favorites-list');
+                list.innerHTML = '';
+                
+                if (appState.favorites.length === 0) {
+                    list.innerHTML = `
+                        <div class="empty-state">
+                            <i class="fas fa-star"></i>
+                            <h4>لا توجد مفضلات</h4>
+                            <p>لم تقم بإضافة أي عناصر إلى المفضلة بعد</p>
+                        </div>
+                    `;
+                    return;
+                }
+                
+                appState.favorites.forEach(item => {
+                    const listItem = document.createElement('li');
+                    listItem.className = 'history-item';
+                    
+                    // أيقونة حسب النوع
+                    let iconClass = 'fas fa-link';
+                    if (item.type === 'wifi') iconClass = 'fas fa-wifi';
+                    if (item.type === 'text') iconClass = 'fas fa-font';
+                    
+                    listItem.innerHTML = `
+                        <div class="history-icon">
+                            <i class="${iconClass}"></i>
+                        </div>
+                        <div class="history-details">
+                            <div class="history-name">${item.title}</div>
+                            <div class="history-meta">${item.type} • ${item.date}</div>
+                        </div>
+                        <div class="history-actions">
+                            <button class="action-btn remove-favorite-btn" data-id="${item.id}">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </div>
+                    `;
+                    
+                    list.appendChild(listItem);
+                });
+                
+                // إضافة مستمعي الأحداث للأزرار
+                document.querySelectorAll('.remove-favorite-btn').forEach(btn => {
+                    btn.addEventListener('click', function() {
+                        const id = this.dataset.id;
+                        removeFavorite(id);
+                    });
+                });
+            }
+            
+            // التبديل بين المفضلة
+            function toggleFavorite(id) {
+                const item = appState.scanHistory.find(i => i.id === id);
+                if (!item) return;
+                
+                const isFavorite = appState.favorites.some(i => i.id === id);
+                
+                if (isFavorite) {
+                    appState.favorites = appState.favorites.filter(i => i.id !== id);
+                    showToast('تمت إزالة العنصر من المفضلة');
+                } else {
+                    appState.favorites.unshift(item);
+                    showToast('تمت إضافة العنصر إلى المفضلة');
+                }
+                
+                localStorage.setItem('meqr_favorites', JSON.stringify(appState.favorites));
+                renderFavorites();
+            }
+            
+            // إزالة من المفضلة
+            function removeFavorite(id) {
+                appState.favorites = appState.favorites.filter(i => i.id !== id);
+                localStorage.setItem('meqr_favorites', JSON.stringify(appState.favorites));
+                renderFavorites();
+                showToast('تمت إزالة العنصر من المفضلة');
+            }
+            
+            // عرض رموزي
+            function renderMyQrs() {
+                const grid = document.getElementById('my-qrs-grid');
+                grid.innerHTML = '';
+                
+                if (appState.savedQrs.length === 0) {
+                    grid.innerHTML = `
+                        <div class="empty-state">
+                            <i class="fas fa-qrcode"></i>
+                            <h4>لا توجد رموز</h4>
+                            <p>لم تقم بإنشاء أي رموز QR بعد</p>
+                        </div>
+                    `;
+                    return;
+                }
+                
+                appState.savedQrs.forEach(qr => {
+                    const qrItem = document.createElement('div');
+                    qrItem.className = 'qr-item';
+                    
+                    // أيقونة حسب النوع
+                    let iconClass = 'fas fa-link';
+                    if (qr.type === 'wifi') iconClass = 'fas fa-wifi';
+                    if (qr.type === 'text') iconClass = 'fas fa-font';
+                    if (qr.type === 'pdf') iconClass = 'fas fa-file-pdf';
+                    
+                    qrItem.innerHTML = `
+                        <div class="qr-image">
+                            <canvas id="qr-${qr.id}"></canvas>
+                        </div>
+                        <div class="qr-info">
+                            <div class="qr-name">${qr.name}</div>
+                            <div class="qr-type">${qrTypes[qr.type]?.name || qr.type} • ${qr.date}</div>
+                            <div class="qr-actions" style="margin-top: 10px;">
+                                <button class="btn btn-small download-btn" data-id="${qr.id}">تنزيل</button>
+                                <button class="btn btn-small btn-secondary delete-btn" data-id="${qr.id}">حذف</button>
+                            </div>
+                        </div>
+                    `;
+                    
+                    grid.appendChild(qrItem);
+                    
+                    // إنشاء رمز QR
+                    setTimeout(() => {
+                        QRCode.toCanvas(document.getElementById(`qr-${qr.id}`), qr.content, {
+                            width: 120,
+                            margin: 1,
+                            color: {
+                                dark: qr.color,
+                                light: '#ffffff'
+                            }
+                        });
+                    }, 100);
+                });
+                
+                // إضافة مستمعي الأحداث للأزرار
+                document.querySelectorAll('.download-btn').forEach(btn => {
+                    btn.addEventListener('click', function() {
+                        const id = this.dataset.id;
+                        downloadSavedQR(id);
+                    });
+                });
+                
+                document.querySelectorAll('.delete-btn').forEach(btn => {
+                    btn.addEventListener('click', function() {
+                        const id = this.dataset.id;
+                        deleteQR(id);
+                    });
+                });
+            }
+            
+            // تنزيل رمز QR محفوظ
+            function downloadSavedQR(id) {
+                const qr = appState.savedQrs.find(q => q.id === id);
+                if (!qr) return;
+                
+                const canvas = document.createElement('canvas');
+                QRCode.toCanvas(canvas, qr.content, {
+                    width: 300,
+                    margin: 2,
+                    color: {
+                        dark: qr.color,
+                        light: '#ffffff'
+                    }
+                }, function() {
+                    const link = document.createElement('a');
+                    link.download = `meqr-${qr.name.replace(/\s+/g, '-')}.png`;
+                    link.href = canvas.toDataURL('image/png');
+                    link.click();
+                });
+            }
+            
+            // حذف رمز QR
+            function deleteQR(id) {
+                appState.savedQrs = appState.savedQrs.filter(q => q.id !== id);
+                localStorage.setItem('meqr_qrs', JSON.stringify(appState.savedQrs));
+                renderMyQrs();
+                showToast('تم حذف الرمز بنجاح');
+            }
+            
+            // تصفية رموزي
+            function filterMyQrs(query) {
+                const grid = document.getElementById('my-qrs-grid');
+                const qrItems = grid.querySelectorAll('.qr-item');
+                
+                qrItems.forEach(item => {
+                    const name = item.querySelector('.qr-name').textContent.toLowerCase();
+                    if (name.includes(query.toLowerCase())) {
+                        item.style.display = 'block';
+                    } else {
+                        item.style.display = 'none';
+                    }
+                });
+            }
+            
+            // تحديث الإعدادات من التخزين المحلي
+            function updateSettingsFromStorage() {
+                if (settingsSwitches.vibrate) {
+                    settingsSwitches.vibrate.checked = appState.settings.vibrate;
+                }
+                if (settingsSwitches.autoOpen) {
+                    settingsSwitches.autoOpen.checked = appState.settings.autoOpen;
+                }
+                if (settingsSwitches.saveHistory) {
+                    settingsSwitches.saveHistory.checked = appState.settings.saveHistory;
+                }
+            }
+            
+            // حفظ الإعدادات
+            function saveSettings() {
+                localStorage.setItem('meqr_settings', JSON.stringify(appState.settings));
+                showToast('تم حفظ الإعدادات');
+            }
+            
+            // عرض الإعدادات
+            function renderSettings() {
+                updateSettingsFromStorage();
+            }
+            
+            // معالجة زر الإجراءات
+            function handleActionButtonClick() {
+                const currentPage = appState.currentPage;
+                
+                if (currentPage === 'createDetail') {
+                    // إظهار خيارات إضافية لصفحة الإنشاء
+                    showToast('خيارات إضافية: تحرير، مشاركة، إلخ');
+                }
+            }
+            
+            // تحميل البيانات الأولية
+            function loadInitialData() {
+                // إنشاء بعض البيانات الافتراضية إذا لم تكن موجودة
+                if (appState.savedQrs.length === 0) {
+                    appState.savedQrs = [
+                        {
+                            id: 'qr_1',
+                            name: 'موقع الشركة',
+                            type: 'url',
+                            content: 'https://example.com',
+                            color: '#2F6BFF',
+                            date: '13.07.25'
+                        },
+                        {
+                            id: 'qr_2',
+                            name: 'شبكة المكتب',
+                            type: 'wifi',
+                            content: 'WIFI:S:OfficeNetwork;T:WPA;P:OfficePass123;;',
+                            color: '#00C853',
+                            date: '12.07.25'
+                        }
+                    ];
+                    localStorage.setItem('meqr_qrs', JSON.stringify(appState.savedQrs));
+                }
+                
+                if (appState.scanHistory.length === 0) {
+                    appState.scanHistory = [
+                        {
+                            id: 'scan_1',
+                            type: 'url',
+                            content: 'https://meqr.com',
+                            title: 'موقع MEQR الرسمي',
+                            date: '13.07.25'
+                        }
+                    ];
+                    localStorage.setItem('meqr_scan_history', JSON.stringify(appState.scanHistory));
+                }
+            }
+            
+            // عرض رسالة تنبيه
+            function showToast(message) {
+                const existingToast = document.querySelector('.toast');
+                if (existingToast) existingToast.remove();
+                
+                const toast = document.createElement('div');
+                toast.className = 'toast';
+                toast.textContent = message;
+                
+                document.body.appendChild(toast);
+                
+                setTimeout(() => {
+                    toast.remove();
+                }, 3000);
+            }
+        }
     </script>
 </body>
 </html>
