@@ -1,0 +1,1077 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>إنشاء رمز QR ديناميكي - MEQR</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.1/build/qrcode.min.js"></script>
+    <style>
+        :root {
+            --primary: #2F6BFF;
+            --primary-dark: #0E374A;
+            --secondary: #00C853;
+            --background: #FFFFFF;
+            --card-bg: #F2F4F8;
+            --text: #333333;
+            --text-light: #777777;
+            --border: #E0E0E0;
+            --shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            --radius: 12px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: var(--background);
+            color: var(--text);
+            overflow-x: hidden;
+            padding: 20px;
+        }
+
+        .top-bar {
+            height: 60px;
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: white;
+            padding: 0 16px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            z-index: 1000;
+            box-shadow: var(--shadow);
+            border-radius: var(--radius);
+            margin-bottom: 20px;
+        }
+
+        .back-btn {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 1.2rem;
+            cursor: pointer;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+        }
+
+        .back-btn:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+
+        .page-title {
+            font-size: 1.3rem;
+            font-weight: 700;
+            flex: 1;
+            text-align: center;
+        }
+
+        .card {
+            background-color: var(--background);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            padding: 20px;
+            margin-bottom: 20px;
+            transition: transform 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-3px);
+        }
+
+        .card-title {
+            font-size: 1.2rem;
+            font-weight: 700;
+            margin-bottom: 16px;
+            color: var(--primary-dark);
+            display: flex;
+            align-items: center;
+        }
+
+        .card-title i {
+            margin-left: 10px;
+        }
+
+        .type-category {
+            margin-bottom: 25px;
+        }
+
+        .category-title {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--primary-dark);
+            margin-bottom: 15px;
+            padding-bottom: 8px;
+            border-bottom: 2px solid var(--primary);
+        }
+
+        .qr-type-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+        }
+
+        .qr-type {
+            background-color: var(--card-bg);
+            border-radius: var(--radius);
+            padding: 15px 8px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .qr-type:hover {
+            background-color: var(--primary);
+            color: white;
+            transform: scale(1.05);
+        }
+
+        .qr-type i {
+            font-size: 1.8rem;
+            margin-bottom: 8px;
+        }
+
+        .qr-type p {
+            font-size: 0.85rem;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: var(--primary-dark);
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            font-size: 1rem;
+            transition: border-color 0.3s ease;
+        }
+
+        .form-control:focus {
+            border-color: var(--primary);
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(47, 107, 255, 0.2);
+        }
+
+        .checkbox-group {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .checkbox-group input {
+            margin-left: 10px;
+        }
+
+        .btn {
+            display: inline-block;
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            border-radius: var(--radius);
+            padding: 14px 24px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+            width: 100%;
+            margin-top: 10px;
+        }
+
+        .btn:hover {
+            background-color: var(--primary-dark);
+            transform: translateY(-2px);
+        }
+
+        .btn-secondary {
+            background-color: var(--card-bg);
+            color: var(--text);
+        }
+
+        .btn-secondary:hover {
+            background-color: #e0e0e0;
+        }
+
+        .btn-small {
+            padding: 8px 15px;
+            font-size: 0.9rem;
+            width: auto;
+        }
+
+        .qr-preview-container {
+            text-align: center;
+            padding: 20px;
+            background-color: var(--card-bg);
+            border-radius: var(--radius);
+            margin-bottom: 20px;
+        }
+
+        #qr-preview {
+            max-width: 200px;
+            margin: 0 auto 20px;
+            display: block;
+        }
+
+        .customization-options {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .color-option {
+            height: 40px;
+            border-radius: var(--radius);
+            cursor: pointer;
+            border: 2px solid transparent;
+        }
+
+        .color-option.active {
+            border-color: var(--text);
+        }
+
+        .page {
+            display: none;
+        }
+
+        .page.active {
+            display: block;
+            animation: fadeIn 0.4s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .dynamic-rules {
+            background-color: #f8f9fa;
+            border-radius: var(--radius);
+            padding: 15px;
+            margin-bottom: 15px;
+        }
+
+        .rule-item {
+            background-color: white;
+            border-radius: var(--radius);
+            padding: 15px;
+            margin-bottom: 15px;
+            box-shadow: var(--shadow);
+        }
+
+        .form-row {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+
+        .form-row .form-group {
+            flex: 1;
+            margin-bottom: 0;
+        }
+
+        .file-upload {
+            position: relative;
+            display: inline-block;
+            width: 100%;
+        }
+
+        .file-upload input {
+            position: absolute;
+            left: 0;
+            top: 0;
+            opacity: 0;
+            width: 100%;
+            height: 100%;
+            cursor: pointer;
+        }
+
+        .file-upload-label {
+            display: block;
+            padding: 12px 15px;
+            background-color: var(--card-bg);
+            border: 1px dashed var(--border);
+            border-radius: var(--radius);
+            text-align: center;
+            cursor: pointer;
+        }
+
+        .file-upload-label i {
+            margin-left: 8px;
+        }
+
+        .toast {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: var(--primary);
+            color: white;
+            padding: 12px 24px;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            z-index: 1000;
+            animation: toastIn 0.3s ease, toastOut 0.3s ease 2.7s;
+        }
+
+        @keyframes toastIn {
+            from { opacity: 0; transform: translateX(-50%) translateY(20px); }
+            to { opacity: 1; transform: translateX(-50%) translateY(0); }
+        }
+
+        @keyframes toastOut {
+            from { opacity: 1; transform: translateX(-50%) translateY(0); }
+            to { opacity: 0; transform: translateX(-50%) translateY(20px); }
+        }
+
+        .dynamic-item {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: var(--radius);
+            margin-bottom: 15px;
+        }
+
+        @media (max-width: 768px) {
+            .qr-type-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .icon-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+            
+            .days-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="top-bar">
+        <button class="back-btn" id="back-button">
+            <i class="fas fa-home"></i>
+        </button>
+        <div class="page-title" id="page-title">إنشاء رمز QR جديد</div>
+        <div style="width: 40px;"></div> <!-- Placeholder for alignment -->
+    </div>
+
+    <div id="create-page" class="page active">
+        <div class="card">
+            <h3 class="card-title"><i class="fas fa-qrcode"></i> اختر نوع المحتوى</h3>
+            
+            <div class="type-category">
+                <div class="category-title">الروابط</div>
+                <div class="qr-type-grid">
+                    <div class="qr-type" data-type="url">
+                        <i class="fas fa-link"></i>
+                        <p>رابط URL</p>
+                    </div>
+                    <div class="qr-type" data-type="appstore">
+                        <i class="fas fa-mobile-alt"></i>
+                        <p>متجر التطبيقات</p>
+                    </div>
+                    <div class="qr-type" data-type="custom-url">
+                        <i class="fas fa-pencil-ruler"></i>
+                        <p>رابط مخصص</p>
+                    </div>
+                    <div class="qr-type" data-type="list-links">
+                        <i class="fas fa-list"></i>
+                        <p>قائمة الروابط</p>
+                    </div>
+                    <div class="qr-type" data-type="payment">
+                        <i class="fas fa-money-bill-wave"></i>
+                        <p>دفع</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="type-category">
+                <div class="category-title">التواصل</div>
+                <div class="qr-type-grid">
+                    <div class="qr-type" data-type="email">
+                        <i class="fas fa-envelope"></i>
+                        <p>البريد الإلكتروني</p>
+                    </div>
+                    <div class="qr-type" data-type="sms">
+                        <i class="fas fa-sms"></i>
+                        <p>رسالة SMS</p>
+                    </div>
+                    <div class="qr-type" data-type="whatsapp">
+                        <i class="fab fa-whatsapp"></i>
+                        <p>واتساب</p>
+                    </div>
+                    <div class="qr-type" data-type="phone">
+                        <i class="fas fa-phone-alt"></i>
+                        <p>مكالمة هاتفية</p>
+                    </div>
+                    <div class="qr-type" data-type="vcard">
+                        <i class="fas fa-address-card"></i>
+                        <p>بطاقة اتصال</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="type-category">
+                <div class="category-title">الوسائط</div>
+                <div class="qr-type-grid">
+                    <div class="qr-type" data-type="pdf">
+                        <i class="fas fa-file-pdf"></i>
+                        <p>ملف PDF</p>
+                    </div>
+                    <div class="qr-type" data-type="image">
+                        <i class="fas fa-image"></i>
+                        <p>صورة</p>
+                    </div>
+                    <div class="qr-type" data-type="audio">
+                        <i class="fas fa-music"></i>
+                        <p>صوت</p>
+                    </div>
+                    <div class="qr-type" data-type="video">
+                        <i class="fas fa-video"></i>
+                        <p>فيديو</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="type-category">
+                <div class="category-title">الشبكات</div>
+                <div class="qr-type-grid">
+                    <div class="qr-type" data-type="wifi">
+                        <i class="fas fa-wifi"></i>
+                        <p>واي فاي</p>
+                    </div>
+                    <div class="qr-type" data-type="social">
+                        <i class="fas fa-hashtag"></i>
+                        <p>وسائل التواصل</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="type-category">
+                <div class="category-title">أخرى</div>
+                <div class="qr-type-grid">
+                    <div class="qr-type" data-type="text">
+                        <i class="fas fa-font"></i>
+                        <p>نص</p>
+                    </div>
+                    <div class="qr-type" data-type="map">
+                        <i class="fas fa-map-marker-alt"></i>
+                        <p>خريطة</p>
+                    </div>
+                    <div class="qr-type" data-type="booking">
+                        <i class="fas fa-calendar-check"></i>
+                        <p>حجز موعد</p>
+                    </div>
+                    <div class="qr-type" data-type="crypto">
+                        <i class="fab fa-bitcoin"></i>
+                        <p>عملة رقمية</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="create-detail-page" class="page">
+        <!-- سيتم ملؤها ديناميكيًا -->
+    </div>
+
+    <script>
+        // حالة التطبيق
+        const appState = {
+            currentPage: 'create',
+            currentQrType: null,
+            savedQrs: []
+        };
+
+        // أنواع رموز QR مع تفاصيلها
+        const qrTypes = {
+            'url': {
+                name: 'رابط URL',
+                icon: 'fas fa-link',
+                fields: [
+                    { type: 'text', name: 'url', label: 'الرابط', placeholder: 'https://example.com', required: true }
+                ]
+            },
+            'text': {
+                name: 'نص',
+                icon: 'fas fa-font',
+                fields: [
+                    { type: 'textarea', name: 'text', label: 'النص', placeholder: 'أدخل النص هنا...', required: true }
+                ]
+            },
+            'wifi': {
+                name: 'واي فاي',
+                icon: 'fas fa-wifi',
+                fields: [
+                    { type: 'text', name: 'ssid', label: 'اسم الشبكة (SSID)', placeholder: 'اسم شبكة الواي فاي', required: true },
+                    { type: 'select', name: 'encryption', label: 'نوع التشفير', options: ['WPA/WPA2', 'WEP', 'لا يوجد'], required: true },
+                    { type: 'text', name: 'password', label: 'كلمة المرور', placeholder: 'كلمة مرور الواي فاي', required: true }
+                ]
+            },
+            'pdf': {
+                name: 'ملف PDF',
+                icon: 'fas fa-file-pdf',
+                fields: [
+                    { type: 'file', name: 'pdf', label: 'رفع ملف PDF', accept: '.pdf', required: true }
+                ]
+            },
+            'appstore': {
+                name: 'متجر التطبيقات',
+                icon: 'fas fa-mobile-alt',
+                fields: [
+                    { type: 'text', name: 'ios', label: 'رابط App Store', placeholder: 'https://apps.apple.com/...' },
+                    { type: 'text', name: 'android', label: 'رابط Google Play', placeholder: 'https://play.google.com/...' }
+                ]
+            },
+            'email': {
+                name: 'البريد الإلكتروني',
+                icon: 'fas fa-envelope',
+                fields: [
+                    { type: 'email', name: 'to', label: 'المستلم', placeholder: 'example@domain.com', required: true },
+                    { type: 'text', name: 'subject', label: 'الموضوع', placeholder: 'موضوع البريد الإلكتروني' },
+                    { type: 'textarea', name: 'body', label: 'نص الرسالة', placeholder: 'محتوى البريد الإلكتروني...' }
+                ]
+            },
+            'whatsapp': {
+                name: 'واتساب',
+                icon: 'fab fa-whatsapp',
+                fields: [
+                    { type: 'tel', name: 'phone', label: 'رقم الهاتف', placeholder: '+966XXXXXXXXX', required: true },
+                    { type: 'text', name: 'message', label: 'الرسالة', placeholder: 'رسالة واتساب...' }
+                ]
+            },
+            'phone': {
+                name: 'مكالمة هاتفية',
+                icon: 'fas fa-phone-alt',
+                fields: [
+                    { type: 'tel', name: 'number', label: 'رقم الهاتف', placeholder: '+966XXXXXXXXX', required: true }
+                ]
+            },
+            'sms': {
+                name: 'رسالة SMS',
+                icon: 'fas fa-sms',
+                fields: [
+                    { type: 'tel', name: 'number', label: 'رقم الهاتف', placeholder: '+966XXXXXXXXX', required: true },
+                    { type: 'text', name: 'message', label: 'الرسالة', placeholder: 'نص الرسالة...' }
+                ]
+            },
+            'vcard': {
+                name: 'بطاقة اتصال',
+                icon: 'fas fa-address-card',
+                fields: [
+                    { type: 'text', name: 'name', label: 'الاسم', placeholder: 'الاسم الكامل', required: true },
+                    { type: 'tel', name: 'phone', label: 'رقم الهاتف', placeholder: '+966XXXXXXXXX' },
+                    { type: 'email', name: 'email', label: 'البريد الإلكتروني', placeholder: 'example@domain.com' },
+                    { type: 'text', name: 'company', label: 'الشركة', placeholder: 'اسم الشركة' },
+                    { type: 'text', name: 'title', label: 'المسمى الوظيفي', placeholder: 'المسمى الوظيفي' }
+                ]
+            },
+            'map': {
+                name: 'خريطة',
+                icon: 'fas fa-map-marker-alt',
+                fields: [
+                    { type: 'text', name: 'address', label: 'العنوان', placeholder: 'العنوان الكامل' },
+                    { type: 'number', name: 'latitude', label: 'خط العرض', placeholder: '00.0000' },
+                    { type: 'number', name: 'longitude', label: 'خط الطول', placeholder: '00.0000' }
+                ]
+            },
+            'audio': {
+                name: 'صوت',
+                icon: 'fas fa-music',
+                fields: [
+                    { type: 'file', name: 'audio', label: 'رفع ملف صوتي', accept: '.mp3,.wav', required: true }
+                ]
+            },
+            'video': {
+                name: 'فيديو',
+                icon: 'fas fa-video',
+                fields: [
+                    { type: 'text', name: 'url', label: 'رابط الفيديو', placeholder: 'https://youtube.com/...', required: true }
+                ]
+            },
+            'social': {
+                name: 'وسائل التواصل',
+                icon: 'fas fa-hashtag',
+                fields: [
+                    { type: 'text', name: 'facebook', label: 'فيسبوك', placeholder: 'https://facebook.com/...' },
+                    { type: 'text', name: 'twitter', label: 'تويتر', placeholder: 'https://twitter.com/...' },
+                    { type: 'text', name: 'instagram', label: 'إنستغرام', placeholder: 'https://instagram.com/...' },
+                    { type: 'text', name: 'linkedin', label: 'لينكد إن', placeholder: 'https://linkedin.com/...' },
+                    { type: 'text', name: 'tiktok', label: 'تيك توك', placeholder: 'https://tiktok.com/...' }
+                ]
+            },
+            'booking': {
+                name: 'حجز موعد',
+                icon: 'fas fa-calendar-check',
+                fields: [
+                    { type: 'text', name: 'title', label: 'عنوان الحجز', placeholder: 'عنوان الحجز', required: true },
+                    { type: 'text', name: 'description', label: 'الوصف', placeholder: 'وصف الحجز...' },
+                    { type: 'date', name: 'start', label: 'تاريخ البدء', required: true },
+                    { type: 'date', name: 'end', label: 'تاريخ الانتهاء' },
+                    { type: 'number', name: 'duration', label: 'المدة (دقائق)', placeholder: '30', value: '30' }
+                ]
+            },
+            'crypto': {
+                name: 'عملة رقمية',
+                icon: 'fab fa-bitcoin',
+                fields: [
+                    { type: 'select', name: 'currency', label: 'العملة', options: ['Bitcoin', 'Ethereum', 'Litecoin', 'Dogecoin'], required: true },
+                    { type: 'text', name: 'address', label: 'عنوان المحفظة', placeholder: '1A1zP1eP5QGefi2DMPTfTL5SLmv7DivfNa', required: true },
+                    { type: 'number', name: 'amount', label: 'المبلغ', placeholder: '0.00' }
+                ]
+            },
+            'payment': {
+                name: 'دفع',
+                icon: 'fas fa-money-bill-wave',
+                fields: [
+                    { type: 'text', name: 'url', label: 'رابط الدفع', placeholder: 'https://payment.example.com', required: true },
+                    { type: 'number', name: 'amount', label: 'المبلغ', placeholder: '0.00', required: true },
+                    { type: 'select', name: 'currency', label: 'العملة', options: ['SAR', 'USD', 'EUR', 'AED'], value: 'SAR' }
+                ]
+            },
+            'custom-url': {
+                name: 'رابط مخصص',
+                icon: 'fas fa-pencil-ruler',
+                fields: [
+                    { type: 'text', name: 'url', label: 'الرابط', placeholder: 'https://example.com', required: true },
+                    { type: 'select', name: 'condition', label: 'الشرط', options: ['الموقع الجغرافي', 'الوقت', 'اللغة', 'عدد المسح'], required: true }
+                ]
+            },
+            'list-links': {
+                name: 'قائمة الروابط',
+                icon: 'fas fa-list',
+                fields: [
+                    { type: 'text', name: 'title', label: 'عنوان القائمة', placeholder: 'روابط مفيدة', required: true },
+                    { type: 'dynamic', name: 'links', label: 'الروابط', fields: [
+                        { type: 'text', name: 'title', label: 'عنوان الرابط', placeholder: 'الرابط الأول' },
+                        { type: 'text', name: 'url', label: 'الرابط', placeholder: 'https://...' }
+                    ]}
+                ]
+            }
+        };
+
+        // تهيئة التطبيق عند تحميل الصفحة
+        document.addEventListener('DOMContentLoaded', function() {
+            initApp();
+        });
+
+        function initApp() {
+            // عناصر DOM
+            const pages = {
+                create: document.getElementById('create-page'),
+                createDetail: document.getElementById('create-detail-page')
+            };
+            
+            const backButton = document.getElementById('back-button');
+            const qrTypesElements = document.querySelectorAll('.qr-type');
+            
+            // إعداد مستمعي الأحداث
+            setupEventListeners();
+            
+            // تحميل البيانات الأولية
+            loadInitialData();
+
+            // إعداد مستمعي الأحداث
+            function setupEventListeners() {
+                // اختيار نوع رمز QR
+                qrTypesElements.forEach(type => {
+                    type.addEventListener('click', () => {
+                        appState.currentQrType = type.dataset.type;
+                        loadCreateDetailPage(appState.currentQrType);
+                    });
+                });
+                
+                // زر الرجوع
+                backButton.addEventListener('click', () => {
+                    navigateTo('create');
+                });
+            }
+            
+            // التنقل بين الصفحات
+            function navigateTo(page) {
+                // إخفاء الصفحة الحالية
+                pages[appState.currentPage].classList.remove('active');
+                
+                // إظهار الصفحة الجديدة
+                pages[page].classList.add('active');
+                appState.currentPage = page;
+                
+                // تحديث عنوان الصفحة
+                updatePageTitle();
+            }
+            
+            // تحديث عنوان الصفحة
+            function updatePageTitle() {
+                const titles = {
+                    'create': 'إنشاء رمز QR جديد',
+                    'createDetail': qrTypes[appState.currentQrType]?.name || 'تفاصيل الرمز'
+                };
+                
+                document.getElementById('page-title').textContent = titles[appState.currentPage] || 'إنشاء رمز QR';
+            }
+            
+            // تحميل صفحة تفاصيل إنشاء رمز QR
+            function loadCreateDetailPage(type) {
+                const typeData = qrTypes[type];
+                if (!typeData) return;
+                
+                let formHTML = `
+                    <div class="card">
+                        <h3 class="card-title"><i class="${typeData.icon}"></i> ${typeData.name}</h3>
+                        <form id="qr-form">
+                `;
+                
+                // إضافة حقول النموذج
+                typeData.fields.forEach(field => {
+                    if (field.type === 'text' || field.type === 'email' || 
+                        field.type === 'tel' || field.type === 'number' || field.type === 'url') {
+                        formHTML += `
+                            <div class="form-group">
+                                <label for="${field.name}">${field.label}${field.required ? ' *' : ''}</label>
+                                <input type="${field.type}" id="${field.name}" name="${field.name}" 
+                                    class="form-control" placeholder="${field.placeholder || ''}" 
+                                    ${field.required ? 'required' : ''} value="${field.value || ''}">
+                            </div>
+                        `;
+                    } 
+                    else if (field.type === 'textarea') {
+                        formHTML += `
+                            <div class="form-group">
+                                <label for="${field.name}">${field.label}${field.required ? ' *' : ''}</label>
+                                <textarea id="${field.name}" name="${field.name}" 
+                                    class="form-control" placeholder="${field.placeholder || ''}" 
+                                    rows="4" ${field.required ? 'required' : ''}>${field.value || ''}</textarea>
+                            </div>
+                        `;
+                    }
+                    else if (field.type === 'select') {
+                        let optionsHTML = '';
+                        field.options.forEach(option => {
+                            const selected = (option === field.value) ? 'selected' : '';
+                            optionsHTML += `<option value="${option}" ${selected}>${option}</option>`;
+                        });
+                        
+                        formHTML += `
+                            <div class="form-group">
+                                <label for="${field.name}">${field.label}${field.required ? ' *' : ''}</label>
+                                <select id="${field.name}" name="${field.name}" class="form-control" ${field.required ? 'required' : ''}>
+                                    ${optionsHTML}
+                                </select>
+                            </div>
+                        `;
+                    }
+                    else if (field.type === 'file') {
+                        formHTML += `
+                            <div class="form-group">
+                                <label for="${field.name}">${field.label}${field.required ? ' *' : ''}</label>
+                                <div class="file-upload">
+                                    <input type="file" id="${field.name}" name="${field.name}" 
+                                        accept="${field.accept || '*'}" ${field.required ? 'required' : ''}>
+                                    <div class="file-upload-label">
+                                        <i class="fas fa-upload"></i> اختر ملفًا للرفع
+                                    </div>
+                                </div>
+                            </div>
+                        `;
+                    }
+                    else if (field.type === 'dynamic') {
+                        formHTML += `
+                            <div class="form-group">
+                                <label>${field.label}</label>
+                                <div id="dynamic-container">
+                                    <div class="dynamic-item">
+                                        ${generateDynamicFields(field.fields)}
+                                        <button type="button" class="btn btn-small btn-secondary remove-item">إزالة</button>
+                                    </div>
+                                </div>
+                                <button type="button" class="btn btn-small" id="add-item">+ إضافة عنصر</button>
+                            </div>
+                        `;
+                    }
+                });
+                
+                formHTML += `
+                            <button type="submit" class="btn">إنشاء رمز QR</button>
+                        </form>
+                    </div>
+                `;
+                
+                // إضافة معاينة الرمز
+                formHTML += `
+                    <div class="card">
+                        <h3 class="card-title"><i class="fas fa-eye"></i> معاينة الرمز</h3>
+                        <div class="qr-preview-container">
+                            <canvas id="qr-preview" width="200" height="200"></canvas>
+                            <div id="qr-name-display">رمز ${typeData.name}</div>
+                        </div>
+                        <div class="customization-options">
+                            <div class="color-option active" style="background-color: #2F6BFF;" data-color="#2F6BFF"></div>
+                            <div class="color-option" style="background-color: #00C853;" data-color="#00C853"></div>
+                            <div class="color-option" style="background-color: #FF6B6B;" data-color="#FF6B6B"></div>
+                            <div class="color-option" style="background-color: #9B59B6;" data-color="#9B59B6"></div>
+                        </div>
+                        <button class="btn" id="download-btn"><i class="fas fa-download"></i> تنزيل الرمز</button>
+                        <button class="btn btn-secondary" id="share-btn"><i class="fas fa-share-alt"></i> مشاركة</button>
+                    </div>
+                `;
+                
+                pages.createDetail.innerHTML = formHTML;
+                navigateTo('createDetail');
+                
+                // إعداد مستمعي الأحداث للصفحة الجديدة
+                setupDetailPageEvents();
+            }
+            
+            // توليد حقول ديناميكية
+            function generateDynamicFields(fields) {
+                let html = '';
+                fields.forEach(field => {
+                    html += `
+                        <div class="form-group">
+                            <label for="${field.name}">${field.label}</label>
+                            <input type="${field.type}" name="${field.name}" 
+                                class="form-control" placeholder="${field.placeholder || ''}">
+                        </div>
+                    `;
+                });
+                return html;
+            }
+            
+            // إعداد أحداث الصفحة التفصيلية
+            function setupDetailPageEvents() {
+                // إضافة عنصر ديناميكي
+                const addItemBtn = document.getElementById('add-item');
+                if (addItemBtn) {
+                    addItemBtn.addEventListener('click', () => {
+                        const container = document.getElementById('dynamic-container');
+                        const newItem = document.createElement('div');
+                        newItem.className = 'dynamic-item';
+                        newItem.innerHTML = generateDynamicFields(qrTypes[appState.currentQrType].fields.find(f => f.type === 'dynamic').fields) + 
+                                            '<button type="button" class="btn btn-small btn-secondary remove-item">إزالة</button>';
+                        container.appendChild(newItem);
+                        
+                        // إضافة مستمع للأزرار الجديدة
+                        newItem.querySelector('.remove-item').addEventListener('click', function() {
+                            if (container.children.length > 1) {
+                                this.parentElement.remove();
+                            }
+                        });
+                    });
+                }
+                
+                // إزالة عنصر ديناميكي
+                document.querySelectorAll('.remove-item').forEach(btn => {
+                    btn.addEventListener('click', function() {
+                        if (document.getElementById('dynamic-container').children.length > 1) {
+                            this.parentElement.remove();
+                        }
+                    });
+                });
+                
+                // تغيير لون رمز QR
+                document.querySelectorAll('.color-option').forEach(option => {
+                    option.addEventListener('click', function() {
+                        document.querySelectorAll('.color-option').forEach(o => o.classList.remove('active'));
+                        this.classList.add('active');
+                        generateQRPreview();
+                    });
+                });
+                
+                // إنشاء رمز QR عند تغيير المدخلات
+                document.querySelectorAll('#qr-form input, #qr-form textarea, #qr-form select').forEach(input => {
+                    input.addEventListener('input', generateQRPreview);
+                });
+                
+                // إرسال النموذج
+                const qrForm = document.getElementById('qr-form');
+                if (qrForm) {
+                    qrForm.addEventListener('submit', function(e) {
+                        e.preventDefault();
+                        saveQR();
+                    });
+                }
+                
+                // تنزيل رمز QR
+                const downloadBtn = document.getElementById('download-btn');
+                if (downloadBtn) {
+                    downloadBtn.addEventListener('click', downloadQR);
+                }
+                
+                // مشاركة رمز QR
+                const shareBtn = document.getElementById('share-btn');
+                if (shareBtn) {
+                    shareBtn.addEventListener('click', shareQR);
+                }
+                
+                // إنشاء معاينة أولية
+                generateQRPreview();
+            }
+            
+            // إنشاء معاينة رمز QR
+            function generateQRPreview() {
+                const form = document.getElementById('qr-form');
+                if (!form) return;
+                
+                // جمع بيانات النموذج
+                const formData = new FormData(form);
+                let qrContent = '';
+                
+                // بناء محتوى رمز QR حسب النوع
+                switch(appState.currentQrType) {
+                    case 'url':
+                        qrContent = formData.get('url') || '';
+                        break;
+                    case 'text':
+                        qrContent = formData.get('text') || '';
+                        break;
+                    case 'wifi':
+                        qrContent = `WIFI:S:${formData.get('ssid')};T:${formData.get('encryption')};P:${formData.get('password')};;`;
+                        break;
+                    case 'email':
+                        const to = formData.get('to') || '';
+                        const subject = encodeURIComponent(formData.get('subject') || '');
+                        const body = encodeURIComponent(formData.get('body') || '');
+                        qrContent = `mailto:${to}?subject=${subject}&body=${body}`;
+                        break;
+                    case 'whatsapp':
+                        const phone = formData.get('phone') || '';
+                        const message = encodeURIComponent(formData.get('message') || '');
+                        qrContent = `https://wa.me/${phone}?text=${message}`;
+                        break;
+                    default:
+                        qrContent = formData.get('url') || formData.get('text') || '';
+                }
+                
+                // الحصول على اللون المختار
+                const colorOption = document.querySelector('.color-option.active');
+                const color = colorOption ? colorOption.dataset.color : '#2F6BFF';
+                
+                // إنشاء رمز QR
+                const canvas = document.getElementById('qr-preview');
+                QRCode.toCanvas(canvas, qrContent, {
+                    width: 200,
+                    margin: 1,
+                    color: {
+                        dark: color,
+                        light: '#ffffff'
+                    }
+                }, function(error) {
+                    if (error) {
+                        console.error('Error generating QR code:', error);
+                    }
+                });
+            }
+            
+            // حفظ رمز QR
+            function saveQR() {
+                const form = document.getElementById('qr-form');
+                if (!form) return;
+                
+                const formData = new FormData(form);
+                const name = formData.get('name') || `رمز ${qrTypes[appState.currentQrType].name}`;
+                const colorOption = document.querySelector('.color-option.active');
+                const color = colorOption ? colorOption.dataset.color : '#2F6BFF';
+                
+                // بناء محتوى رمز QR
+                let qrContent = '';
+                switch(appState.currentQrType) {
+                    case 'url':
+                        qrContent = formData.get('url') || '';
+                        break;
+                    case 'text':
+                        qrContent = formData.get('text') || '';
+                        break;
+                    case 'wifi':
+                        qrContent = `WIFI:S:${formData.get('ssid')};T:${formData.get('encryption')};P:${formData.get('password')};;`;
+                        break;
+                    case 'email':
+                        const to = formData.get('to') || '';
+                        const subject = encodeURIComponent(formData.get('subject') || '');
+                        const body = encodeURIComponent(formData.get('body') || '');
+                        qrContent = `mailto:${to}?subject=${subject}&body=${body}`;
+                        break;
+                    case 'whatsapp':
+                        const phone = formData.get('phone') || '';
+                        const message = encodeURIComponent(formData.get('message') || '');
+                        qrContent = `https://wa.me/${phone}?text=${message}`;
+                        break;
+                    default:
+                        qrContent = formData.get('url') || formData.get('text') || '';
+                }
+                
+                showToast('تم حفظ الرمز بنجاح!');
+            }
+            
+            // تنزيل رمز QR
+            function downloadQR() {
+                const canvas = document.getElementById('qr-preview');
+                const link = document.createElement('a');
+                link.download = 'meqr-qrcode.png';
+                link.href = canvas.toDataURL('image/png');
+                link.click();
+                showToast('تم تنزيل الرمز بنجاح!');
+            }
+            
+            // مشاركة رمز QR
+            function shareQR() {
+                const canvas = document.getElementById('qr-preview');
+                canvas.toBlob(function(blob) {
+                    const file = new File([blob], "meqr-qrcode.png", {type: "image/png"});
+                    
+                    if (navigator.share && navigator.canShare({files: [file]})) {
+                        navigator.share({
+                            title: 'رمز QR من MEQR',
+                            text: 'تم إنشاء هذا الرمز باستخدام تطبيق MEQR',
+                            files: [file]
+                        })
+                        .then(() => showToast('تمت المشاركة بنجاح!'))
+                        .catch(error => showToast('حدث خطأ في المشاركة: ' + error));
+                    } else {
+                        showToast('مشاركة الملف غير مدعومة في هذا المتصفح');
+                    }
+                }, 'image/png');
+            }
+            
+            // تحميل البيانات الأولية
+            function loadInitialData() {
+                // يمكن إضافة بيانات مبدئية هنا إذا لزم الأمر
+            }
+            
+            // عرض رسالة تنبيه
+            function showToast(message) {
+                const existingToast = document.querySelector('.toast');
+                if (existingToast) existingToast.remove();
+                
+                const toast = document.createElement('div');
+                toast.className = 'toast';
+                toast.textContent = message;
+                
+                document.body.appendChild(toast);
+                
+                setTimeout(() => {
+                    toast.remove();
+                }, 3000);
+            }
+        }
+    </script>
+</body>
+</html>
