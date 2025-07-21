@@ -1,14 +1,17 @@
-
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>نظام SeaStar - إنشاء بطاقات الهوية</title>
+    <title>نظام SeaStar - إنشاء بطاقات الهوية | تصميم بطاقات هوية احترافية</title>
+    <meta name="description" content="نظام SeaStar لإنشاء بطاقات الهوية للموظفين والطلاب بطريقة احترافية. تصميم وتخصيص بطاقات الهوية بسهولة وإدارتها وتحميلها.">
+    <meta name="keywords" content="بطاقات الهوية, نظام سيستار, بطاقة طالب, بطاقة موظف, تصميم بطاقة, إنشاء بطاقة, تحميل بطاقة, نظام بطاقات, هوية طالب, هوية موظف">
+    
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    
     <style>
         :root {
             --dark-blue: #00204A;
@@ -310,7 +313,6 @@
             display: flex;
             background-size: cover; /* لتناسب صورة الخلفية */
             background-position: center; /* لمركزة صورة الخلفية */
-            transition: background 0.3s ease, background-color 0.3s ease;
         }
         
         .id-card-front {
@@ -343,22 +345,12 @@
             align-items: center;
             justify-content: center;
             overflow: hidden;
-            position: relative; /* لإحتواء الأيقونة والصورة */
-            transition: width 0.3s ease, height 0.3s ease;
         }
         
         .id-photo img {
             max-width: 100%;
             max-height: 100%;
             object-fit: cover; /* لضمان تغطية الصورة للمساحة */
-            display: none; /* مخفي افتراضيا حتى يتم التحميل */
-        }
-        
-        .id-photo .default-icon {
-            position: absolute;
-            font-size: 2.5rem;
-            color: #ccc;
-            display: block; /* مرئي افتراضيا */
         }
         
         .id-signature {
@@ -373,22 +365,12 @@
             align-items: center;
             justify-content: center;
             overflow: hidden;
-            position: relative;
-            display: none; /* مخفي افتراضيًا */
         }
         
         .id-signature img {
             max-width: 100%;
             max-height: 100%;
             object-fit: contain;
-            display: none; /* مخفي افتراضيا */
-        }
-
-        .id-signature .default-icon {
-            position: absolute;
-            font-size: 1.2rem;
-            color: #ccc;
-            display: block; /* مرئي افتراضيا */
         }
         
         /* إضافة مكان للشعار والباركود في الواجهة الخلفية */
@@ -404,22 +386,12 @@
             align-items: center;
             justify-content: center;
             overflow: hidden;
-            transition: width 0.3s ease, height 0.3s ease;
-            display: none; /* مخفي افتراضيًا */
         }
         
         .id-logo-back img {
             max-width: 100%;
             max-height: 100%;
             object-fit: contain;
-            display: none; /* مخفي افتراضيا */
-        }
-
-        .id-logo-back .default-icon {
-            position: absolute;
-            font-size: 1.5rem;
-            color: #ccc;
-            display: block; /* مرئي افتراضيا */
         }
         
         .id-qr-back {
@@ -434,22 +406,12 @@
             align-items: center;
             justify-content: center;
             overflow: hidden;
-            transition: width 0.3s ease, height 0.3s ease;
-            display: none; /* مخفي افتراضيًا */
         }
         
         .id-qr-back img {
             max-width: 100%;
             max-height: 100%;
             object-fit: contain;
-            display: none; /* مخفي افتراضيا */
-        }
-
-        .id-qr-back .default-icon {
-            position: absolute;
-            font-size: 1.8rem;
-            color: #ccc;
-            display: block; /* مرئي افتراضيا */
         }
         
         .id-title-text { /* تم تغيير اسم الكلاس */
@@ -461,7 +423,6 @@
             color: white;
             padding: 3px;
             border-radius: 3px;
-            transition: font-family 0.3s ease, color 0.3s ease;
         }
         
         .id-details {
@@ -478,24 +439,11 @@
         .id-label {
             font-weight: 600;
             min-width: 100px;
-            transition: font-family 0.3s ease, color 0.3s ease;
         }
         
         .id-value {
             flex-grow: 1;
-            transition: font-family 0.3s ease, color 0.3s ease;
         }
-
-        /* تنسيق النصوص المنسقة في البطاقة */
-        .id-card-front .rich-text-content, .id-card-back .rich-text-content {
-            font-size: 0.8rem;
-            line-height: 1.4;
-            margin-top: 10px;
-            color: #555; /* لون افتراضي لنصوص المحرر */
-        }
-        .id-card-front .rich-text-content b, .id-card-back .rich-text-content b { font-weight: bold; }
-        .id-card-front .rich-text-content i, .id-card-back .rich-text-content i { font-style: italic; }
-        .id-card-front .rich-text-content u, .id-card-back .rich-text-content u { text-decoration: underline; }
         
         /* نموذج إنشاء بطاقة الهوية */
         .id-form-section {
@@ -899,8 +847,6 @@
             padding: 8px;
             background: rgba(0, 0, 0, 0.2);
             border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-            flex-wrap: wrap; /* للسماح للأزرار بالانتقال إلى سطر جديد */
-            gap: 5px; /* مسافة بين الأزرار */
         }
         
         .editor-toolbar button {
@@ -922,7 +868,6 @@
             padding: 15px;
             color: white;
             outline: none;
-            overflow-y: auto; /* لإضافة شريط تمرير إذا كان المحتوى طويلاً */
         }
         
         /* قوالب البطاقات */
@@ -941,12 +886,6 @@
             cursor: pointer;
             border: 2px solid transparent;
             transition: all 0.3s ease;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-weight: 700;
-            text-shadow: 0 1px 3px rgba(0,0,0,0.3);
         }
         
         .template-item:hover, .template-item.active {
@@ -1053,6 +992,20 @@
         .animate {
             animation: fadeIn 0.8s ease-out;
         }
+        
+        /* تحسينات الشعار */
+        .logo-position-controls {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-top: 10px;
+        }
+        
+        .position-input {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
     </style>
 </head>
 <body>
@@ -1087,16 +1040,16 @@
     
     <section class="hero-section">
         <div class="hero-content animate">
-            <h1 class="hero-title">إدارة بطاقات الهوية</h1>
-            <p class="hero-subtitle">تصميم وتخصيص بطاقات الهوية للموظفين والطلاب وقابلة للتحميل</p>
+            <h1 class="hero-title">نظام إدارة بطاقات الهوية المتكامل</h1>
+            <p class="hero-subtitle">تصميم وتخصيص بطاقات الهوية للموظفين والطلاب بطريقة احترافية مع إمكانية الحفظ والتعديل</p>
         </div>
     </section>
 
     <section class="dashboard-section">
         <div class="section-header animate">
             <div>
-                <h2 class="section-title">تصميم بطاقات الهوية</h2>
-                <p class="section-subtitle">أنشئ وقم بتخصيص بطاقات الهوية للموظفين والطلاب بسهولة ثم حمّلها لجهازك</p>
+                <h2 class="section-title">تصميم بطاقات الهوية الاحترافية</h2>
+                <p class="section-subtitle">أنشئ وقم بتخصيص بطاقات الهوية للموظفين والطلاب بسهولة ثم حمّلها لجهازك أو احفظها كقالب للتعديل في أي وقت</p>
             </div>
             <button class="btn primary-btn" id="add-card-btn">
                 <i class="fas fa-plus"></i> إضافة بطاقة هوية
@@ -1130,12 +1083,12 @@
                         <div class="id-card-front">
                             <div class="id-signature">
                                 <img id="preview-signature" src="" alt="توقيع" style="display: none;">
-                                <i class="fas fa-signature default-icon"></i>
+                                <i class="fas fa-signature default-icon" style="font-size: 1.2rem; color: #ccc;"></i>
                             </div>
                             
                             <div class="id-photo">
                                 <img id="preview-photo" src="" alt="صورة شخصية" style="display: none;">
-                                <i class="fas fa-user default-icon"></i>
+                                <i class="fas fa-user default-icon" style="font-size: 2.5rem; color: #ccc;"></i>
                             </div>
                             
                             <div class="id-details">
@@ -1143,27 +1096,27 @@
                                 
                                 <div class="id-field" data-field-name="name">
                                     <div class="id-label">الاسم:</div>
-                                    <div class="id-value" id="preview-name"></div>
+                                    <div class="id-value" id="preview-name">محمد أحمد</div>
                                 </div>
                                 
                                 <div class="id-field" data-field-name="id">
                                     <div class="id-label">رقم القبول:</div>
-                                    <div class="id-value" id="preview-id"></div>
+                                    <div class="id-value" id="preview-id">STU-2023-001</div>
                                 </div>
                                 
                                 <div class="id-field" data-field-name="class">
                                     <div class="id-label">الفصل:</div>
-                                    <div class="id-value" id="preview-class"></div>
+                                    <div class="id-value" id="preview-class">العاشر (أ)</div>
                                 </div>
                                 
                                 <div class="id-field" data-field-name="dob">
                                     <div class="id-label">تاريخ الميلاد:</div>
-                                    <div class="id-value" id="preview-dob"></div>
+                                    <div class="id-value" id="preview-dob">01/01/2008</div>
                                 </div>
                                 
                                 <div class="id-field" data-field-name="blood">
                                     <div class="id-label">فصيلة الدم:</div>
-                                    <div class="id-value" id="preview-blood"></div>
+                                    <div class="id-value" id="preview-blood">O+</div>
                                 </div>
                                 <div class="id-field" data-field-name="father-name" style="display: none;">
                                     <div class="id-label">اسم الأب:</div>
@@ -1190,43 +1143,42 @@
                                     <div class="id-value" id="preview-employee-id"></div>
                                 </div>
                             </div>
-                            <div class="rich-text-content" id="preview-front-text"></div>
                         </div>
                         
                         <div class="id-card-back">
+                            <!-- إضافة الشعار والباركود للواجهة الخلفية -->
                             <div class="id-logo-back">
                                 <img id="preview-logo-back" src="" alt="شعار" style="display: none;">
-                                <i class="fas fa-school default-icon"></i>
+                                <i class="fas fa-school default-icon" style="font-size: 1.5rem; color: #ccc;"></i>
                             </div>
                             
                             <div class="id-qr-back">
                                 <img id="preview-qr-back" src="" alt="QR Code" style="display: none;">
-                                <i class="fas fa-qrcode default-icon"></i>
+                                <i class="fas fa-qrcode default-icon" style="font-size: 1.8rem; color: #ccc;"></i>
                             </div>
                             
                             <div class="id-title-text" id="back-card-title">بطاقة طالب</div>
                             <div class="id-details">
                                 <div class="id-field" data-field-name="phone">
                                     <div class="id-label">رقم الهاتف:</div>
-                                    <div class="id-value" id="preview-phone"></div>
+                                    <div class="id-value" id="preview-phone">+966500000000</div>
                                 </div>
                                 
                                 <div class="id-field" data-field-name="address">
                                     <div class="id-label">العنوان:</div>
-                                    <div class="id-value" id="preview-address"></div>
+                                    <div class="id-value" id="preview-address">الرياض - حي المروج</div>
                                 </div>
                                 
                                 <div class="id-field" data-field-name="status">
                                     <div class="id-label">الحالة:</div>
-                                    <div class="id-value" id="preview-status"></div>
+                                    <div class="id-value" id="preview-status">نشط</div>
                                 </div>
                                 
                                 <div class="id-field" data-field-name="expiry">
                                     <div class="id-label">تاريخ الانتهاء:</div>
-                                    <div class="id-value" id="preview-expiry"></div>
+                                    <div class="id-value" id="preview-expiry">01/06/2024</div>
                                 </div>
                             </div>
-                            <div class="rich-text-content" id="preview-back-text"></div>
                         </div>
                     </div>
                     
@@ -1248,27 +1200,27 @@
                                 <input type="text" class="form-input" id="input-class" placeholder="ادخل الفصل أو القسم">
                             </div>
                             
-                            <div class="input-group toggleable" data-input-for="dob">
+                            <div class="input-group" data-input-for="dob" style="display: none;">
                                 <label class="input-label">تاريخ الميلاد</label>
                                 <input type="date" class="form-input" id="input-dob" placeholder="ادخل تاريخ الميلاد">
                             </div>
-                            <div class="input-group toggleable" data-input-for="phone">
+                            <div class="input-group" data-input-for="phone" style="display: none;">
                                 <label class="input-label">رقم الهاتف</label>
                                 <input type="tel" class="form-input" id="input-phone" placeholder="ادخل رقم الهاتف">
                             </div>
-                            <div class="input-group toggleable" data-input-for="address">
+                            <div class="input-group" data-input-for="address" style="display: none;">
                                 <label class="input-label">العنوان</label>
                                 <input type="text" class="form-input" id="input-address" placeholder="ادخل العنوان">
                             </div>
-                            <div class="input-group toggleable" data-input-for="status">
+                            <div class="input-group" data-input-for="status" style="display: none;">
                                 <label class="input-label">الحالة</label>
                                 <input type="text" class="form-input" id="input-status" placeholder="مثال: نشط، متوقف">
                             </div>
-                            <div class="input-group toggleable" data-input-for="expiry">
+                            <div class="input-group" data-input-for="expiry" style="display: none;">
                                 <label class="input-label">تاريخ الانتهاء</label>
                                 <input type="date" class="form-input" id="input-expiry" placeholder="مثال: 01/06/2024">
                             </div>
-                            <div class="input-group toggleable" data-input-for="blood">
+                            <div class="input-group" data-input-for="blood" style="display: none;">
                                 <label class="input-label">فصيلة الدم</label>
                                 <select class="form-select" id="input-blood">
                                     <option value="">اختر فصيلة الدم</option>
@@ -1282,15 +1234,15 @@
                                     <option value="O-">O-</option>
                                 </select>
                             </div>
-                            <div class="input-group toggleable" data-input-for="father-name">
+                            <div class="input-group" data-input-for="father-name" style="display: none;">
                                 <label class="input-label">اسم الأب</label>
                                 <input type="text" class="form-input" id="input-father-name" placeholder="ادخل اسم الأب">
                             </div>
-                            <div class="input-group toggleable" data-input-for="mother-name">
+                            <div class="input-group" data-input-for="mother-name" style="display: none;">
                                 <label class="input-label">اسم الأم</label>
                                 <input type="text" class="form-input" id="input-mother-name" placeholder="ادخل اسم الأم">
                             </div>
-                            <div class="input-group toggleable" data-input-for="gender">
+                            <div class="input-group" data-input-for="gender" style="display: none;">
                                 <label class="input-label">النوع</label>
                                 <select class="form-select" id="input-gender">
                                     <option value="">اختر النوع</option>
@@ -1298,15 +1250,15 @@
                                     <option value="أنثى">أنثى</option>
                                 </select>
                             </div>
-                            <div class="input-group toggleable" data-input-for="job-title">
+                            <div class="input-group" data-input-for="job-title" style="display: none;">
                                 <label class="input-label">المسمى الوظيفي</label>
                                 <input type="text" class="form-input" id="input-job-title" placeholder="ادخل المسمى الوظيفي">
                             </div>
-                            <div class="input-group toggleable" data-input-for="join-date">
+                            <div class="input-group" data-input-for="join-date" style="display: none;">
                                 <label class="input-label">تاريخ الانضمام</label>
                                 <input type="date" class="form-input" id="input-join-date" placeholder="ادخل تاريخ الانضمام">
                             </div>
-                            <div class="input-group toggleable" data-input-for="employee-id">
+                            <div class="input-group" data-input-for="employee-id" style="display: none;">
                                 <label class="input-label">رقم تعريف الموظف</label>
                                 <input type="text" class="form-input" id="input-employee-id" placeholder="ادخل رقم تعريف الموظف">
                             </div>
@@ -1316,9 +1268,9 @@
                 
                 <div class="cards-list-section animate">
                     <div class="cards-header">
-                        <h3 class="cards-title">قوالب بطاقات الهوية</h3>
+                        <h3 class="cards-title">البطاقات المحفوظة</h3>
                         <div class="search-box">
-                            <input type="text" class="form-input" placeholder="ابحث عن بطاقة...">
+                            <input type="text" class="form-input" placeholder="ابحث عن بطاقة..." id="card-search">
                         </div>
                     </div>
                     
@@ -1328,46 +1280,12 @@
                                 <th>اسم البطاقة</th>
                                 <th>النوع</th>
                                 <th>تاريخ الإنشاء</th>
+                                <th>آخر تحديث</th>
                                 <th>الإجراءات</th>
                             </tr>
                         </thead>
-                        <tbody>
-                            <tr>
-                                <td>بطاقة طالب أساسية</td>
-                                <td>طالب</td>
-                                <td>01/08/2023</td>
-                                <td class="action-cell">
-                                    <button class="action-btn edit-btn"><i class="fas fa-edit"></i></button>
-                                    <button class="action-btn delete-btn"><i class="fas fa-trash"></i></button>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>بطاقة موظف إداري</td>
-                                <td>موظف</td>
-                                <td>15/07/2023</td>
-                                <td class="action-cell">
-                                    <button class="action-btn edit-btn"><i class="fas fa-edit"></i></button>
-                                    <button class="action-btn delete-btn"><i class="fas fa-trash"></i></button>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>بطاقة معلم</td>
-                                <td>موظف</td>
-                                <td>20/06/2023</td>
-                                <td class="action-cell">
-                                    <button class="action-btn edit-btn"><i class="fas fa-edit"></i></button>
-                                    <button class="action-btn delete-btn"><i class="fas fa-trash"></i></button>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>بطاقة زائر</td>
-                                <td>زائر</td>
-                                <td>10/05/2023</td>
-                                <td class="action-cell">
-                                    <button class="action-btn edit-btn"><i class="fas fa-edit"></i></button>
-                                    <button class="action-btn delete-btn"><i class="fas fa-trash"></i></button>
-                                </td>
-                            </tr>
+                        <tbody id="saved-cards-table">
+                            <!-- سيتم ملؤه ديناميكيًا -->
                         </tbody>
                     </table>
                 </div>
@@ -1377,6 +1295,7 @@
                 <div class="id-form-section animate">
                     <div class="form-header">
                         <h3 class="form-title">إنشاء بطاقة هوية جديدة</h3>
+                        <input type="hidden" id="current-card-id" value="">
                     </div>
                     
                     <div class="form-grid">
@@ -1403,10 +1322,10 @@
                         <div class="input-group">
                             <label class="input-label">اختر قالبًا جاهزًا</label>
                             <div class="templates-container">
-                                <div class="template-item student active" data-template="student">طالب</div>
-                                <div class="template-item employee" data-template="employee">موظف</div>
-                                <div class="template-item visitor" data-template="visitor">زائر</div>
-                                <div class="template-item premium" data-template="premium">مميز</div>
+                                <div class="template-item student active" data-template="student"></div>
+                                <div class="template-item employee" data-template="employee"></div>
+                                <div class="template-item visitor" data-template="visitor"></div>
+                                <div class="template-item premium" data-template="premium"></div>
                             </div>
                         </div>
                         
@@ -1564,7 +1483,7 @@
                                             <option value="'Tajawal', sans-serif">Tajawal</option>
                                             <option value="'Amiri', serif">Amiri</option>
                                         </select>
-                                        <input type="color" class="color-input" id="title-color" value="#FFFFFF">
+                                        <input type="color" class="color-input" id="title-color" value="#00204A">
                                     </div>
                                 </div>
                                 <div class="text-group">
@@ -1604,17 +1523,17 @@
                             </div>
                             
                             <button class="upload-btn" id="upload-photo-btn">
-                                <i class="fas fa-upload"></i> تحميل صورة شخصية
+                                <i class="fas fa-upload"></i> تحميل صورة افتراضية
                             </button>
                             <input type="file" id="photo-upload" accept="image/*" style="display: none;">
                             
                             <div class="position-controls">
                                 <div class="size-control">
-                                    <label>العرض (px)</label>
+                                    <label>العرض (بكسل)</label>
                                     <input type="number" id="photo-width" value="100" min="50" max="150">
                                 </div>
                                 <div class="size-control">
-                                    <label>الارتفاع (px)</label>
+                                    <label>الارتفاع (بكسل)</label>
                                     <input type="number" id="photo-height" value="120" min="50" max="150">
                                 </div>
                             </div>
@@ -1635,11 +1554,12 @@
                             <input type="file" id="signature-upload" accept="image/*" style="display: none;">
                         </div>
                         
+                        <!-- تحسينات الشعار -->
                         <div class="customize-section">
                             <div class="customize-header">
                                 <h4 class="customize-title">الشعار (الواجهة الخلفية)</h4>
                                 <label class="toggle-switch">
-                                    <input type="checkbox" id="toggle-logo-back">
+                                    <input type="checkbox" id="toggle-logo-back" checked>
                                     <span class="slider"></span>
                                 </label>
                             </div>
@@ -1651,12 +1571,23 @@
                             
                             <div class="position-controls">
                                 <div class="size-control">
-                                    <label>العرض (px)</label>
+                                    <label>العرض (بكسل)</label>
                                     <input type="number" id="logo-back-width" value="40" min="20" max="80">
                                 </div>
                                 <div class="size-control">
-                                    <label>الارتفاع (px)</label>
+                                    <label>الارتفاع (بكسل)</label>
                                     <input type="number" id="logo-back-height" value="40" min="20" max="80">
+                                </div>
+                            </div>
+                            
+                            <div class="logo-position-controls">
+                                <div class="position-input">
+                                    <label>الموقع الأفقي (بكسل)</label>
+                                    <input type="number" id="logo-back-x" value="10" min="0" max="300">
+                                </div>
+                                <div class="position-input">
+                                    <label>الموقع الرأسي (بكسل)</label>
+                                    <input type="number" id="logo-back-y" value="10" min="0" max="200">
                                 </div>
                             </div>
                         </div>
@@ -1665,7 +1596,7 @@
                             <div class="customize-header">
                                 <h4 class="customize-title">رمز الاستجابة السريعة (الواجهة الخلفية)</h4>
                                 <label class="toggle-switch">
-                                    <input type="checkbox" id="toggle-qr-back">
+                                    <input type="checkbox" id="toggle-qr-back" checked>
                                     <span class="slider"></span>
                                 </label>
                             </div>
@@ -1677,45 +1608,35 @@
                             
                             <div class="position-controls">
                                 <div class="size-control">
-                                    <label>العرض (px)</label>
+                                    <label>العرض (بكسل)</label>
                                     <input type="number" id="qr-back-width" value="50" min="30" max="80">
                                 </div>
                                 <div class="size-control">
-                                    <label>الارتفاع (px)</label>
+                                    <label>الارتفاع (بكسل)</label>
                                     <input type="number" id="qr-back-height" value="50" min="30" max="80">
                                 </div>
                             </div>
                         </div>
                         
                         <div class="input-group">
-                            <label class="input-label">نص الواجهة الأمامية الإضافي</label>
+                            <label class="input-label">نص الواجهة الأمامية</label>
                             <div class="rich-text-editor">
                                 <div class="editor-toolbar">
                                     <button type="button" data-command="bold"><i class="fas fa-bold"></i></button>
                                     <button type="button" data-command="italic"><i class="fas fa-italic"></i></button>
                                     <button type="button" data-command="underline"><i class="fas fa-underline"></i></button>
-                                    <button type="button" data-command="justifyleft"><i class="fas fa-align-left"></i></button>
-                                    <button type="button" data-command="justifycenter"><i class="fas fa-align-center"></i></button>
-                                    <button type="button" data-command="justifyright"><i class="fas fa-align-right"></i></button>
-                                    <button type="button" data-command="insertunorderedlist"><i class="fas fa-list-ul"></i></button>
-                                    <button type="button" data-command="insertorderedlist"><i class="fas fa-list-ol"></i></button>
                                 </div>
                                 <div class="rich-editor" id="front-text" contenteditable="true"></div>
                             </div>
                         </div>
                         
                         <div class="input-group">
-                            <label class="input-label">نص الواجهة الخلفية الإضافي</label>
+                            <label class="input-label">نص الواجهة الخلفية</label>
                             <div class="rich-text-editor">
                                 <div class="editor-toolbar">
                                     <button type="button" data-command="bold"><i class="fas fa-bold"></i></button>
                                     <button type="button" data-command="italic"><i class="fas fa-italic"></i></button>
                                     <button type="button" data-command="underline"><i class="fas fa-underline"></i></button>
-                                    <button type="button" data-command="justifyleft"><i class="fas fa-align-left"></i></button>
-                                    <button type="button" data-command="justifycenter"><i class="fas fa-align-center"></i></button>
-                                    <button type="button" data-command="justifyright"><i class="fas fa-align-right"></i></button>
-                                    <button type="button" data-command="insertunorderedlist"><i class="fas fa-list-ul"></i></button>
-                                    <button type="button" data-command="insertorderedlist"><i class="fas fa-list-ol"></i></button>
                                 </div>
                                 <div class="rich-editor" id="back-text" contenteditable="true"></div>
                             </div>
@@ -1740,6 +1661,9 @@
     </div>
 
     <script>
+        // تخزين البطاقات المحفوظة
+        let savedCards = JSON.parse(localStorage.getItem('savedCards')) || [];
+        
         document.addEventListener('DOMContentLoaded', function() {
             // تأثيرات الظهور عند التمرير
             const observer = new IntersectionObserver((entries) => {
@@ -1767,182 +1691,45 @@
             });
             
             // تفاعل أزرار التعديل في القائمة
-            document.querySelectorAll('.edit-btn').forEach(btn => {
-                btn.addEventListener('click', function() {
-                    const row = this.closest('tr');
-                    const cardName = row.cells[0].textContent;
-                    const cardType = row.cells[1].textContent;
-                    
-                    // تعبئة النموذج بالمعلومات
-                    document.getElementById('card-name').value = cardName;
-                    document.getElementById('card-title').value = cardName; // تعيين عنوان البطاقة أيضًا
-                    document.getElementById('card-type').value = cardType === 'طالب' ? 'student' : 
-                                                               cardType === 'موظف' ? 'employee' : 'visitor';
-                    
-                    // تغيير نص الزر لحفظ التعديلات
-                    document.getElementById('save-btn').innerHTML = '<i class="fas fa-save"></i> تحديث البطاقة';
-                    
-                    // التمرير إلى النموذج
-                    document.querySelector('.id-form-section').scrollIntoView({behavior: 'smooth'});
-                });
+            document.querySelector('#saved-cards-table').addEventListener('click', function(e) {
+                const target = e.target;
+                
+                if (target.closest('.edit-btn')) {
+                    const row = target.closest('tr');
+                    const cardId = row.dataset.id;
+                    loadCardTemplate(cardId);
+                }
+                
+                if (target.closest('.delete-btn')) {
+                    const row = target.closest('tr');
+                    const cardId = row.dataset.id;
+                    deleteCardTemplate(cardId);
+                }
             });
             
-            // تفاعل أزرار الحذف في القائمة
-            document.querySelectorAll('.delete-btn').forEach(btn => {
-                btn.addEventListener('click', function() {
-                    if (confirm('هل أنت متأكد من رغبتك في حذف قالب بطاقة الهوية هذا؟ سيتم حذفه بشكل دائم.')) {
-                        const row = this.closest('tr');
-                        row.style.opacity = '0.5';
-                        setTimeout(() => {
-                            row.remove();
-                        }, 500);
+            // تفاعل البحث
+            document.getElementById('card-search').addEventListener('input', function() {
+                const searchTerm = this.value.toLowerCase();
+                const rows = document.querySelectorAll('#saved-cards-table tr');
+                
+                rows.forEach(row => {
+                    const cardName = row.cells[0].textContent.toLowerCase();
+                    if (cardName.includes(searchTerm)) {
+                        row.style.display = '';
+                    } else {
+                        row.style.display = 'none';
                     }
                 });
             });
             
             // زر الإلغاء
             document.getElementById('reset-btn').addEventListener('click', function() {
-                document.getElementById('card-type').value = '';
-                document.getElementById('card-name').value = '';
-                document.getElementById('card-title').value = '';
-                document.getElementById('front-text').innerHTML = '';
-                document.getElementById('back-text').innerHTML = '';
-                document.getElementById('save-btn').innerHTML = '<i class="fas fa-save"></i> حفظ بطاقة الهوية';
-
-                // إعادة تعيين حقول بيانات المعاينة إلى القيم الافتراضية
-                const previewDataFields = {
-                    'name': 'الاسم الكامل', 'id': 'رقم القبول/الهوية', 'class': 'الفصل/القسم',
-                    'dob': 'تاريخ الميلاد', 'phone': 'رقم الهاتف', 'address': 'العنوان',
-                    'status': 'نشط', 'expiry': 'تاريخ الانتهاء', 'blood': 'O+',
-                    'father-name': 'اسم الأب', 'mother-name': 'اسم الأم', 'gender': 'ذكر',
-                    'job-title': 'المسمى الوظيفي', 'join-date': 'تاريخ الانضمام', 'employee-id': 'رقم الموظف'
-                };
-            
-                for (const field in previewDataFields) {
-                    const inputElement = document.getElementById(`input-${field}`);
-                    const previewElement = document.getElementById(`preview-${field}`);
-                    if (inputElement) inputElement.value = '';
-                    if (previewElement) previewElement.textContent = previewDataFields[field];
-                }
-
-                // إخفاء جميع حقول الإدخال الإضافية
-                document.querySelectorAll('.input-group.toggleable').forEach(group => {
-                    group.style.display = 'none';
-                });
-
-                // إعادة تعيين صور المعاينة إلى الأيقونات الافتراضية
-                document.getElementById('preview-photo').src = '';
-                document.getElementById('preview-photo').style.display = 'none';
-                document.querySelector('.id-photo .default-icon').style.display = 'block';
-
-                document.getElementById('preview-logo-back').src = '';
-                document.getElementById('preview-logo-back').style.display = 'none';
-                document.querySelector('.id-logo-back .default-icon').style.display = 'block';
-
-                document.getElementById('preview-qr-back').src = '';
-                document.getElementById('preview-qr-back').style.display = 'none';
-                document.querySelector('.id-qr-back .default-icon').style.display = 'block';
-
-                document.getElementById('preview-signature').src = '';
-                document.getElementById('preview-signature').style.display = 'none';
-                document.querySelector('.id-signature .default-icon').style.display = 'block';
-                
-                document.querySelector('.id-card').style.backgroundImage = 'none'; // إزالة خلفية البطاقة
-                document.querySelector('.id-card').style.backgroundColor = '#fff'; // إعادة لون الخلفية الأبيض
-                
-                // إعادة تعيين حالة التبديل للحقول (مع تفعيل الافتراضي)
-                document.querySelectorAll('.toggle-switch input').forEach(checkbox => {
-                    const fieldName = checkbox.dataset.field;
-                    // الحقول التي يجب أن تكون مفعلة افتراضيًا
-                    if (['id', 'name', 'class', 'status', 'expiry', 'photo'].includes(fieldName)) {
-                        checkbox.checked = true;
-                    } else {
-                        checkbox.checked = false;
-                    }
-                    // قم بتشغيل حدث التغيير لتحديث الواجهة بناءً على هذه القيم الافتراضية
-                    checkbox.dispatchEvent(new Event('change'));
-                });
-                
-                // إعادة تعيين عناوين البطاقة الافتراضية
-                document.getElementById('front-card-title').textContent = 'بطاقة طالب';
-                document.getElementById('back-card-title').textContent = 'بطاقة طالب';
-
-                // إعادة تعيين الخطوط والألوان
-                document.getElementById('title-font').value = "'Cairo', sans-serif";
-                document.getElementById('title-color').value = "#FFFFFF";
-                document.getElementById('label-font').value = "'Cairo', sans-serif";
-                document.getElementById('label-color').value = "#333333";
-                document.getElementById('value-font').value = "'Cairo', sans-serif";
-                document.getElementById('value-color').value = "#333333";
-                
-                document.getElementById('title-font').dispatchEvent(new Event('change'));
-                document.getElementById('title-color').dispatchEvent(new Event('input'));
-                document.getElementById('label-font').dispatchEvent(new Event('change'));
-                document.getElementById('label-color').dispatchEvent(new Event('input'));
-                document.getElementById('value-font').dispatchEvent(new Event('change'));
-                document.getElementById('value-color').dispatchEvent(new Event('input'));
-
-                // إعادة تعيين أحجام الصور
-                document.getElementById('photo-width').value = "100";
-                document.getElementById('photo-height').value = "120";
-                document.getElementById('logo-back-width').value = "40";
-                document.getElementById('logo-back-height').value = "40";
-                document.getElementById('qr-back-width').value = "50";
-                document.getElementById('qr-back-height').value = "50";
-                
-                document.getElementById('photo-width').dispatchEvent(new Event('input'));
-                document.getElementById('photo-height').dispatchEvent(new Event('input'));
-                document.getElementById('logo-back-width').dispatchEvent(new Event('input'));
-                document.getElementById('logo-back-height').dispatchEvent(new Event('input'));
-                document.getElementById('qr-back-width').dispatchEvent(new Event('input'));
-                document.getElementById('qr-back-height').dispatchEvent(new Event('input'));
-
-                // تفعيل القالب الافتراضي (طالب)
-                document.querySelector('.template-item.student').click();
+                resetForm();
             });
             
             // زر الحفظ
             document.getElementById('save-btn').addEventListener('click', function() {
-                const cardType = document.getElementById('card-type').value;
-                const cardName = document.getElementById('card-name').value;
-                
-                if (!cardType) {
-                    alert('الرجاء اختيار نوع بطاقة الهوية');
-                    return;
-                }
-                
-                if (!cardName) {
-                    alert('الرجاء إدخال اسم البطاقة');
-                    return;
-                }
-                
-                // رسالة نجاح
-                showNotification('تم حفظ بطاقة الهوية بنجاح!');
-                
-                // إضافة البطاقة الجديدة للقائمة
-                const table = document.querySelector('.cards-table tbody');
-                const newRow = document.createElement('tr');
-                
-                const typeText = cardType === 'student' ? 'طالب' : 
-                               cardType === 'employee' ? 'موظف' : 'زائر';
-                
-                const today = new Date();
-                const dateStr = `${today.getDate()}/${today.getMonth()+1}/${today.getFullYear()}`;
-                
-                newRow.innerHTML = `
-                    <td>${cardName}</td>
-                    <td>${typeText}</td>
-                    <td>${dateStr}</td>
-                    <td class="action-cell">
-                        <button class="action-btn edit-btn"><i class="fas fa-edit"></i></button>
-                        <button class="action-btn delete-btn"><i class="fas fa-trash"></i></button>
-                    </td>
-                `;
-                
-                table.prepend(newRow); // إضافة الصف الجديد في البداية
-
-                // إعادة تعيين النموذج بعد الحفظ
-                document.getElementById('reset-btn').click();
+                saveCardTemplate();
             });
             
             // تفاعل التبديل بين الواجهة الأمامية والخلفية
@@ -1968,7 +1755,7 @@
             // تفاعل التبديل للحقول
             document.querySelectorAll('.toggle-switch input').forEach(checkbox => {
                 checkbox.addEventListener('change', function() {
-                    const fieldName = this.dataset.field; 
+                    const fieldName = this.dataset.field; // استخدام data-field
                     
                     // تحديث حقول المعاينة في البطاقة
                     const previewField = document.querySelector(`.id-field[data-field-name="${fieldName}"]`);
@@ -1979,21 +1766,14 @@
                     // تحديث حقول الإدخال في نموذج تعبئة البيانات
                     const inputGroup = document.querySelector(`.input-group[data-input-for="${fieldName}"]`);
                     if (inputGroup) {
-                        // أظهر أو أخفِ حقول الإدخال الإضافية
-                        if (this.checked) {
-                            inputGroup.style.display = 'flex';
-                            inputGroup.classList.add('toggleable'); // إضافة الكلاس لسهولة الإخفاء عند إعادة التعيين
-                        } else {
-                            inputGroup.style.display = 'none';
-                            inputGroup.classList.remove('toggleable');
-                        }
+                        inputGroup.style.display = this.checked ? 'flex' : 'none';
                     }
 
                     // منطق خاص للأيقونات والصور (الصور الشخصية، الشعار، QR، التوقيع)
                     const previewImgId = `preview-${fieldName}`;
                     const previewImg = document.getElementById(previewImgId);
                     
-                    if (previewImg) { // تأكد من وجود عنصر الصورة
+                    if (previewImg && (fieldName === 'photo' || fieldName === 'logo' || fieldName === 'qr' || fieldName === 'signature')) {
                         const defaultIcon = previewImg.nextElementSibling; // الأيقونة الافتراضية
                         if (this.checked) {
                             if (previewImg.src && previewImg.src !== window.location.href) { // إذا كانت هناك صورة مرفوعة
@@ -2006,21 +1786,6 @@
                             previewImg.style.display = 'none';
                             if (defaultIcon) defaultIcon.style.display = 'none'; // أخفِ الأيقونة إذا تم إخفاء الحقل
                         }
-                    }
-                    // تحديث عرض الصورة الشخصية والتوقيع والشعار والباركود في البطاقة
-                    const photoContainer = document.querySelector('.id-photo');
-                    const signatureContainer = document.querySelector('.id-signature');
-                    const logoBackContainer = document.querySelector('.id-logo-back');
-                    const qrBackContainer = document.querySelector('.id-qr-back');
-
-                    if (fieldName === 'photo') {
-                        photoContainer.style.display = this.checked ? 'flex' : 'none';
-                    } else if (fieldName === 'signature') {
-                        signatureContainer.style.display = this.checked ? 'flex' : 'none';
-                    } else if (fieldName === 'logo-back') {
-                        logoBackContainer.style.display = this.checked ? 'flex' : 'none';
-                    } else if (fieldName === 'qr-back') {
-                        qrBackContainer.style.display = this.checked ? 'flex' : 'none';
                     }
                 });
             });
@@ -2039,29 +1804,27 @@
             });
             
             // تعيين القيم الافتراضية للحقول (إذا لم يتم إدخال بيانات)
-            document.getElementById('preview-name').setAttribute('data-default', 'الاسم الكامل');
-            document.getElementById('preview-id').setAttribute('data-default', 'رقم القبول/الهوية');
-            document.getElementById('preview-class').setAttribute('data-default', 'الفصل/القسم');
-            document.getElementById('preview-dob').setAttribute('data-default', 'تاريخ الميلاد');
-            document.getElementById('preview-phone').setAttribute('data-default', 'رقم الهاتف');
-            document.getElementById('preview-address').setAttribute('data-default', 'العنوان');
+            document.getElementById('preview-name').setAttribute('data-default', 'محمد أحمد');
+            document.getElementById('preview-id').setAttribute('data-default', 'STU-2023-001');
+            document.getElementById('preview-class').setAttribute('data-default', 'العاشر (أ)');
+            document.getElementById('preview-dob').setAttribute('data-default', '01/01/2008');
+            document.getElementById('preview-phone').setAttribute('data-default', '+966500000000');
+            document.getElementById('preview-address').setAttribute('data-default', 'الرياض - حي المروج');
             document.getElementById('preview-status').setAttribute('data-default', 'نشط');
-            document.getElementById('preview-expiry').setAttribute('data-default', 'تاريخ الانتهاء');
-            document.getElementById('preview-blood').setAttribute('data-default', 'فصيلة الدم');
+            document.getElementById('preview-expiry').setAttribute('data-default', '01/06/2024');
+            document.getElementById('preview-blood').setAttribute('data-default', 'O+');
             document.getElementById('preview-father-name').setAttribute('data-default', 'اسم الأب');
             document.getElementById('preview-mother-name').setAttribute('data-default', 'اسم الأم');
-            document.getElementById('preview-gender').setAttribute('data-default', 'النوع');
-            document.getElementById('preview-job-title').setAttribute('data-default', 'المسمى الوظيفي');
-            document.getElementById('preview-join-date').setAttribute('data-default', 'تاريخ الانضمام');
-            document.getElementById('preview-employee-id').setAttribute('data-default', 'رقم تعريف الموظف');
-
+            document.getElementById('preview-gender').setAttribute('data-default', 'ذكر');
+            document.getElementById('preview-job-title').setAttribute('data-default', 'مطور برمجيات');
+            document.getElementById('preview-join-date').setAttribute('data-default', '01/01/2023');
+            document.getElementById('preview-employee-id').setAttribute('data-default', 'EMP-12345');
 
             // وظيفة عامة لتحميل وعرض الصور
-            function handleImageUpload(inputElementId, previewImgElementId, containerElementId) {
+            function handleImageUpload(inputElementId, previewImgElementId, defaultIconSelector = null) {
                 const input = document.getElementById(inputElementId);
                 const previewImg = document.getElementById(previewImgElementId);
-                const container = document.querySelector(containerElementId);
-                const defaultIcon = container.querySelector('.default-icon');
+                const defaultIcon = defaultIconSelector ? document.querySelector(defaultIconSelector) : null;
 
                 input.addEventListener('change', function(event) {
                     const file = event.target.files[0];
@@ -2089,23 +1852,23 @@
             document.getElementById('upload-photo-btn').addEventListener('click', () => {
                 document.getElementById('photo-upload').click();
             });
-            handleImageUpload('photo-upload', 'preview-photo', '.id-photo');
+            handleImageUpload('photo-upload', 'preview-photo', '.id-photo .default-icon');
 
             document.getElementById('upload-signature-btn').addEventListener('click', () => {
                 document.getElementById('signature-upload').click();
             });
-            handleImageUpload('signature-upload', 'preview-signature', '.id-signature');
+            handleImageUpload('signature-upload', 'preview-signature', '.id-signature .default-icon');
             
             // تفعيل أزرار الرفع للشعار والباركود في الواجهة الخلفية
             document.getElementById('upload-logo-back-btn').addEventListener('click', () => {
                 document.getElementById('logo-back-upload').click();
             });
-            handleImageUpload('logo-back-upload', 'preview-logo-back', '.id-logo-back');
+            handleImageUpload('logo-back-upload', 'preview-logo-back', '.id-logo-back .default-icon');
 
             document.getElementById('upload-qr-back-btn').addEventListener('click', () => {
                 document.getElementById('qr-back-upload').click();
             });
-            handleImageUpload('qr-back-upload', 'preview-qr-back', '.id-qr-back');
+            handleImageUpload('qr-back-upload', 'preview-qr-back', '.id-qr-back .default-icon');
             
             // تفعيل رفع صورة خلفية البطاقة
             document.getElementById('upload-background-btn').addEventListener('click', () => {
@@ -2117,24 +1880,22 @@
                     const reader = new FileReader();
                     reader.onload = function(e) {
                         document.querySelector('.id-card').style.backgroundImage = `url('${e.target.result}')`;
-                        document.querySelector('.id-card').style.backgroundColor = 'transparent'; // إزالة لون الخلفية إذا تم رفع صورة
                     };
                     reader.readAsDataURL(file);
                 } else {
                     document.querySelector('.id-card').style.backgroundImage = 'none';
-                    // قد تحتاج إلى إعادة تعيين لون افتراضي هنا إذا أردت
                 }
             });
             
             // تغيير لون خلفية البطاقة
             document.getElementById('background-color').addEventListener('input', function() {
-                document.querySelector('.id-card').style.backgroundImage = 'none'; // إزالة أي صورة خلفية موجودة
+                document.querySelector('.id-card').style.backgroundImage = 'none';
                 document.querySelector('.id-card').style.backgroundColor = this.value;
             });
             
             // تغيير حجم الصورة الشخصية
             document.getElementById('photo-width').addEventListener('input', function() {
-                document.querySelector('.id-photo').style.width = this.value + 'px';
+                document.querySelector('.id-photo').style.width = this.value + '%';
             });
             
             document.getElementById('photo-height').addEventListener('input', function() {
@@ -2150,6 +1911,15 @@
                 document.querySelector('.id-logo-back').style.height = this.value + 'px';
             });
             
+            // تغيير موضع الشعار في الواجهة الخلفية
+            document.getElementById('logo-back-x').addEventListener('input', function() {
+                document.querySelector('.id-logo-back').style.right = this.value + 'px';
+            });
+            
+            document.getElementById('logo-back-y').addEventListener('input', function() {
+                document.querySelector('.id-logo-back').style.top = this.value + 'px';
+            });
+            
             // تغيير حجم الباركود في الواجهة الخلفية
             document.getElementById('qr-back-width').addEventListener('input', function() {
                 document.querySelector('.id-qr-back').style.width = this.value + 'px';
@@ -2161,46 +1931,30 @@
             
             // تفعيل التبديل للشعار والباركود في الواجهة الخلفية
             document.getElementById('toggle-logo-back').addEventListener('change', function() {
-                document.querySelector('.id-logo-back').style.display = this.checked ? 'flex' : 'none';
-                if (!this.checked) { // إذا تم إخفاؤه، قم بإخفاء الصورة والأيقونة الافتراضية
-                    document.getElementById('preview-logo-back').style.display = 'none';
-                    document.querySelector('.id-logo-back .default-icon').style.display = 'none';
-                } else { // إذا تم إظهاره، قم بتحديث الأيقونة/الصورة بناءً على وجود الصورة
-                    if (document.getElementById('preview-logo-back').src && document.getElementById('preview-logo-back').src !== window.location.href) {
-                        document.getElementById('preview-logo-back').style.display = 'block';
-                        document.querySelector('.id-logo-back .default-icon').style.display = 'none';
-                    } else {
-                        document.getElementById('preview-logo-back').style.display = 'none';
-                        document.querySelector('.id-logo-back .default-icon').style.display = 'block';
-                    }
+                const logoBack = document.querySelector('.id-logo-back');
+                if (this.checked) {
+                    logoBack.style.display = 'flex';
+                } else {
+                    logoBack.style.display = 'none';
                 }
             });
             
             document.getElementById('toggle-qr-back').addEventListener('change', function() {
-                document.querySelector('.id-qr-back').style.display = this.checked ? 'flex' : 'none';
-                if (!this.checked) { // إذا تم إخفاؤه، قم بإخفاء الصورة والأيقونة الافتراضية
-                    document.getElementById('preview-qr-back').style.display = 'none';
-                    document.querySelector('.id-qr-back .default-icon').style.display = 'none';
-                } else { // إذا تم إظهاره، قم بتحديث الأيقونة/الصورة بناءً على وجود الصورة
-                    if (document.getElementById('preview-qr-back').src && document.getElementById('preview-qr-back').src !== window.location.href) {
-                        document.getElementById('preview-qr-back').style.display = 'block';
-                        document.querySelector('.id-qr-back .default-icon').style.display = 'none';
-                    } else {
-                        document.getElementById('preview-qr-back').style.display = 'none';
-                        document.querySelector('.id-qr-back .default-icon').style.display = 'block';
-                    }
+                const qrBack = document.querySelector('.id-qr-back');
+                if (this.checked) {
+                    qrBack.style.display = 'flex';
+                } else {
+                    qrBack.style.display = 'none';
                 }
             });
             
             // تغيير الخطوط والألوان
             document.getElementById('title-font').addEventListener('change', function() {
-                document.getElementById('front-card-title').style.fontFamily = this.value;
-                document.getElementById('back-card-title').style.fontFamily = this.value;
+                document.querySelector('.id-title-text').style.fontFamily = this.value;
             });
             
             document.getElementById('title-color').addEventListener('input', function() {
-                document.getElementById('front-card-title').style.color = this.value;
-                document.getElementById('back-card-title').style.color = this.value;
+                document.querySelector('.id-title-text').style.color = this.value;
             });
             
             document.getElementById('label-font').addEventListener('change', function() {
@@ -2242,64 +1996,24 @@
                     const template = this.dataset.template;
                     const card = document.querySelector('.id-card');
                     
-                    // إعادة تعيين الأنماط الافتراضية أولاً
+                    // إزالة أي أنماط سابقة
                     card.style.backgroundImage = 'none';
-                    card.style.backgroundColor = '#fff'; // لون أبيض افتراضي للقوالب
-                    document.getElementById('title-color').value = "#00204A"; // لون افتراضي لعناوين البطاقة
-                    document.getElementById('label-color').value = "#333333";
-                    document.getElementById('value-color').value = "#333333";
+                    card.style.backgroundColor = '#fff';
                     
-                    document.getElementById('front-card-title').style.background = 'var(--cyber-indigo)';
-                    document.getElementById('back-card-title').style.background = 'var(--cyber-indigo)';
-                    document.getElementById('front-card-title').style.color = '#fff';
-                    document.getElementById('back-card-title').style.color = '#fff';
-
                     switch(template) {
                         case 'student':
-                            card.style.backgroundColor = '#e6f7ff'; // أزرق فاتح
-                            document.getElementById('title-color').value = "#1890ff"; // لون أزرق
-                            document.getElementById('front-card-title').style.background = 'none';
-                            document.getElementById('back-card-title').style.background = 'none';
-                            document.getElementById('front-card-title').style.color = '#1890ff';
-                            document.getElementById('back-card-title').style.color = '#1890ff';
+                            card.style.backgroundColor = '#f0f9ff';
                             break;
                         case 'employee':
-                            card.style.backgroundColor = '#f6ffed'; // أخضر فاتح
-                            document.getElementById('title-color').value = "#52c41a"; // لون أخضر
-                            document.getElementById('front-card-title').style.background = 'none';
-                            document.getElementById('back-card-title').style.background = 'none';
-                            document.getElementById('front-card-title').style.color = '#52c41a';
-                            document.getElementById('back-card-title').style.color = '#52c41a';
+                            card.style.backgroundColor = '#f0f8ff';
                             break;
                         case 'visitor':
-                            card.style.backgroundColor = '#fff7e6'; // برتقالي فاتح
-                            document.getElementById('title-color').value = "#fa8c16"; // لون برتقالي
-                            document.getElementById('front-card-title').style.background = 'none';
-                            document.getElementById('back-card-title').style.background = 'none';
-                            document.getElementById('front-card-title').style.color = '#fa8c16';
-                            document.getElementById('back-card-title').style.color = '#fa8c16';
+                            card.style.backgroundColor = '#fffaf0';
                             break;
                         case 'premium':
-                            card.style.backgroundImage = 'linear-gradient(135deg, #1f1f1f, #333333)'; // تدرج رمادي داكن
-                            document.getElementById('title-color').value = "#ffd700"; // لون ذهبي
-                            document.getElementById('label-color').value = "#eeeeee"; // لون فاتح للتسميات
-                            document.getElementById('value-color').value = "#cccccc"; // لون فاتح للقيم
-                            document.getElementById('front-card-title').style.background = 'none';
-                            document.getElementById('back-card-title').style.background = 'none';
-                            document.getElementById('front-card-title').style.color = '#ffd700';
-                            document.getElementById('back-card-title').style.color = '#ffd700';
+                            card.style.backgroundImage = 'linear-gradient(135deg, #9C27B0, #673AB7)';
                             break;
                     }
-
-                    // قم بتشغيل حدث 'input' لألوان الخطوط لتحديث الأنماط
-                    document.getElementById('title-color').dispatchEvent(new Event('input'));
-                    document.getElementById('label-color').dispatchEvent(new Event('input'));
-                    document.getElementById('value-color').dispatchEvent(new Event('input'));
-                    
-                    // قم بتشغيل حدث 'change' لأنواع الخطوط
-                    document.getElementById('title-font').dispatchEvent(new Event('change'));
-                    document.getElementById('label-font').dispatchEvent(new Event('change'));
-                    document.getElementById('value-font').dispatchEvent(new Event('change'));
                 });
             });
             
@@ -2308,19 +2022,7 @@
                 button.addEventListener('click', function() {
                     const command = this.dataset.command;
                     document.execCommand(command, false, null);
-                    // تحديث محتوى المعاينة عند تغيير النص في المحرر
-                    const editorId = this.closest('.rich-text-editor').querySelector('.rich-editor').id;
-                    const previewElementId = `preview-${editorId}`;
-                    document.getElementById(previewElementId).innerHTML = document.getElementById(editorId).innerHTML;
                 });
-            });
-
-            // تحديث محتوى المعاينة فورًا عند الكتابة في محرر النصوص
-            document.getElementById('front-text').addEventListener('input', function() {
-                document.getElementById('preview-front-text').innerHTML = this.innerHTML;
-            });
-            document.getElementById('back-text').addEventListener('input', function() {
-                document.getElementById('preview-back-text').innerHTML = this.innerHTML;
             });
             
             // خيارات التحميل
@@ -2449,35 +2151,37 @@
             });
 
             // التأكد من إظهار الأيقونات الافتراضية عند تحميل الصفحة إذا لم تكن هناك صور مرفوعة
-            function initializeImageDisplay(previewImgId, defaultIconSelector, toggleCheckboxId) {
-                const previewImg = document.getElementById(previewImgId);
-                const defaultIcon = document.querySelector(defaultIconSelector);
-                const toggleCheckbox = document.getElementById(toggleCheckboxId);
-
-                if (toggleCheckbox && !toggleCheckbox.checked) {
-                    // إذا كان الحقل معطلاً، أخفِ كل شيء
-                    if (previewImg) previewImg.style.display = 'none';
-                    if (defaultIcon) defaultIcon.style.display = 'none';
-                    if (previewImg && previewImg.parentElement) previewImg.parentElement.style.display = 'none';
-                } else {
-                    // إذا كان الحقل مفعلاً، تحقق من وجود الصورة
-                    if (previewImg) {
-                        if (previewImg.src === '' || previewImg.src === window.location.href) {
-                            previewImg.style.display = 'none';
-                            if (defaultIcon) defaultIcon.style.display = 'block';
-                        } else {
-                            previewImg.style.display = 'block';
-                            if (defaultIcon) defaultIcon.style.display = 'none';
-                        }
-                    }
-                    if (previewImg && previewImg.parentElement) previewImg.parentElement.style.display = 'flex'; // تأكد من إظهار الحاوية
-                }
+            const previewPhoto = document.getElementById('preview-photo');
+            const defaultPhotoIcon = document.querySelector('.id-photo .default-icon');
+            if (previewPhoto.src === '' || previewPhoto.src === window.location.href) {
+                previewPhoto.style.display = 'none';
+                defaultPhotoIcon.style.display = 'block';
             }
-            
+
+            const previewLogoBack = document.getElementById('preview-logo-back');
+            const defaultLogoBackIcon = document.querySelector('.id-logo-back .default-icon');
+            if (previewLogoBack.src === '' || previewLogoBack.src === window.location.href) {
+                previewLogoBack.style.display = 'none';
+                defaultLogoBackIcon.style.display = 'block';
+            }
+
+            const previewQrBack = document.getElementById('preview-qr-back');
+            const defaultQrBackIcon = document.querySelector('.id-qr-back .default-icon');
+            if (previewQrBack.src === '' || previewQrBack.src === window.location.href) {
+                previewQrBack.style.display = 'none';
+                defaultQrBackIcon.style.display = 'block';
+            }
+
+            const previewSignature = document.getElementById('preview-signature');
+            const defaultSignatureIcon = document.querySelector('.id-signature .default-icon');
+            if (previewSignature.src === '' || previewSignature.src === window.location.href) {
+                previewSignature.style.display = 'none';
+                defaultSignatureIcon.style.display = 'block';
+            }
+
             // عند تحميل الصفحة، تأكد من إظهار الحقول التي تم تفعيلها افتراضيًا
-            // وتعيين القيم الافتراضية للمعاينات إذا كانت المدخلات فارغة
-            document.querySelectorAll('.toggle-switch input').forEach(checkbox => {
-                checkbox.dispatchEvent(new Event('change')); // لتشغيل منطق الإظهار/الإخفاء الأولي
+            document.querySelectorAll('.toggle-switch input:checked').forEach(checkbox => {
+                checkbox.dispatchEvent(new Event('change'));
             });
 
             // قم بتشغيل حدث 'input' للحقول الموجودة عند التحميل لتحديث المعاينة
@@ -2488,18 +2192,301 @@
             // قم بتشغيل حدث 'input' لحقلي العنوان واسم البطاقة عند التحميل
             document.getElementById('card-title').dispatchEvent(new Event('input'));
             document.getElementById('card-name').dispatchEvent(new Event('input'));
-
-            // قم بتشغيل القالب الافتراضي عند تحميل الصفحة لأول مرة
-            document.querySelector('.template-item.student').click();
             
-            // تهيئة حالة عرض الأيقونات/الصور عند تحميل الصفحة
-            initializeImageDisplay('preview-photo', '.id-photo .default-icon', 'toggle-photo');
-            initializeImageDisplay('preview-signature', '.id-signature .default-icon', 'toggle-signature');
-            initializeImageDisplay('preview-logo-back', '.id-logo-back .default-icon', 'toggle-logo-back');
-            initializeImageDisplay('preview-qr-back', '.id-qr-back .default-icon', 'toggle-qr-back');
+            // تحميل البطاقات المحفوظة عند بدء التشغيل
+            loadSavedCards();
+            
+            // وظائف إدارة البطاقات المحفوظة
+            function saveCardTemplate() {
+                const cardType = document.getElementById('card-type').value;
+                const cardName = document.getElementById('card-name').value;
+                const cardId = document.getElementById('current-card-id').value || Date.now().toString();
+                
+                if (!cardType) {
+                    alert('الرجاء اختيار نوع بطاقة الهوية');
+                    return;
+                }
+                
+                if (!cardName) {
+                    alert('الرجاء إدخال اسم البطاقة');
+                    return;
+                }
+                
+                // جمع بيانات البطاقة
+                const cardData = {
+                    id: cardId,
+                    type: cardType,
+                    name: cardName,
+                    title: document.getElementById('card-title').value,
+                    template: document.querySelector('.template-item.active').dataset.template,
+                    backgroundImage: document.querySelector('.id-card').style.backgroundImage,
+                    backgroundColor: document.querySelector('.id-card').style.backgroundColor,
+                    fields: {},
+                    previewData: {},
+                    settings: {}
+                };
+                
+                // حفظ حقول البيانات
+                document.querySelectorAll('.toggle-switch input').forEach(checkbox => {
+                    const fieldName = checkbox.dataset.field;
+                    cardData.fields[fieldName] = checkbox.checked;
+                });
+                
+                // حفظ بيانات المعاينة
+                document.querySelectorAll('.preview-data-form .form-input, .preview-data-form .form-select').forEach(input => {
+                    const fieldName = input.id.replace('input-', '');
+                    cardData.previewData[fieldName] = input.value;
+                });
+                
+                // حفظ الإعدادات
+                cardData.settings = {
+                    photoWidth: document.getElementById('photo-width').value,
+                    photoHeight: document.getElementById('photo-height').value,
+                    logoBackWidth: document.getElementById('logo-back-width').value,
+                    logoBackHeight: document.getElementById('logo-back-height').value,
+                    logoBackX: document.getElementById('logo-back-x').value,
+                    logoBackY: document.getElementById('logo-back-y').value,
+                    qrBackWidth: document.getElementById('qr-back-width').value,
+                    qrBackHeight: document.getElementById('qr-back-height').value,
+                    titleFont: document.getElementById('title-font').value,
+                    titleColor: document.getElementById('title-color').value,
+                    labelFont: document.getElementById('label-font').value,
+                    labelColor: document.getElementById('label-color').value,
+                    valueFont: document.getElementById('value-font').value,
+                    valueColor: document.getElementById('value-color').value,
+                    frontText: document.getElementById('front-text').innerHTML,
+                    backText: document.getElementById('back-text').innerHTML
+                };
+                
+                // حفظ الصور
+                cardData.images = {
+                    photo: document.getElementById('preview-photo').src,
+                    signature: document.getElementById('preview-signature').src,
+                    logoBack: document.getElementById('preview-logo-back').src,
+                    qrBack: document.getElementById('preview-qr-back').src
+                };
+                
+                // تحديث البطاقة إذا كانت موجودة أو إضافة جديدة
+                const existingIndex = savedCards.findIndex(card => card.id === cardId);
+                if (existingIndex !== -1) {
+                    savedCards[existingIndex] = cardData;
+                } else {
+                    savedCards.push(cardData);
+                }
+                
+                // حفظ في localStorage
+                localStorage.setItem('savedCards', JSON.stringify(savedCards));
+                
+                // عرض إشعار
+                showNotification('تم حفظ بطاقة الهوية بنجاح!');
+                
+                // إعادة تعيين النموذج
+                resetForm();
+                
+                // تحديث القائمة
+                loadSavedCards();
+            }
+            
+            function loadCardTemplate(cardId) {
+                const cardData = savedCards.find(card => card.id === cardId);
+                if (!cardData) return;
+                
+                // تعبئة النموذج
+                document.getElementById('current-card-id').value = cardData.id;
+                document.getElementById('card-type').value = cardData.type;
+                document.getElementById('card-name').value = cardData.name;
+                document.getElementById('card-title').value = cardData.title;
+                
+                // تعيين القالب النشط
+                document.querySelectorAll('.template-item').forEach(item => {
+                    item.classList.remove('active');
+                    if (item.dataset.template === cardData.template) {
+                        item.classList.add('active');
+                    }
+                });
+                
+                // تعيين خلفية البطاقة
+                if (cardData.backgroundImage) {
+                    document.querySelector('.id-card').style.backgroundImage = cardData.backgroundImage;
+                } else {
+                    document.querySelector('.id-card').style.backgroundImage = 'none';
+                    document.querySelector('.id-card').style.backgroundColor = cardData.backgroundColor;
+                }
+                
+                // تعيين الحقول
+                Object.keys(cardData.fields).forEach(fieldName => {
+                    const checkbox = document.querySelector(`.toggle-switch input[data-field="${fieldName}"]`);
+                    if (checkbox) {
+                        checkbox.checked = cardData.fields[fieldName];
+                        checkbox.dispatchEvent(new Event('change'));
+                    }
+                });
+                
+                // تعيين بيانات المعاينة
+                Object.keys(cardData.previewData).forEach(fieldName => {
+                    const input = document.getElementById(`input-${fieldName}`);
+                    if (input) {
+                        input.value = cardData.previewData[fieldName];
+                        input.dispatchEvent(new Event('input'));
+                    }
+                });
+                
+                // تعيين الإعدادات
+                const settings = cardData.settings;
+                document.getElementById('photo-width').value = settings.photoWidth;
+                document.getElementById('photo-height').value = settings.photoHeight;
+                document.getElementById('logo-back-width').value = settings.logoBackWidth;
+                document.getElementById('logo-back-height').value = settings.logoBackHeight;
+                document.getElementById('logo-back-x').value = settings.logoBackX;
+                document.getElementById('logo-back-y').value = settings.logoBackY;
+                document.getElementById('qr-back-width').value = settings.qrBackWidth;
+                document.getElementById('qr-back-height').value = settings.qrBackHeight;
+                document.getElementById('title-font').value = settings.titleFont;
+                document.getElementById('title-color').value = settings.titleColor;
+                document.getElementById('label-font').value = settings.labelFont;
+                document.getElementById('label-color').value = settings.labelColor;
+                document.getElementById('value-font').value = settings.valueFont;
+                document.getElementById('value-color').value = settings.valueColor;
+                document.getElementById('front-text').innerHTML = settings.frontText;
+                document.getElementById('back-text').innerHTML = settings.backText;
+                
+                // تعيين الصور
+                setImage('preview-photo', cardData.images.photo, '.id-photo .default-icon');
+                setImage('preview-signature', cardData.images.signature, '.id-signature .default-icon');
+                setImage('preview-logo-back', cardData.images.logoBack, '.id-logo-back .default-icon');
+                setImage('preview-qr-back', cardData.images.qrBack, '.id-qr-back .default-icon');
+                
+                // تحديث زر الحفظ
+                document.getElementById('save-btn').innerHTML = '<i class="fas fa-save"></i> تحديث البطاقة';
+                
+                // التمرير إلى النموذج
+                document.querySelector('.id-form-section').scrollIntoView({behavior: 'smooth'});
+            }
+            
+            function setImage(elementId, src, defaultIconSelector) {
+                const img = document.getElementById(elementId);
+                const defaultIcon = document.querySelector(defaultIconSelector);
+                
+                if (src && src !== '') {
+                    img.src = src;
+                    img.style.display = 'block';
+                    if (defaultIcon) defaultIcon.style.display = 'none';
+                } else {
+                    img.src = '';
+                    img.style.display = 'none';
+                    if (defaultIcon) defaultIcon.style.display = 'block';
+                }
+            }
+            
+            function deleteCardTemplate(cardId) {
+                if (confirm('هل أنت متأكد من رغبتك في حذف قالب بطاقة الهوية هذا؟ سيتم حذفه بشكل دائم.')) {
+                    savedCards = savedCards.filter(card => card.id !== cardId);
+                    localStorage.setItem('savedCards', JSON.stringify(savedCards));
+                    loadSavedCards();
+                    showNotification('تم حذف البطاقة بنجاح!');
+                }
+            }
+            
+            function loadSavedCards() {
+                const tableBody = document.getElementById('saved-cards-table');
+                tableBody.innerHTML = '';
+                
+                savedCards.forEach(card => {
+                    const typeText = card.type === 'student' ? 'طالب' : 
+                                   card.type === 'employee' ? 'موظف' : 'زائر';
+                    
+                    const createDate = new Date(parseInt(card.id));
+                    const createDateStr = `${createDate.getDate()}/${createDate.getMonth()+1}/${createDate.getFullYear()}`;
+                    
+                    const today = new Date();
+                    const todayStr = `${today.getDate()}/${today.getMonth()+1}/${today.getFullYear()}`;
+                    
+                    const row = document.createElement('tr');
+                    row.dataset.id = card.id;
+                    row.innerHTML = `
+                        <td>${card.name}</td>
+                        <td>${typeText}</td>
+                        <td>${createDateStr}</td>
+                        <td>${todayStr}</td>
+                        <td class="action-cell">
+                            <button class="action-btn edit-btn"><i class="fas fa-edit"></i></button>
+                            <button class="action-btn delete-btn"><i class="fas fa-trash"></i></button>
+                        </td>
+                    `;
+                    
+                    tableBody.appendChild(row);
+                });
+            }
+            
+            function resetForm() {
+                document.getElementById('current-card-id').value = '';
+                document.getElementById('card-type').value = '';
+                document.getElementById('card-name').value = '';
+                document.getElementById('card-title').value = '';
+                document.getElementById('front-text').innerHTML = '';
+                document.getElementById('back-text').innerHTML = '';
+                document.getElementById('save-btn').innerHTML = '<i class="fas fa-save"></i> حفظ بطاقة الهوية';
+
+                // إعادة تعيين حقول بيانات المعاينة إلى القيم الافتراضية
+                document.getElementById('input-name').value = '';
+                document.getElementById('input-id').value = '';
+                document.getElementById('input-class').value = '';
+                document.getElementById('input-dob').value = '';
+                document.getElementById('input-phone').value = '';
+                document.getElementById('input-address').value = '';
+                document.getElementById('input-status').value = '';
+                document.getElementById('input-expiry').value = '';
+                document.getElementById('input-blood').value = '';
+                document.getElementById('input-father-name').value = '';
+                document.getElementById('input-mother-name').value = '';
+                document.getElementById('input-gender').value = '';
+                document.getElementById('input-job-title').value = '';
+                document.getElementById('input-join-date').value = '';
+                document.getElementById('input-employee-id').value = '';
+
+                // إخفاء جميع حقول الإدخال الإضافية
+                document.querySelectorAll('.input-group.toggleable').forEach(group => {
+                    group.style.display = 'none';
+                });
+
+                // إعادة تعيين صور المعاينة إلى الأيقونات الافتراضية
+                document.getElementById('preview-photo').style.display = 'none';
+                document.querySelector('.id-photo .default-icon').style.display = 'block';
+                document.getElementById('preview-logo-back').style.display = 'none';
+                document.querySelector('.id-logo-back .default-icon').style.display = 'block';
+                document.getElementById('preview-qr-back').style.display = 'none';
+                document.querySelector('.id-qr-back .default-icon').style.display = 'block';
+                document.getElementById('preview-signature').style.display = 'none';
+                document.querySelector('.id-signature .default-icon').style.display = 'block';
+                document.querySelector('.id-card').style.backgroundImage = 'none'; // إزالة خلفية البطاقة
+                document.querySelector('.id-card').style.backgroundColor = '#fff'; // إعادة اللون الأبيض
+
+                // إعادة تعيين حالة التبديل للحقول
+                document.querySelectorAll('.toggle-switch input').forEach(checkbox => {
+                    const fieldName = checkbox.dataset.field;
+                    // هنا يمكن تحديد الحقول التي يجب أن تكون مفعلة افتراضيًا
+                    if (['id', 'name', 'class', 'status', 'expiry'].includes(fieldName)) {
+                        checkbox.checked = true;
+                    } else {
+                        checkbox.checked = false;
+                    }
+                    // قم بتشغيل حدث التغيير لتحديث الواجهة بناءً على هذه القيم الافتراضية
+                    checkbox.dispatchEvent(new Event('change'));
+                });
+                
+                // إعادة تعيين عناوين البطاقة
+                document.getElementById('front-card-title').textContent = 'بطاقة طالب';
+                document.getElementById('back-card-title').textContent = 'بطاقة طالب';
+                
+                // إعادة تعيين القالب
+                document.querySelectorAll('.template-item').forEach(item => {
+                    item.classList.remove('active');
+                    if (item.dataset.template === 'student') {
+                        item.classList.add('active');
+                    }
+                });
+            }
         });
     </script>
 </body>
 </html>
-
-
